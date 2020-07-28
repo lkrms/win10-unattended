@@ -2,6 +2,8 @@
 
 SET "SCRIPT_DIR=%~dp0"
 SET ERRORS=0
+SET CHOCO_COUNT=0
+SET CHOCO_ERRORS=0
 
 IF EXIST "%SCRIPT_DIR%InstallEmbeddedProductKey.ps1" (
 
@@ -79,10 +81,15 @@ CALL :choco sumatrapdf --ia="/d ""%ProgramFiles%\SumatraPDF"""
 CALL :choco tightvnc --ia="ADDLOCAL=Server SET_ACCEPTHTTPCONNECTIONS=1 SET_CONTROLPASSWORD=1 SET_PASSWORD=1 SET_RUNCONTROLINTERFACE=1 SET_USECONTROLAUTHENTICATION=1 SET_USEVNCAUTHENTICATION=1 VALUE_OF_ACCEPTHTTPCONNECTIONS=0 VALUE_OF_CONTROLPASSWORD=nZ4yUJ3O VALUE_OF_PASSWORD=Shabbyr= VALUE_OF_RUNCONTROLINTERFACE=0 VALUE_OF_USECONTROLAUTHENTICATION=1 VALUE_OF_USEVNCAUTHENTICATION=1"
 CALL :choco vlc
 
+>&2 ECHO %CHOCO_COUNT% packages installed by Chocolatey ^(errors: %CHOCO_ERRORS%^)
+>&2 ECHO:
+
 IF NOT EXIST "%SCRIPT_DIR%Office365\setup.exe" GOTO :skipOffice
+IF EXIST "%SCRIPT_DIR%Office365\sources" XCOPY "%SCRIPT_DIR%Office365\sources" C:\OfficeDeploymentTool\sources /E /I /Q /Y
 >&2 ECHO Downloading Office 365
 "%SCRIPT_DIR%Office365\setup.exe" /download "%SCRIPT_DIR%Office365\Configuration.xml" || (
     CALL :error "%SCRIPT_DIR%Office365\setup.exe" /download "%SCRIPT_DIR%Office365\Configuration.xml" failed
+    GOTO :skipOffice
 )
 >&2 ECHO Installing Office 365
 "%SCRIPT_DIR%Office365\setup.exe" /configure "%SCRIPT_DIR%Office365\Configuration.xml" || (
@@ -114,8 +121,10 @@ EXIT /B
 
 :choco
 >&2 ECHO Installing %1
+SET /A "CHOCO_COUNT+=1"
 choco install %* -y --no-progress || (
     CALL :error "choco install %* -y --no-progress" failed
+    SET /A "CHOCO_ERRORS+=1"
 )
 EXIT /B
 
