@@ -5,11 +5,10 @@ SET ERRORS=0
 SET CHOCO_COUNT=0
 SET CHOCO_ERRORS=0
 
-IF EXIST "%SCRIPT_DIR%InstallEmbeddedProductKey.ps1" (
+IF EXIST "%SCRIPT_DIR%InstallOriginalProductKey.ps1" (
 
-    ECHO Installing embedded product key for Windows
-    powershell -NoProfile -ExecutionPolicy Bypass -File "%SCRIPT_DIR%InstallEmbeddedProductKey.ps1" || (
-        CALL :error "%SCRIPT_DIR%InstallEmbeddedProductKey.ps1" failed
+    powershell -NoProfile -ExecutionPolicy Bypass -File "%SCRIPT_DIR%InstallOriginalProductKey.ps1" || (
+        CALL :error "%SCRIPT_DIR%InstallOriginalProductKey.ps1" failed
     )
     ECHO:
 
@@ -41,13 +40,12 @@ CALL :online && GOTO :connected
 <NUL >&2 SET /P "_NUL=."
 CALL :now
 SET /A "SECONDS=NOW-START"
-:: Give up after 5 minutes
-IF %SECONDS% GEQ 300 (
+:: Give up after 10 minutes
+IF %SECONDS% GEQ 600 (
     ECHO:
-    ECHO No Internet connection
-    ECHO Will try again after rebooting
+    ECHO Exiting ^(no Internet connection after 10 minutes^)
     ping -n 6 127.0.0.1 >nul
-    EXIT /B 2
+    EXIT /B 1
 )
 :: Sleep for 2 seconds
 ping -n 3 127.0.0.1 >nul
@@ -58,10 +56,19 @@ IF DEFINED SECONDS >&2 ECHO:
 ECHO Connection established
 ECHO:
 
+IF EXIST "%SCRIPT_DIR%SetNetworkCategory.ps1" (
+
+    powershell -NoProfile -ExecutionPolicy Bypass -File "%SCRIPT_DIR%SetNetworkCategory.ps1" || (
+        CALL :error "%SCRIPT_DIR%SetNetworkCategory.ps1" failed
+    )
+    ECHO:
+
+)
+
 ECHO Installing Chocolatey
 powershell -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "[System.Net.ServicePointManager]::SecurityProtocol = 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" || (
     ECHO Exiting ^(Chocolatey installation failed^)
-    EXIT /B 3
+    EXIT /B 1
 )
 SET "PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"
 ECHO:
@@ -86,19 +93,10 @@ CALL :choco vlc
 ECHO %CHOCO_COUNT% packages installed by Chocolatey ^(errors: %CHOCO_ERRORS%^)
 ECHO:
 
-IF NOT EXIST "%SCRIPT_DIR%Office365\setup.exe" GOTO :skipOffice
-IF EXIST "%SCRIPT_DIR%Office365\sources" XCOPY "%SCRIPT_DIR%Office365\sources" C:\OfficeDeploymentTool\sources /E /I /Q /Y
-ECHO Downloading Office 365
-"%SCRIPT_DIR%Office365\setup.exe" /download "%SCRIPT_DIR%Office365\Configuration.xml" || (
-    CALL :error "%SCRIPT_DIR%Office365\setup.exe" /download "%SCRIPT_DIR%Office365\Configuration.xml" failed
-    GOTO :skipOffice
-)
-ECHO Installing Office 365
-"%SCRIPT_DIR%Office365\setup.exe" /configure "%SCRIPT_DIR%Office365\Configuration.xml" || (
-    CALL :error "%SCRIPT_DIR%Office365\setup.exe" /configure "%SCRIPT_DIR%Office365\Configuration.xml" failed
+IF EXIST "%SCRIPT_DIR%Office365" (
+    XCOPY "%SCRIPT_DIR%Office365" C:\OfficeDeploymentTool /E /I /Q /Y
 )
 
-:skipOffice
 IF EXIST "%SCRIPT_DIR%AppAssociations.xml" (
     ECHO Configuring default apps
     DISM /Online /Import-DefaultAppAssociations:"%SCRIPT_DIR%AppAssociations.xml" || (
@@ -115,7 +113,7 @@ EXIT /B 0
 FOR /F "usebackq tokens=*" %%l IN (
     `powershell -NoProfile -Command "& {[int32](Get-Date -UFormat "%%s")}"`
 ) DO SET NOW=%%l
-EXIT /B 0
+EXIT /B
 
 :online
 ping -4 -n 1 -w 1000 1.1.1.1 | FINDSTR /R /C:"TTL=[0-9][0-9]*$" >nul
