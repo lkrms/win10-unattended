@@ -56,15 +56,6 @@ IF DEFINED SECONDS >&2 ECHO:
 ECHO Connection established
 ECHO:
 
-IF EXIST "%SCRIPT_DIR%SetNetworkCategory.ps1" (
-
-    powershell -NoProfile -ExecutionPolicy Bypass -File "%SCRIPT_DIR%SetNetworkCategory.ps1" || (
-        CALL :error "%SCRIPT_DIR%SetNetworkCategory.ps1" failed
-    )
-    ECHO:
-
-)
-
 IF NOT EXIST "%SCRIPT_DIR%Specialize.reg" GOTO :skipReg
 ECHO Applying registry settings
 REG LOAD HKLM\DEFAULT %SystemDrive%\Users\Default\NTUSER.DAT || (
@@ -77,11 +68,6 @@ REG IMPORT "%SCRIPT_DIR%Specialize.reg" || (
 REG UNLOAD HKLM\DEFAULT
 
 :skipReg
-ECHO Disabling reserved storage
-DISM /Online /Set-ReservedStorageState /State:Disabled || (
-    CALL :error "DISM /Online /Set-ReservedStorageState /State:Disabled" failed
-)
-
 ECHO Installing Chocolatey
 powershell -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "[System.Net.ServicePointManager]::SecurityProtocol = 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" || (
     ECHO Exiting ^(Chocolatey installation failed^)
@@ -112,6 +98,7 @@ ECHO:
 
 IF EXIST "%SCRIPT_DIR%Office365" (
     XCOPY "%SCRIPT_DIR%Office365" %SystemDrive%\Office365 /E /I /Q /Y
+    REG ADD HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce /v !InstallOffice /t REG_EXPAND_SZ /d %%SystemDrive%%\Office365\install.cmd /f
 )
 
 IF EXIST "%SCRIPT_DIR%AppAssociations.xml" (
@@ -128,7 +115,7 @@ EXIT /B 0
 
 :now
 FOR /F "usebackq tokens=*" %%l IN (
-    `powershell -NoProfile -Command "& {[int32](Get-Date -UFormat "%%s")}"`
+    `powershell -NoProfile -Command "[int32](Get-Date -UFormat "%%s")"`
 ) DO SET NOW=%%l
 EXIT /B
 
