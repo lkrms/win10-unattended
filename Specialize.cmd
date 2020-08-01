@@ -67,8 +67,8 @@ IF EXIST "%SCRIPT_DIR%SetNetworkCategory.ps1" (
 
 IF NOT EXIST "%SCRIPT_DIR%Specialize.reg" GOTO :skipReg
 ECHO Applying registry settings
-REG LOAD HKLM\DEFAULT C:\Users\Default\NTUSER.DAT || (
-    CALL :error "REG LOAD HKLM\DEFAULT C:\Users\Default\NTUSER.DAT" failed
+REG LOAD HKLM\DEFAULT %SystemDrive%\Users\Default\NTUSER.DAT || (
+    CALL :error "REG LOAD HKLM\DEFAULT %SystemDrive%\Users\Default\NTUSER.DAT" failed
     GOTO :skipReg
 )
 REG IMPORT "%SCRIPT_DIR%Specialize.reg" || (
@@ -111,7 +111,7 @@ ECHO %CHOCO_COUNT% packages installed by Chocolatey ^(errors: %CHOCO_ERRORS%^)
 ECHO:
 
 IF EXIST "%SCRIPT_DIR%Office365" (
-    XCOPY "%SCRIPT_DIR%Office365" C:\Office365 /E /I /Q /Y
+    XCOPY "%SCRIPT_DIR%Office365" %SystemDrive%\Office365 /E /I /Q /Y
 )
 
 IF EXIST "%SCRIPT_DIR%AppAssociations.xml" (

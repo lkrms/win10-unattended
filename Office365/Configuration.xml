@@ -16,5 +16,5 @@
   <Updates Enabled="TRUE" />
   <RemoveMSI />
   <Display Level="Full" AcceptEULA="TRUE" />
-  <Logging Level="Standard" Path="C:\Office365\logs" />
+  <Logging Level="Standard" Path="%SystemDrive%\Office365\logs" />
 </Configuration>
