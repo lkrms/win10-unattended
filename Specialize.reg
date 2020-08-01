@@ -33,6 +33,9 @@ Windows Registry Editor Version 5.00
 "AllowPrelaunch"=dword:00000000
 "PreventFirstRunPage"=dword:00000001
 
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MicrosoftEdge\TabPreloader]
+"AllowTabPreloading"=dword:00000000
+
 [-HKEY_LOCAL_MACHINE\DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Taskband]
 
 [HKEY_LOCAL_MACHINE\DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Taskband]
