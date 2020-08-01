@@ -5,6 +5,12 @@ Windows Registry Editor Version 5.00
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System]
 "EnableFirstLogonAnimation"=dword:00000000
 
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run]
+"MapHome"=hex(2):6e,00,65,00,74,00,20,00,75,00,73,00,65,00,20,00,68,00,3a,00,\
+  20,00,5c,00,5c,00,68,00,75,00,62,00,5c,00,25,00,55,00,53,00,45,00,52,00,4e,\
+  00,41,00,4d,00,45,00,25,00,00,00
+"MapFamily"="net use s: \\\\hub\\family"
+
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer]
 "NoNewAppAlert"=dword:00000001
 
