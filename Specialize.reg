@@ -1,0 +1,36 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Network\NewNetworkWindowOff]
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System]
+"EnableFirstLogonAnimation"=dword:00000000
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer]
+"NoNewAppAlert"=dword:00000001
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search]
+"AllowCortana"=dword:00000000
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsStore]
+"DisableStoreApps"=dword:00000001
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MicrosoftEdge]
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MicrosoftEdge\Main]
+"AllowPrelaunch"=dword:00000000
+"PreventFirstRunPage"=dword:00000001
+
+[-HKEY_LOCAL_MACHINE\DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Taskband]
+
+[HKEY_LOCAL_MACHINE\DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Taskband]
+"Favorites"=hex:ff
+
+[HKEY_LOCAL_MACHINE\DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Taskband\AuxilliaryPins]
+"MailPin"=dword:00000001
+
+[HKEY_LOCAL_MACHINE\DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\Search]
+"SearchboxTaskbarMode"=dword:00000000
+
+[HKEY_LOCAL_MACHINE\DEFAULT\SOFTWARE\Policies\Microsoft\Office\16.0\Teams]
+"PreventFirstLaunchAfterInstall"=dword:00000001
+

@@ -65,6 +65,17 @@ IF EXIST "%SCRIPT_DIR%SetNetworkCategory.ps1" (
 
 )
 
+IF NOT EXIST "%SCRIPT_DIR%Specialize.reg" GOTO :chocolatey
+REG LOAD HKLM\DEFAULT C:\Users\Default\NTUSER.DAT || (
+    CALL :error "REG LOAD HKLM\DEFAULT C:\Users\Default\NTUSER.DAT" failed
+    GOTO :chocolatey
+)
+REG IMPORT "%SCRIPT_DIR%Specialize.reg" || (
+    CALL :error "REG IMPORT "%SCRIPT_DIR%Specialize.reg"" failed
+)
+REG UNLOAD HKLM\DEFAULT
+
+:chocolatey
 ECHO Installing Chocolatey
 powershell -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "[System.Net.ServicePointManager]::SecurityProtocol = 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" || (
     ECHO Exiting ^(Chocolatey installation failed^)
