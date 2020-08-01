@@ -111,7 +111,7 @@ ECHO %CHOCO_COUNT% packages installed by Chocolatey ^(errors: %CHOCO_ERRORS%^)
 ECHO:
 
 IF EXIST "%SCRIPT_DIR%Office365" (
-    XCOPY "%SCRIPT_DIR%Office365" C:\OfficeDeploymentTool /E /I /Q /Y
+    XCOPY "%SCRIPT_DIR%Office365" C:\Office365 /E /I /Q /Y
 )
 
 IF EXIST "%SCRIPT_DIR%AppAssociations.xml" (

@@ -1,5 +1,5 @@
 <Configuration>
-  <Add OfficeClientEdition="64" Channel="Current" SourcePath="C:\OfficeDeploymentTool\sources" AllowCdnFallback="FALSE">
+  <Add OfficeClientEdition="64" Channel="Current" SourcePath="\\hub\unattend\Office365" AllowCdnFallback="FALSE">
     <Product ID="O365ProPlusRetail">
       <Language ID="en-us" />
       <ExcludeApp ID="Access" />
@@ -16,5 +16,5 @@
   <Updates Enabled="TRUE" />
   <RemoveMSI />
   <Display Level="Full" AcceptEULA="TRUE" />
-  <Logging Level="Standard" Path="C:\OfficeDeploymentTool\logs" />
+  <Logging Level="Standard" Path="C:\Office365\logs" />
 </Configuration>
