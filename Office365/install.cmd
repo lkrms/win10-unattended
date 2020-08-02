@@ -2,7 +2,10 @@
 
 SET "SCRIPT_DIR=%~dp0"
 
-"%SCRIPT_DIR%setup.exe" /configure "%SCRIPT_DIR%Configuration.xml"
+IF EXIST "%ProgramFiles%\Microsoft Office\Office16" (
+    REG DELETE HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run /v InstallOffice /f
+    EXIT /B 0
+)
 
-IF NOT EXIST "%SystemDrive%\Program Files\Microsoft Office\Office16" EXIT /B 1
+"%SCRIPT_DIR%setup.exe" /configure "%SCRIPT_DIR%Configuration.xml"
 

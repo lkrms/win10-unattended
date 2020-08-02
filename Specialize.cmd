@@ -56,14 +56,19 @@ IF DEFINED SECONDS >&2 ECHO:
 ECHO Connection established
 ECHO:
 
-IF NOT EXIST "%SCRIPT_DIR%Specialize.reg" GOTO :skipReg
 ECHO Applying registry settings
 REG LOAD HKLM\DEFAULT %SystemDrive%\Users\Default\NTUSER.DAT || (
     CALL :error "REG LOAD HKLM\DEFAULT %SystemDrive%\Users\Default\NTUSER.DAT" failed
     GOTO :skipReg
 )
+IF NOT EXIST "%SCRIPT_DIR%Specialize.reg" GOTO :skipRegImport
 REG IMPORT "%SCRIPT_DIR%Specialize.reg" || (
     CALL :error "REG IMPORT "%SCRIPT_DIR%Specialize.reg"" failed
+)
+:skipRegImport
+IF EXIST "%SCRIPT_DIR%ResetTaskbar.reg" (
+    COPY "%SCRIPT_DIR%ResetTaskbar.reg" "%SystemRoot%" /Y
+    REG ADD HKLM\DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce /v !ResetTaskbar /t REG_EXPAND_SZ /d "CMD /C REG IMPORT \"%%SystemRoot%%\ResetTaskbar.reg\" && TASKKILL /F /IM explorer.exe && start explorer.exe" /f
 )
 REG UNLOAD HKLM\DEFAULT
 
@@ -90,6 +95,7 @@ CALL :choco keepassxc --ia="AUTOSTARTPROGRAM=0"
 CALL :choco nextcloud-client
 CALL :choco notepadplusplus
 CALL :choco sumatrapdf --ia="/d ""%ProgramFiles%\SumatraPDF"""
+CALL :choco sysinternals
 CALL :choco tightvnc --ia="ADDLOCAL=Server SET_ACCEPTHTTPCONNECTIONS=1 SET_CONTROLPASSWORD=1 SET_PASSWORD=1 SET_RUNCONTROLINTERFACE=1 SET_USECONTROLAUTHENTICATION=1 SET_USEVNCAUTHENTICATION=1 VALUE_OF_ACCEPTHTTPCONNECTIONS=0 VALUE_OF_CONTROLPASSWORD=nZ4yUJ3O VALUE_OF_PASSWORD=Shabbyr= VALUE_OF_RUNCONTROLINTERFACE=0 VALUE_OF_USECONTROLAUTHENTICATION=1 VALUE_OF_USEVNCAUTHENTICATION=1"
 CALL :choco vlc
 
@@ -98,7 +104,7 @@ ECHO:
 
 IF EXIST "%SCRIPT_DIR%Office365" (
     XCOPY "%SCRIPT_DIR%Office365" %SystemDrive%\Office365 /E /I /Q /Y
-    REG ADD HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce /v !InstallOffice /t REG_EXPAND_SZ /d %%SystemDrive%%\Office365\install.cmd /f
+    REG ADD HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run /v InstallOffice /t REG_EXPAND_SZ /d %%SystemDrive%%\Office365\install.cmd /f
 )
 
 IF EXIST "%SCRIPT_DIR%AppAssociations.xml" (
