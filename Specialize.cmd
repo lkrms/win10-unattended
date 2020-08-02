@@ -6,26 +6,23 @@ SET CHOCO_COUNT=0
 SET CHOCO_ERRORS=0
 
 IF EXIST "%SCRIPT_DIR%InstallOriginalProductKey.ps1" (
-
     powershell -NoProfile -ExecutionPolicy Bypass -File "%SCRIPT_DIR%InstallOriginalProductKey.ps1" || (
         CALL :error "%SCRIPT_DIR%InstallOriginalProductKey.ps1" failed
     )
     ECHO:
-
 )
 
 IF EXIST "%SCRIPT_DIR%Wi-Fi.xml" (
-
     netsh wlan show interfaces >nul || (
         ECHO Skipping Wi-Fi setup ^(no WLAN interfaces^)
+        ECHO:
         GOTO :checkOnline
     )
-
     ECHO Adding Wi-Fi profile from %SCRIPT_DIR%Wi-Fi.xml
     netsh wlan add profile filename="%SCRIPT_DIR%Wi-Fi.xml" || (
         CALL :error "netsh wlan add profile" failed
     )
-
+    ECHO:
 )
 
 :checkOnline
@@ -56,6 +53,10 @@ IF DEFINED SECONDS >&2 ECHO:
 ECHO Connection established
 ECHO:
 
+ECHO Removing provisioned apps
+powershell -NoProfile -Command "Get-ProvisionedAppxPackage -Online | Remove-ProvisionedAppxPackage -Online"
+ECHO:
+
 ECHO Applying registry settings
 REG LOAD HKLM\DEFAULT %SystemDrive%\Users\Default\NTUSER.DAT || (
     CALL :error "REG LOAD HKLM\DEFAULT %SystemDrive%\Users\Default\NTUSER.DAT" failed
@@ -66,13 +67,18 @@ REG IMPORT "%SCRIPT_DIR%Specialize.reg" || (
     CALL :error "REG IMPORT "%SCRIPT_DIR%Specialize.reg"" failed
 )
 :skipRegImport
+REG ADD "HKLM\DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" /v {374DE290-123F-4565-9164-39C4925E467B} /t REG_EXPAND_SZ /d "\\hub\%%USERNAME%%\Downloads" /f
+REG ADD "HKLM\DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" /v Desktop /t REG_EXPAND_SZ /d "\\hub\%%USERNAME%%\Desktop" /f
+REG ADD "HKLM\DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" /v Personal /t REG_EXPAND_SZ /d "\\hub\%%USERNAME%%\Documents" /f
 IF EXIST "%SCRIPT_DIR%ResetTaskbar.reg" (
     COPY "%SCRIPT_DIR%ResetTaskbar.reg" "%SystemRoot%" /Y
+    :: After each user's first login, reset their taskbar to remove Edge and Mail
     REG ADD HKLM\DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce /v !ResetTaskbar /t REG_EXPAND_SZ /d "CMD /C REG IMPORT \"%%SystemRoot%%\ResetTaskbar.reg\" && TASKKILL /F /IM explorer.exe && start explorer.exe" /f
 )
 REG UNLOAD HKLM\DEFAULT
 
 :skipReg
+ECHO:
 ECHO Installing Chocolatey
 powershell -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "[System.Net.ServicePointManager]::SecurityProtocol = 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" || (
     ECHO Exiting ^(Chocolatey installation failed^)
@@ -81,7 +87,6 @@ powershell -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "[Syste
 SET "PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"
 ECHO:
 
-:: choco feature enable -n=logEnvironmentValues -y
 choco feature enable -n=useRememberedArgumentsForUpgrades -y
 
 :: Otherwise SumatraPDF won't install
@@ -94,6 +99,7 @@ CALL :choco GoogleChrome --ignore-checksum
 CALL :choco keepassxc --ia="AUTOSTARTPROGRAM=0"
 CALL :choco nextcloud-client
 CALL :choco notepadplusplus
+CALL :choco skype
 CALL :choco sumatrapdf --ia="/d ""%ProgramFiles%\SumatraPDF"""
 CALL :choco sysinternals
 CALL :choco tightvnc --ia="ADDLOCAL=Server SET_ACCEPTHTTPCONNECTIONS=1 SET_CONTROLPASSWORD=1 SET_PASSWORD=1 SET_RUNCONTROLINTERFACE=1 SET_USECONTROLAUTHENTICATION=1 SET_USEVNCAUTHENTICATION=1 VALUE_OF_ACCEPTHTTPCONNECTIONS=0 VALUE_OF_CONTROLPASSWORD=nZ4yUJ3O VALUE_OF_PASSWORD=Shabbyr= VALUE_OF_RUNCONTROLINTERFACE=0 VALUE_OF_USECONTROLAUTHENTICATION=1 VALUE_OF_USEVNCAUTHENTICATION=1"
@@ -104,7 +110,6 @@ ECHO:
 
 IF EXIST "%SCRIPT_DIR%Office365" (
     XCOPY "%SCRIPT_DIR%Office365" %SystemDrive%\Office365 /E /I /Q /Y
-    REG ADD HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run /v InstallOffice /t REG_EXPAND_SZ /d %%SystemDrive%%\Office365\install.cmd /f
 )
 
 IF EXIST "%SCRIPT_DIR%AppAssociations.xml" (
