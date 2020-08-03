@@ -53,9 +53,12 @@ IF DEFINED SECONDS >&2 ECHO:
 ECHO Connection established
 ECHO:
 
-ECHO Removing provisioned apps
-powershell -NoProfile -Command "Get-ProvisionedAppxPackage -Online | Remove-ProvisionedAppxPackage -Online"
-ECHO:
+IF EXIST "%SCRIPT_DIR%RemoveProvisionedPackages.ps1" (
+    powershell -NoProfile -ExecutionPolicy Bypass -File "%SCRIPT_DIR%RemoveProvisionedPackages.ps1" || (
+        CALL :error "%SCRIPT_DIR%RemoveProvisionedPackages.ps1" failed
+    )
+    ECHO:
+)
 
 ECHO Applying registry settings
 REG LOAD HKLM\DEFAULT %SystemDrive%\Users\Default\NTUSER.DAT || (
