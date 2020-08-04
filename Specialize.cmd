@@ -83,6 +83,12 @@ IF EXIST "%SCRIPT_DIR%ResetTaskbar.reg" (
     :: After each user's first login, reset their taskbar to remove Edge and Mail
     REG ADD HKLM\DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce /v !ResetTaskbar /t REG_EXPAND_SZ /d "CMD /C REG IMPORT \"%%SystemRoot%%\ResetTaskbar.reg\" && TASKKILL /F /IM explorer.exe && start explorer.exe" /f
 )
+IF EXIST "%SCRIPT_DIR%AddPrinters.ps1" (
+    powershell -NoProfile -ExecutionPolicy Bypass -File "%SCRIPT_DIR%AddPrinters.ps1" || (
+        CALL :error "%SCRIPT_DIR%AddPrinters.ps1" failed
+    )
+    REG ADD HKLM\DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\Run /v SetDefaultPrinter /t REG_EXPAND_SZ /d "powershell -NoProfile -Command \"^(New-Object -ComObject WScript.Network^).SetDefaultPrinter^('Brother HL-5450DN ^(black and white^)'^)\"" /f
+)
 REG UNLOAD HKLM\DEFAULT
 
 :skipReg
