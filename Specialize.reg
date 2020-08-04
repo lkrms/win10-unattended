@@ -3,25 +3,18 @@ Windows Registry Editor Version 5.00
 [HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Network\NewNetworkWindowOff]
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System]
+; Disable "This won't take long" etc.
 "EnableFirstLogonAnimation"=dword:00000000
-; 0x384 = 900s = 15min, but most importantly, enables lock after screen sleep
+; Display detailed messages during logon
+"VerboseStatus"=dword:00000001
+"DisableStatusMessages"=dword:00000000
+; Sign users out whenever the system shuts down or restarts
+"DisableAutomaticRestartSignOn"=dword:00000001
+; Lock session when screen is turned off, or after 15 minutes (0x384 seconds) of inactivity
 "InactivityTimeoutSecs"=dword:00000384
 
-[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run]
-; CMD /C NET USE H: "\\hub\%USERNAME%" && NET USE S: \\hub\family
-"MapNetworkDrives"=hex(2):43,00,4d,00,44,00,20,00,2f,00,43,00,20,00,4e,00,45,\
-  00,54,00,20,00,55,00,53,00,45,00,20,00,48,00,3a,00,20,00,22,00,5c,00,5c,00,\
-  68,00,75,00,62,00,5c,00,25,00,55,00,53,00,45,00,52,00,4e,00,41,00,4d,00,45,\
-  00,25,00,22,00,20,00,26,00,26,00,20,00,4e,00,45,00,54,00,20,00,55,00,53,00,\
-  45,00,20,00,53,00,3a,00,20,00,5c,00,5c,00,68,00,75,00,62,00,5c,00,66,00,61,\
-  00,6d,00,69,00,6c,00,79,00,00,00
-
-[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce]
-"!NeverSleepOnAC"="POWERCFG /CHANGE standby-timeout-ac 0"
-"!SetNetworkCategory"="powershell -NoProfile -Command \"Get-NetConnectionProfile | Set-NetConnectionProfile -NetworkCategory Private\""
-"!DisableReservedStorage"="DISM /Online /Set-ReservedStorageState /State:Disabled"
-
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer]
+; Don't prompt for confirmation when first opening a PDF in SumatraPDF, for example
 "NoNewAppAlert"=dword:00000001
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search]
@@ -33,14 +26,4 @@ Windows Registry Editor Version 5.00
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MicrosoftEdge\TabPreloader]
 "AllowTabPreloading"=dword:00000000
-
-[HKEY_LOCAL_MACHINE\DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications\Microsoft.MicrosoftEdge_8wekyb3d8bbwe]
-"Disabled"=dword:00000001
-"DisabledByUser"=dword:00000001
-
-[HKEY_LOCAL_MACHINE\DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\Search]
-"SearchboxTaskbarMode"=dword:00000000
-
-[HKEY_LOCAL_MACHINE\DEFAULT\SOFTWARE\Policies\Microsoft\Office\16.0\Teams]
-"PreventFirstLaunchAfterInstall"=dword:00000001
 

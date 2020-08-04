@@ -69,7 +69,12 @@ IF NOT EXIST "%SCRIPT_DIR%Specialize.reg" GOTO :skipRegImport
 REG IMPORT "%SCRIPT_DIR%Specialize.reg" || (
     CALL :error "REG IMPORT "%SCRIPT_DIR%Specialize.reg"" failed
 )
+IF NOT EXIST "%SCRIPT_DIR%Specialize-HKLM-DEFAULT.reg" GOTO :skipRegImport
+REG IMPORT "%SCRIPT_DIR%Specialize-HKLM-DEFAULT.reg" || (
+    CALL :error "REG IMPORT "%SCRIPT_DIR%Specialize-HKLM-DEFAULT.reg"" failed
+)
 :skipRegImport
+REG ADD "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" /v MapNetworkDrives /t REG_EXPAND_SZ /d "CMD /C NET USE H: \"\\hub\%%USERNAME%%\" && NET USE S: \\hub\family" /f
 REG ADD "HKLM\DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" /v {374DE290-123F-4565-9164-39C4925E467B} /t REG_EXPAND_SZ /d "\\hub\%%USERNAME%%\Downloads" /f
 REG ADD "HKLM\DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" /v Desktop /t REG_EXPAND_SZ /d "\\hub\%%USERNAME%%\Desktop" /f
 REG ADD "HKLM\DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" /v Personal /t REG_EXPAND_SZ /d "\\hub\%%USERNAME%%\Documents" /f
