@@ -5,6 +5,8 @@ SET ERRORS=0
 SET CHOCO_COUNT=0
 SET CHOCO_ERRORS=0
 
+XCOPY "%SCRIPT_DIR%" %SystemDrive%\Unattended /E /I /Q /Y
+
 IF EXIST "%SCRIPT_DIR%InstallOriginalProductKey.ps1" (
     powershell -NoProfile -ExecutionPolicy Bypass -File "%SCRIPT_DIR%InstallOriginalProductKey.ps1" || (
         CALL :error "%SCRIPT_DIR%InstallOriginalProductKey.ps1" failed
@@ -12,14 +14,14 @@ IF EXIST "%SCRIPT_DIR%InstallOriginalProductKey.ps1" (
     ECHO:
 )
 
-IF EXIST "%SCRIPT_DIR%Wi-Fi.xml" (
+IF EXIST "%SCRIPT_DIR%..\Wi-Fi.xml" (
     netsh wlan show interfaces >nul || (
         ECHO Skipping Wi-Fi setup ^(no WLAN interfaces^)
         ECHO:
         GOTO :checkOnline
     )
-    ECHO Adding Wi-Fi profile from %SCRIPT_DIR%Wi-Fi.xml
-    netsh wlan add profile filename="%SCRIPT_DIR%Wi-Fi.xml" || (
+    ECHO Adding Wi-Fi profile from %SCRIPT_DIR%..\Wi-Fi.xml
+    netsh wlan add profile filename="%SCRIPT_DIR%..\Wi-Fi.xml" || (
         CALL :error "netsh wlan add profile" failed
     )
     ECHO:
@@ -84,10 +86,7 @@ IF EXIST "%SCRIPT_DIR%ResetTaskbar.reg" (
     REG ADD HKLM\DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce /v !ResetTaskbar /t REG_EXPAND_SZ /d "CMD /C REG IMPORT \"%%SystemRoot%%\ResetTaskbar.reg\" && TASKKILL /F /IM explorer.exe && start explorer.exe" /f
 )
 IF EXIST "%SCRIPT_DIR%AddPrinters.ps1" (
-    powershell -NoProfile -ExecutionPolicy Bypass -File "%SCRIPT_DIR%AddPrinters.ps1" || (
-        CALL :error "%SCRIPT_DIR%AddPrinters.ps1" failed
-    )
-    REG ADD HKLM\DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\Run /v SetDefaultPrinter /t REG_EXPAND_SZ /d "powershell -NoProfile -Command \"^(New-Object -ComObject WScript.Network^).SetDefaultPrinter^('Brother HL-5450DN ^(black and white^)'^)\"" /f
+    REG ADD HKLM\DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce /v !SetDefaultPrinter /t REG_EXPAND_SZ /d "powershell -NoProfile -Command \"^(New-Object -ComObject WScript.Network^).SetDefaultPrinter^('Brother HL-5450DN ^(black and white^)'^)\"" /f
 )
 REG UNLOAD HKLM\DEFAULT
 
@@ -122,15 +121,8 @@ CALL :choco vlc
 ECHO %CHOCO_COUNT% packages installed by Chocolatey ^(errors: %CHOCO_ERRORS%^)
 ECHO:
 
-IF EXIST "%SCRIPT_DIR%Office365" (
-    XCOPY "%SCRIPT_DIR%Office365" %SystemDrive%\Office365 /E /I /Q /Y
-)
-
-IF EXIST "%SCRIPT_DIR%AppAssociations.xml" (
-    ECHO Configuring default apps
-    DISM /Online /Import-DefaultAppAssociations:"%SCRIPT_DIR%AppAssociations.xml" || (
-        CALL :error "DISM /Online /Import-DefaultAppAssociations" failed
-    )
+IF EXIST "%SCRIPT_DIR%..\Office365" (
+    XCOPY "%SCRIPT_DIR%..\Office365" %SystemDrive%\Office365 /E /I /Q /Y
 )
 
 ECHO Exiting ^(end of script^)
