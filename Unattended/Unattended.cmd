@@ -2,14 +2,16 @@
 
 NET SESSION >NUL 2>NUL || (
     ECHO Please use "Run as administrator"
-    EXIT /B 1
+    GOTO :exitError
 )
 
 IF "%1"=="/start" GOTO :start
-CALL "%~0" /start | powershell -NoProfile -Command "$input | tee %SystemDrive%\Unattended.log -Append"
+CALL "%~0" /start %* 2>&1 | powershell -NoProfile -Command "$input | tee %SystemDrive%\Unattended.log -Append"
+IF "%1"=="/exit" EXIT 1
 EXIT /B
 
 :start
+SHIFT /1
 SET "SCRIPT_DIR=%~dp0"
 SET ERRORS=0
 SET CHOCO_COUNT=0
@@ -18,28 +20,28 @@ SET CHOCO_ERRORS=0
 CALL :log ===== Starting %~f0
 
 IF NOT "%SCRIPT_DIR%"=="%SystemDrive%\Unattended\" (
+    CALL :log Copying %SCRIPT_DIR% to %SystemDrive%\Unattended
     XCOPY "%SCRIPT_DIR%" %SystemDrive%\Unattended /E /I /Q /Y
+    CALL :log Scheduling %SystemDrive%\Unattended\UnattendedFirstBoot.cmd
     SCHTASKS /Create /F /TN "Unattended - first boot" /TR "%%SystemDrive%%\Unattended\UnattendedFirstBoot.cmd" /SC ONSTART /RU SYSTEM
 )
 
 IF EXIST "%SCRIPT_DIR%InstallOriginalProductKey.ps1" (
+    CALL :log Installing original product key
     powershell -NoProfile -ExecutionPolicy Bypass -File "%SCRIPT_DIR%InstallOriginalProductKey.ps1" || (
         CALL :error "%SCRIPT_DIR%InstallOriginalProductKey.ps1" failed
     )
-    ECHO:
 )
 
 IF EXIST "%SCRIPT_DIR%..\Wi-Fi.xml" (
     netsh wlan show interfaces >nul || (
         CALL :log Skipping Wi-Fi setup ^(no WLAN interfaces^)
-        ECHO:
         GOTO :checkOnline
     )
     CALL :log Adding Wi-Fi profile from %SCRIPT_DIR%..\Wi-Fi.xml
     netsh wlan add profile filename="%SCRIPT_DIR%..\Wi-Fi.xml" || (
         CALL :error "netsh wlan add profile" failed
     )
-    ECHO:
 )
 
 :checkOnline
@@ -51,54 +53,51 @@ CALL :log Waiting for Internet connection
 :checkOnlineAgain
 CALL :online && GOTO :connected
 :: Output a full stop after every failure
-<NUL >&2 SET /P "_NUL=."
+<NUL >CON SET /P "_NUL=."
 CALL :now
 SET /A "SECONDS=NOW-START"
 :: Give up after 10 minutes
 IF %SECONDS% GEQ 600 (
-    ECHO:
+    >CON ECHO:
     CALL :log Exiting ^(no Internet connection after 10 minutes^)
     ping -n 6 127.0.0.1 >nul
-    EXIT /B 1
+    GOTO :exitError
 )
 :: Sleep for 2 seconds
 ping -n 3 127.0.0.1 >nul
 GOTO :checkOnlineAgain
 
 :connected
-IF DEFINED SECONDS >&2 ECHO:
+IF DEFINED SECONDS >CON ECHO:
 CALL :log Connection established
-ECHO:
 
 IF EXIST "%SCRIPT_DIR%RemoveProvisionedPackages.ps1" (
+    CALL :log Checking for unnecessary packages
     powershell -NoProfile -ExecutionPolicy Bypass -File "%SCRIPT_DIR%RemoveProvisionedPackages.ps1" || (
         CALL :error "%SCRIPT_DIR%RemoveProvisionedPackages.ps1" failed
     )
-    ECHO:
 )
 
 IF EXIST "%SCRIPT_DIR%SetRegistrySettings.cmd" (
-    CALL "%SCRIPT_DIR%SetRegistrySettings.cmd" || (
+    CALL "%SCRIPT_DIR%SetRegistrySettings.cmd" /start || (
         CALL :error "%SCRIPT_DIR%SetRegistrySettings.cmd" failed
     )
-    ECHO:
 )
 
 WHERE /Q choco && (
     CALL :log Updating Chocolatey
     choco upgrade chocolatey -y --no-progress || (
         CALL :log Exiting ^("choco upgrade chocolatey -y --no-progress" failed^)
-        EXIT /B 1
+        GOTO :exitError
     )
     GOTO :skipChoco
 )
 CALL :log Installing Chocolatey
 powershell -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "[System.Net.ServicePointManager]::SecurityProtocol = 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" || (
     CALL :log Exiting ^(Chocolatey installation failed^)
-    EXIT /B 1
+    GOTO :exitError
 )
 SET "PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"
-ECHO:
 
 :skipChoco
 choco feature enable -n=allowGlobalConfirmation -y
@@ -121,15 +120,23 @@ CALL :choco tightvnc --ia="ADDLOCAL=Server SET_ACCEPTHTTPCONNECTIONS=1 SET_CONTR
 CALL :choco vlc
 
 CALL :log %CHOCO_COUNT% packages installed or updated by Chocolatey ^(errors: %CHOCO_ERRORS%^)
-ECHO:
 
 IF EXIST "%SCRIPT_DIR%..\Office365" (
     XCOPY "%SCRIPT_DIR%..\Office365" %SystemDrive%\Office365 /E /I /Q /Y
 )
 
-CALL :log Exiting ^(end of script^)
-ECHO Errors: %ERRORS%
+IF "%1"=="/exit" GOTO :exit
+CALL :log ===== %~f0 finished with %ERRORS% errors
 IF %ERRORS% EQU 0 EXIT /B 0
+EXIT /B 1
+
+:exit
+CALL :log ===== Quitting CMD after %~f0 finished with %ERRORS% errors
+IF %ERRORS% EQU 0 EXIT 0
+EXIT 1
+
+:exitError
+IF "%1"=="/exit" EXIT 1
 EXIT /B 1
 
 

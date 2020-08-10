@@ -6,10 +6,11 @@ NET SESSION >NUL 2>NUL || (
 )
 
 IF "%1"=="/start" GOTO :start
-CALL "%~0" /start | powershell -NoProfile -Command "$input | tee %SystemDrive%\Unattended.log -Append"
+CALL "%~0" /start %* 2>&1 | powershell -NoProfile -Command "$input | tee %SystemDrive%\Unattended.log -Append"
 EXIT /B
 
 :start
+SHIFT /1
 SET "SCRIPT_DIR=%~dp0"
 SET ERRORS=0
 

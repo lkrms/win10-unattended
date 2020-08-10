@@ -111,7 +111,7 @@
         <RunSynchronousCommand wcm:action="add">
           <Order>1</Order>
           <Description>Set the product key, configure Wi-Fi, install software, apply default settings</Description>
-          <Path>CMD /C FOR %i IN (C D E F G H I J K L M N O P Q R S T U V W X Y Z) DO IF EXIST %i:\Autounattend.xml (CALL %i:\Unattended\Unattended.cmd &amp; EXIT %ERRORLEVEL%)</Path>
+          <Path>CMD /C FOR %i IN (C D E F G H I J K L M N O P Q R S T U V W X Y Z) DO IF EXIST %i:\Autounattend.xml CALL %i:\Unattended\Unattended.cmd /exit</Path>
         </RunSynchronousCommand>
       </RunSynchronous>
     </component>

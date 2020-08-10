@@ -6,10 +6,11 @@ NET SESSION >NUL 2>NUL || (
 )
 
 IF "%1"=="/start" GOTO :start
-CALL "%~0" /start | powershell -NoProfile -Command "$input | tee %SystemDrive%\Unattended.log -Append"
+CALL "%~0" /start %* 2>&1 | powershell -NoProfile -Command "$input | tee %SystemDrive%\Unattended.log -Append"
 EXIT /B
 
 :start
+SHIFT /1
 SET "SCRIPT_DIR=%~dp0"
 SET ERRORS=0
 
@@ -20,8 +21,8 @@ POWERCFG /CHANGE standby-timeout-ac 0 || (
     CALL :error "POWERCFG /CHANGE standby-timeout-ac 0" failed
 )
 
-:: Set public networks to private
 IF EXIST "%SCRIPT_DIR%SetNetworkCategory.ps1" (
+    CALL :log Setting network category to Private for all Public connection profiles
     powershell -NoProfile -ExecutionPolicy Bypass -File "%SCRIPT_DIR%SetNetworkCategory.ps1" || (
         CALL :error "powershell -NoProfile -ExecutionPolicy Bypass -File "%SCRIPT_DIR%SetNetworkCategory.ps1"" failed
     )
@@ -33,6 +34,7 @@ DISM /Online /Set-ReservedStorageState /State:Disabled || (
 )
 
 IF EXIST "%SCRIPT_DIR%AddPrinters.ps1" (
+    CALL :log Configuring printers
     powershell -NoProfile -ExecutionPolicy Bypass -File "%SCRIPT_DIR%AddPrinters.ps1" || (
         CALL :error "powershell -NoProfile -ExecutionPolicy Bypass -File "%SCRIPT_DIR%AddPrinters.ps1"" failed
     )
@@ -45,7 +47,15 @@ IF EXIST "%SCRIPT_DIR%AppAssociations.xml" (
     )
 )
 
+IF EXIST %SystemDrive%\Office365\install.cmd (
+    CALL :log Installing Office 365
+    CALL %SystemDrive%\Office365\install.cmd || (
+        CALL :error "%SystemDrive%\Office365\install.cmd" failed
+    )
+)
+
 IF %ERRORS% EQU 0 (
+    CALL :log Disabling first boot scheduled task
     SCHTASKS /Change /TN "Unattended - first boot" /DISABLE
     EXIT /B 0
 )

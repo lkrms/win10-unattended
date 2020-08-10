@@ -1,7 +1,5 @@
 $ErrorActionPreference = "Stop"
 
-Write-Host "Configuring printers"
-
 function ConfigureLprPrinter ($PrinterName, $DriverName, $HostAddress, $DuplexingMode) {
     try {
         Write-Host "Setting up $PrinterName"
