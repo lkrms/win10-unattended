@@ -10,7 +10,10 @@ SET ERRORS=0
 SET CHOCO_COUNT=0
 SET CHOCO_ERRORS=0
 
-XCOPY "%SCRIPT_DIR%" %SystemDrive%\Unattended /E /I /Q /Y
+IF NOT "%SCRIPT_DIR%"=="%SystemDrive%\Unattended\" (
+    XCOPY "%SCRIPT_DIR%" %SystemDrive%\Unattended /E /I /Q /Y
+    SCHTASKS /Create /F /TN "Unattended - first boot" /TR "%%SystemDrive%%\Unattended\UnattendedFirstBoot.cmd" /SC ONSTART /RU SYSTEM
+)
 
 IF EXIST "%SCRIPT_DIR%InstallOriginalProductKey.ps1" (
     powershell -NoProfile -ExecutionPolicy Bypass -File "%SCRIPT_DIR%InstallOriginalProductKey.ps1" || (
