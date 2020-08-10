@@ -45,7 +45,10 @@ IF EXIST "%SCRIPT_DIR%AppAssociations.xml" (
     )
 )
 
-IF %ERRORS% EQU 0 EXIT /B 0
+IF %ERRORS% EQU 0 (
+    SCHTASKS /Change /TN "Unattended - first boot" /DISABLE
+    EXIT /B 0
+)
 EXIT /B 1
 
 
