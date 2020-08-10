@@ -5,10 +5,17 @@ NET SESSION >NUL 2>NUL || (
     EXIT /B 1
 )
 
+IF "%1"=="/start" GOTO :start
+CALL "%~0" /start | powershell -NoProfile -Command "$input | tee %SystemDrive%\Unattended.log -Append"
+EXIT /B
+
+:start
 SET "SCRIPT_DIR=%~dp0"
 SET ERRORS=0
 
-ECHO Applying registry settings
+CALL :log ===== Starting %~f0
+
+CALL :log Applying registry settings
 REG LOAD HKLM\DEFAULT %SystemDrive%\Users\Default\NTUSER.DAT || (
     CALL :error "REG LOAD HKLM\DEFAULT %SystemDrive%\Users\Default\NTUSER.DAT" failed
     EXIT /B 1
@@ -41,7 +48,11 @@ IF %ERRORS% EQU 0 EXIT /B 0
 EXIT /B 1
 
 
+:log
+ECHO [%DATE% %TIME%] %*
+EXIT /B
+
 :error
-ECHO ERROR ^(%ERRORLEVEL%^): %*
+CALL :log ERROR ^(%ERRORLEVEL%^): %*
 SET /A "ERRORS+=1"
 EXIT /B

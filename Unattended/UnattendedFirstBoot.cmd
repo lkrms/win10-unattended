@@ -5,10 +5,17 @@ NET SESSION >NUL 2>NUL || (
     EXIT /B 1
 )
 
+IF "%1"=="/start" GOTO :start
+CALL "%~0" /start | powershell -NoProfile -Command "$input | tee %SystemDrive%\Unattended.log -Append"
+EXIT /B
+
+:start
 SET "SCRIPT_DIR=%~dp0"
 SET ERRORS=0
 
-ECHO Disabling sleep when plugged in
+CALL :log ===== Starting %~f0
+
+CALL :log Disabling sleep when plugged in
 POWERCFG /CHANGE standby-timeout-ac 0 || (
     CALL :error "POWERCFG /CHANGE standby-timeout-ac 0" failed
 )
@@ -20,7 +27,7 @@ IF EXIST "%SCRIPT_DIR%SetNetworkCategory.ps1" (
     )
 )
 
-ECHO Disabling reserved storage
+CALL :log Disabling reserved storage
 DISM /Online /Set-ReservedStorageState /State:Disabled || (
     CALL :error "DISM /Online /Set-ReservedStorageState /State:Disabled" failed
 )
@@ -32,7 +39,7 @@ IF EXIST "%SCRIPT_DIR%AddPrinters.ps1" (
 )
 
 IF EXIST "%SCRIPT_DIR%AppAssociations.xml" (
-    ECHO Configuring default apps
+    CALL :log Configuring default apps
     DISM /Online /Import-DefaultAppAssociations:"%SCRIPT_DIR%AppAssociations.xml" || (
         CALL :error "DISM /Online /Import-DefaultAppAssociations:"%SCRIPT_DIR%AppAssociations.xml"" failed
     )
@@ -42,7 +49,11 @@ IF %ERRORS% EQU 0 EXIT /B 0
 EXIT /B 1
 
 
+:log
+ECHO [%DATE% %TIME%] %*
+EXIT /B
+
 :error
-ECHO ERROR ^(%ERRORLEVEL%^): %*
+CALL :log ERROR ^(%ERRORLEVEL%^): %*
 SET /A "ERRORS+=1"
 EXIT /B
