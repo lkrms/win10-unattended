@@ -1,5 +1,10 @@
 @ECHO OFF
 
+NET SESSION >NUL 2>NUL || (
+    ECHO Please use "Run as administrator"
+    EXIT /B 1
+)
+
 SET "SCRIPT_DIR=%~dp0"
 SET ERRORS=0
 SET CHOCO_COUNT=0
@@ -62,36 +67,21 @@ IF EXIST "%SCRIPT_DIR%RemoveProvisionedPackages.ps1" (
     ECHO:
 )
 
-ECHO Applying registry settings
-REG LOAD HKLM\DEFAULT %SystemDrive%\Users\Default\NTUSER.DAT || (
-    CALL :error "REG LOAD HKLM\DEFAULT %SystemDrive%\Users\Default\NTUSER.DAT" failed
-    GOTO :skipReg
+IF EXIST "%SCRIPT_DIR%SetRegistrySettings.cmd" (
+    CALL "%SCRIPT_DIR%SetRegistrySettings.cmd" || (
+        CALL :error "%SCRIPT_DIR%SetRegistrySettings.cmd" failed
+    )
+    ECHO:
 )
-IF NOT EXIST "%SCRIPT_DIR%Specialize.reg" GOTO :skipRegImport
-REG IMPORT "%SCRIPT_DIR%Specialize.reg" || (
-    CALL :error "REG IMPORT "%SCRIPT_DIR%Specialize.reg"" failed
-)
-IF NOT EXIST "%SCRIPT_DIR%Specialize-HKLM-DEFAULT.reg" GOTO :skipRegImport
-REG IMPORT "%SCRIPT_DIR%Specialize-HKLM-DEFAULT.reg" || (
-    CALL :error "REG IMPORT "%SCRIPT_DIR%Specialize-HKLM-DEFAULT.reg"" failed
-)
-:skipRegImport
-REG ADD "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" /v MapNetworkDrives /t REG_EXPAND_SZ /d "CMD /C NET USE H: \"\\hub\%%USERNAME%%\" && NET USE S: \\hub\family" /f
-REG ADD "HKLM\DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" /v {374DE290-123F-4565-9164-39C4925E467B} /t REG_EXPAND_SZ /d "\\hub\%%USERNAME%%\Downloads" /f
-REG ADD "HKLM\DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" /v Desktop /t REG_EXPAND_SZ /d "\\hub\%%USERNAME%%\Desktop" /f
-REG ADD "HKLM\DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" /v Personal /t REG_EXPAND_SZ /d "\\hub\%%USERNAME%%\Documents" /f
-IF EXIST "%SCRIPT_DIR%ResetTaskbar.reg" (
-    COPY "%SCRIPT_DIR%ResetTaskbar.reg" "%SystemRoot%" /Y
-    :: After each user's first login, reset their taskbar to remove Edge and Mail
-    REG ADD HKLM\DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce /v !ResetTaskbar /t REG_EXPAND_SZ /d "CMD /C REG IMPORT \"%%SystemRoot%%\ResetTaskbar.reg\" && TASKKILL /F /IM explorer.exe && start explorer.exe" /f
-)
-IF EXIST "%SCRIPT_DIR%AddPrinters.ps1" (
-    REG ADD HKLM\DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce /v !SetDefaultPrinter /t REG_EXPAND_SZ /d "powershell -NoProfile -Command \"^(New-Object -ComObject WScript.Network^).SetDefaultPrinter^('Brother HL-5450DN ^(black and white^)'^)\"" /f
-)
-REG UNLOAD HKLM\DEFAULT
 
-:skipReg
-ECHO:
+WHERE /Q choco && (
+    ECHO Updating Chocolatey
+    choco upgrade chocolatey -y --no-progress || (
+        ECHO Exiting ^("choco upgrade chocolatey -y --no-progress" failed^)
+        EXIT /B 1
+    )
+    GOTO :skipChoco
+)
 ECHO Installing Chocolatey
 powershell -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "[System.Net.ServicePointManager]::SecurityProtocol = 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" || (
     ECHO Exiting ^(Chocolatey installation failed^)
@@ -100,6 +90,8 @@ powershell -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "[Syste
 SET "PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"
 ECHO:
 
+:skipChoco
+choco feature enable -n=allowGlobalConfirmation -y
 choco feature enable -n=useRememberedArgumentsForUpgrades -y
 
 :: Otherwise SumatraPDF won't install
@@ -118,7 +110,7 @@ CALL :choco sysinternals
 CALL :choco tightvnc --ia="ADDLOCAL=Server SET_ACCEPTHTTPCONNECTIONS=1 SET_CONTROLPASSWORD=1 SET_PASSWORD=1 SET_RUNCONTROLINTERFACE=1 SET_USECONTROLAUTHENTICATION=1 SET_USEVNCAUTHENTICATION=1 VALUE_OF_ACCEPTHTTPCONNECTIONS=0 VALUE_OF_CONTROLPASSWORD=nZ4yUJ3O VALUE_OF_PASSWORD=Shabbyr= VALUE_OF_RUNCONTROLINTERFACE=0 VALUE_OF_USECONTROLAUTHENTICATION=1 VALUE_OF_USEVNCAUTHENTICATION=1"
 CALL :choco vlc
 
-ECHO %CHOCO_COUNT% packages installed by Chocolatey ^(errors: %CHOCO_ERRORS%^)
+ECHO %CHOCO_COUNT% packages installed or updated by Chocolatey ^(errors: %CHOCO_ERRORS%^)
 ECHO:
 
 IF EXIST "%SCRIPT_DIR%..\Office365" (
@@ -143,8 +135,8 @@ EXIT /B
 :choco
 ECHO Installing %1
 SET /A "CHOCO_COUNT+=1"
-choco install %* -y --no-progress || (
-    CALL :error "choco install %* -y --no-progress" failed
+choco upgrade %* -y --no-progress || (
+    CALL :error "choco upgrade %* -y --no-progress" failed
     SET /A "CHOCO_ERRORS+=1"
 )
 EXIT /B
