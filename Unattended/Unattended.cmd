@@ -129,7 +129,8 @@ IF EXIST "%SCRIPT_DIR%..\Office365" (
 
 CALL :log Exiting ^(end of script^)
 ECHO Errors: %ERRORS%
-EXIT /B 0
+IF %ERRORS% EQU 0 EXIT /B 0
+EXIT /B 1
 
 
 :now
