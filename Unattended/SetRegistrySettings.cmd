@@ -30,6 +30,8 @@ REG IMPORT "%SCRIPT_DIR%Unattended-HKLM-DEFAULT.reg" || (
     CALL :error "REG IMPORT "%SCRIPT_DIR%Unattended-HKLM-DEFAULT.reg"" failed
 )
 :skipRegImport
+:: Must exist or GPSvcDebugLevel will not take effect
+IF NOT EXIST "%SystemRoot%\Debug\UserMode" MD "%SystemRoot%\Debug\UserMode"
 IF EXIST "%SCRIPT_DIR%MapNetworkDrives.cmd" (
     COPY "%SCRIPT_DIR%MapNetworkDrives.cmd" "%SystemRoot%" /Y
     REG ADD "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" /v MapNetworkDrives /t REG_EXPAND_SZ /d "%%SystemRoot%%\MapNetworkDrives.cmd" /f

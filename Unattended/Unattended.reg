@@ -2,6 +2,10 @@ Windows Registry Editor Version 5.00
 
 [HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Network\NewNetworkWindowOff]
 
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Diagnostics]
+; Log user logon details to %SystemRoot%\Debug\UserMode\gpsvc.log
+"GPSvcDebugLevel"=dword:00030002
+
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System]
 ; Disable "This won't take long" etc.
 "EnableFirstLogonAnimation"=dword:00000000
