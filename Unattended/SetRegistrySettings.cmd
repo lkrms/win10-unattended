@@ -30,7 +30,10 @@ REG IMPORT "%SCRIPT_DIR%Unattended-HKLM-DEFAULT.reg" || (
     CALL :error "REG IMPORT "%SCRIPT_DIR%Unattended-HKLM-DEFAULT.reg"" failed
 )
 :skipRegImport
-REG ADD "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" /v MapNetworkDrives /t REG_EXPAND_SZ /d "CMD /C NET USE H: \"\\hub\%%USERNAME%%\" && NET USE S: \\hub\family" /f
+IF EXIST "%SCRIPT_DIR%MapNetworkDrives.cmd" (
+    COPY "%SCRIPT_DIR%MapNetworkDrives.cmd" "%SystemRoot%" /Y
+    REG ADD "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" /v MapNetworkDrives /t REG_EXPAND_SZ /d "%%SystemRoot%%\MapNetworkDrives.cmd" /f
+)
 REG ADD "HKLM\DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" /v {374DE290-123F-4565-9164-39C4925E467B} /t REG_EXPAND_SZ /d "\\hub\%%USERNAME%%\Downloads" /f
 REG ADD "HKLM\DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" /v Desktop /t REG_EXPAND_SZ /d "\\hub\%%USERNAME%%\Desktop" /f
 REG ADD "HKLM\DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" /v Personal /t REG_EXPAND_SZ /d "\\hub\%%USERNAME%%\Documents" /f
