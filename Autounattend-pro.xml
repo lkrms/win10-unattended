@@ -4,12 +4,12 @@
     <component name="Microsoft-Windows-International-Core-WinPE" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
       <!-- Windows 10 English: en-US -->
       <!-- Windows 10 English International: en-GB -->
-      <UILanguage>en-US</UILanguage>
+      <UILanguage>en-GB</UILanguage>
       <InputLocale>en-AU</InputLocale>
       <SystemLocale>en-AU</SystemLocale>
       <UserLocale>en-AU</UserLocale>
       <SetupUILanguage>
-        <UILanguage>en-US</UILanguage>
+        <UILanguage>en-GB</UILanguage>
       </SetupUILanguage>
     </component>
     <component name="Microsoft-Windows-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -59,7 +59,7 @@
       <SystemLocale>en-AU</SystemLocale>
       <UserLocale>en-AU</UserLocale>
       <UILanguage>en-AU</UILanguage>
-      <UILanguageFallback>en-US</UILanguageFallback>
+      <UILanguageFallback>en-GB</UILanguageFallback>
     </component>
     <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
       <UserAccounts>

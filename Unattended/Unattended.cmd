@@ -22,6 +22,9 @@ CALL :log ===== Starting %~f0
 IF NOT "%SCRIPT_DIR%"=="%SystemDrive%\Unattended\" (
     CALL :log Copying %SCRIPT_DIR% to %SystemDrive%\Unattended
     XCOPY "%SCRIPT_DIR%" %SystemDrive%\Unattended /E /I /Q /Y
+    IF EXIST "%SCRIPT_DIR%..\Office365" (
+        XCOPY "%SCRIPT_DIR%..\Office365" %SystemDrive%\Office365 /I /Q /Y
+    )
     CALL :log Scheduling %SystemDrive%\Unattended\UnattendedFirstBoot.cmd
     SCHTASKS /Create /F /TN "Unattended - first boot" /TR "%%SystemDrive%%\Unattended\UnattendedFirstBoot.cmd" /SC ONSTART /RU SYSTEM
 )
@@ -120,10 +123,6 @@ CALL :choco tightvnc --ia="ADDLOCAL=Server SET_ACCEPTHTTPCONNECTIONS=1 SET_CONTR
 CALL :choco vlc
 
 CALL :log %CHOCO_COUNT% packages installed or updated by Chocolatey ^(errors: %CHOCO_ERRORS%^)
-
-IF EXIST "%SCRIPT_DIR%..\Office365" (
-    XCOPY "%SCRIPT_DIR%..\Office365" %SystemDrive%\Office365 /E /I /Q /Y
-)
 
 IF "%1"=="/exit" GOTO :exit
 CALL :log ===== %~f0 finished with %ERRORS% errors
