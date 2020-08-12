@@ -75,13 +75,6 @@ GOTO :checkOnlineAgain
 IF DEFINED SECONDS >CON ECHO:
 CALL :log Connection established
 
-IF EXIST "%SystemRoot%\SysWOW64\OneDriveSetup.exe" (
-    CALL :log Removing OneDrive
-    "%SystemRoot%\SysWOW64\OneDriveSetup.exe" /uninstall || (
-        CALL :error "%SystemRoot%\SysWOW64\OneDriveSetup.exe /uninstall" failed
-    )
-)
-
 IF EXIST "%SCRIPT_DIR%RemoveProvisionedPackages.ps1" (
     CALL :log Checking for unnecessary packages
     powershell -NoProfile -ExecutionPolicy Bypass -File "%SCRIPT_DIR%RemoveProvisionedPackages.ps1" || (
