@@ -1,5 +1,8 @@
 Windows Registry Editor Version 5.00
 
+;[HKEY_LOCAL_MACHINE\DEFAULT\SOFTWARE\Microsoft\Office\Teams]
+;"PreventInstallationFromMsi"="1"
+
 [HKEY_LOCAL_MACHINE\DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications\Microsoft.MicrosoftEdge_8wekyb3d8bbwe]
 "Disabled"=dword:00000001
 "DisabledByUser"=dword:00000001

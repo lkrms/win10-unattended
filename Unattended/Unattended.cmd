@@ -23,6 +23,7 @@ IF NOT "%SCRIPT_DIR%"=="%SystemDrive%\Unattended\" (
     CALL :log Copying %SCRIPT_DIR% to %SystemDrive%\Unattended
     XCOPY "%SCRIPT_DIR%" %SystemDrive%\Unattended /E /I /Q /Y
     IF EXIST "%SCRIPT_DIR%..\Office365" (
+        CALL :log Copying %SCRIPT_DIR%..\Office365 to %SystemDrive%\Office365
         XCOPY "%SCRIPT_DIR%..\Office365" %SystemDrive%\Office365 /I /Q /Y
     )
     CALL :log Scheduling %SystemDrive%\Unattended\UnattendedFirstBoot.cmd
@@ -73,6 +74,13 @@ GOTO :checkOnlineAgain
 :connected
 IF DEFINED SECONDS >CON ECHO:
 CALL :log Connection established
+
+IF EXIST "%SystemRoot%\SysWOW64\OneDriveSetup.exe" (
+    CALL :log Removing OneDrive
+    "%SystemRoot%\SysWOW64\OneDriveSetup.exe" /uninstall || (
+        CALL :error "%SystemRoot%\SysWOW64\OneDriveSetup.exe /uninstall" failed
+    )
+)
 
 IF EXIST "%SCRIPT_DIR%RemoveProvisionedPackages.ps1" (
     CALL :log Checking for unnecessary packages
