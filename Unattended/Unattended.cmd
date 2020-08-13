@@ -125,6 +125,14 @@ CALL :choco vlc
 
 CALL :log %CHOCO_COUNT% packages installed or updated by Chocolatey ^(errors: %CHOCO_ERRORS%^)
 
+IF NOT "%2"=="/debug" GOTO :noDebug
+CALL :log Exporting registry settings
+REG EXPORT HKLM\SOFTWARE %SystemDrive%\Unattended-HKLM-SOFTWARE.reg
+
+CALL :log Enabling Process Monitor log of next boot
+Procmon /AcceptEula /EnableBootLogging
+
+:noDebug
 IF "%1"=="/exit" GOTO :exit
 CALL :log ===== %~f0 finished with %ERRORS% errors
 IF %ERRORS% EQU 0 EXIT /B 0
