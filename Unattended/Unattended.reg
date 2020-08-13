@@ -2,18 +2,16 @@ Windows Registry Editor Version 5.00
 
 [HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Network\NewNetworkWindowOff]
 
-[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Diagnostics]
-; Log user logon details to %SystemRoot%\Debug\UserMode\gpsvc.log
-"GPSvcDebugLevel"=dword:00030002
-
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System]
+; Force "Sign out"
+"HideFastUserSwitching"=dword:00000001
+; Sign users out whenever the system shuts down or restarts
+"DisableAutomaticRestartSignOn"=dword:00000001
 ; Disable "This won't take long" etc.
 "EnableFirstLogonAnimation"=dword:00000000
 ; Display detailed messages during logon
 "VerboseStatus"=dword:00000001
 "DisableStatusMessages"=dword:00000000
-; Sign users out whenever the system shuts down or restarts
-"DisableAutomaticRestartSignOn"=dword:00000001
 ; Lock session when screen is turned off, or after 15 minutes (0x384 seconds) of inactivity
 "InactivityTimeoutSecs"=dword:00000384
 
@@ -23,18 +21,43 @@ Windows Registry Editor Version 5.00
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search]
 "AllowCortana"=dword:00000000
+"ConnectedSearchUseWeb"=dword:00000000
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MicrosoftEdge\Main]
-"AllowPrelaunch"=dword:00000000
+"AllowPrelaunch"=-
 "PreventFirstRunPage"=dword:00000001
 
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MicrosoftEdge\ServiceUI]
+"AllowWebContentOnNewTabPage"=dword:00000000
+
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MicrosoftEdge\TabPreloader]
-"AllowTabPreloading"=dword:00000000
+"AllowTabPreloading"=-
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\NetCache]
+"Enabled"=dword:00000001
+
+[HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\OOBE]
+"DisablePrivacyExperience"=dword:00000001
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU]
+"NoAutoRebootWithLoggedOnUsers"=dword:00000001
+"NoAutoUpdate"=dword:00000000
+"AUOptions"=dword:00000004
+"AutomaticMaintenanceEnabled"=-
+"ScheduledInstallDay"=dword:00000000
+"ScheduledInstallTime"=dword:00000018
+"ScheduledInstallEveryWeek"=-
+"ScheduledInstallFirstWeek"=-
+"ScheduledInstallSecondWeek"=-
+"ScheduledInstallThirdWeek"=-
+"ScheduledInstallFourthWeek"=-
+"AllowMUUpdateService"=dword:00000001
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender]
 "DisableAntiSpyware"=dword:00000001
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Features]
+; Without this, Windows 10 Home ignores DisableAntiSpyware etc.
 "TamperProtection"=dword:00000000
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection]
@@ -42,4 +65,17 @@ Windows Registry Editor Version 5.00
 "DisableBehaviorMonitoring"=dword:00000001
 "DisableOnAccessProtection"=dword:00000001
 "DisableIOAVProtection"=dword:00000001
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender Security Center\Systray]
+"HideSystray"=dword:00000001
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender Security Center\Virus and threat protection]
+"UILockdown"=dword:00000001
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\SystemRestore]
+"DisableSR"=dword:00000001
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services]
+; Allow Remote Desktop connections
+"fDenyTSConnections"=dword:00000000
 

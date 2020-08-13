@@ -7,6 +7,10 @@ Windows Registry Editor Version 5.00
 "Disabled"=dword:00000001
 "DisabledByUser"=dword:00000001
 
+[HKEY_LOCAL_MACHINE\DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced]
+; Open File Explorer to "This PC"
+"LaunchTo"=dword:00000001
+
 [HKEY_LOCAL_MACHINE\DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\Run]
 ; Prevent OneDrive installing itself to %LOCALAPPDATA% for every user
 "OneDriveSetup"=-
