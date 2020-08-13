@@ -1,0 +1,22 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<policyComments xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" revision="1.0" schemaVersion="1.0" xmlns="http://www.microsoft.com/GroupPolicy/CommentDefinitions">
+  <policyNamespaces>
+    <using prefix="ns0" namespace="FullArmor.Policies.3B9EA2B5_A1D1_4CD5_9EDE_75B22990BC21"></using>
+    <using prefix="ns1" namespace="Microsoft.Policies.MicrosoftEdge"></using>
+    <using prefix="ns2" namespace="Microsoft.Policies.OOBE  "></using>
+    <using prefix="ns3" namespace="Microsoft.Policies.OfflineFiles"></using>
+    <using prefix="ns4" namespace="Microsoft.Policies.SystemRestore"></using>
+    <using prefix="ns5" namespace="Microsoft.Policies.TerminalServer"></using>
+    <using prefix="ns6" namespace="Microsoft.Policies.WindowsDefenderSecurityCenter"></using>
+    <using prefix="ns7" namespace="Microsoft.Policies.WindowsExplorer"></using>
+    <using prefix="ns8" namespace="Microsoft.Policies.WindowsLogon"></using>
+    <using prefix="ns9" namespace="Microsoft.Policies.WindowsLogon2"></using>
+    <using prefix="ns10" namespace="Microsoft.Policies.WindowsUpdate"></using>
+  </policyNamespaces>
+  <comments>
+    <admTemplate></admTemplate>
+  </comments>
+  <resources minRequiredRevision="1.0">
+    <stringTable></stringTable>
+  </resources>
+</policyComments>
