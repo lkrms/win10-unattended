@@ -4,17 +4,16 @@ Windows Registry Editor Version 5.00
 [HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Network\NewNetworkWindowOff]
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System]
-; Force "Sign out"
-"HideFastUserSwitching"=dword:00000001
 ; Sign users out whenever the system shuts down or restarts
 "DisableAutomaticRestartSignOn"=dword:00000001
 ; Disable "This won't take long" etc.
 "EnableFirstLogonAnimation"=dword:00000000
-; Display detailed messages during logon
-"VerboseStatus"=dword:00000001
-"DisableStatusMessages"=-
+; Force "Sign out"
+"HideFastUserSwitching"=dword:00000001
 ; Lock session when screen is turned off, or after 15 minutes (0x384 seconds) of inactivity
 "InactivityTimeoutSecs"=dword:00000384
+; Display detailed messages during logon
+"VerboseStatus"=dword:00000001
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer]
 ; Don't prompt for confirmation when first opening a PDF in SumatraPDF, for example
@@ -23,6 +22,7 @@ Windows Registry Editor Version 5.00
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search]
 "AllowCortana"=dword:00000000
 "ConnectedSearchUseWeb"=dword:00000000
+"DisableWebSearch"=dword:00000001
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MicrosoftEdge\Main]
 "AllowPrelaunch"=-
@@ -33,9 +33,6 @@ Windows Registry Editor Version 5.00
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MicrosoftEdge\TabPreloader]
 "AllowTabPreloading"=-
-
-[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\NetCache]
-"Enabled"=dword:00000001
 
 [HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\OOBE]
 "DisablePrivacyExperience"=dword:00000001
@@ -62,10 +59,10 @@ Windows Registry Editor Version 5.00
 "TamperProtection"=dword:00000000
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection]
-"DisableRealtimeMonitoring"=dword:00000001
 "DisableBehaviorMonitoring"=dword:00000001
-"DisableOnAccessProtection"=dword:00000001
 "DisableIOAVProtection"=dword:00000001
+"DisableOnAccessProtection"=dword:00000001
+"DisableRealtimeMonitoring"=dword:00000001
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender Security Center\Systray]
 "HideSystray"=dword:00000001

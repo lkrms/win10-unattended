@@ -17,10 +17,17 @@ Windows Registry Editor Version 5.00
 
 [HKEY_LOCAL_MACHINE\DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\Search]
 "SearchboxTaskbarMode"=dword:00000000
+; Added in Windows 2004
+"BingSearchEnabled"=dword:00000000
 
 [HKEY_LOCAL_MACHINE\DEFAULT\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Windows]
 "LegacyDefaultPrinterMode"=dword:00000001
 
 [HKEY_LOCAL_MACHINE\DEFAULT\SOFTWARE\Policies\Microsoft\Office\16.0\Teams]
 "PreventFirstLaunchAfterInstall"=dword:00000001
+
+[HKEY_LOCAL_MACHINE\DEFAULT\SOFTWARE\Policies\Microsoft\Windows\Control Panel\Desktop]
+"ScreenSaveActive"="1"
+"ScreenSaverIsSecure"="1"
+"ScreenSaveTimeOut"="300"
 
