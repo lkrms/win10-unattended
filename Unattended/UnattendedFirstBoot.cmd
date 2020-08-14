@@ -7,7 +7,7 @@ NET SESSION >NUL 2>NUL || (
 
 IF "%1"=="/start" GOTO :start
 CALL "%~0" /start %* 2>&1 | powershell -NoProfile -Command "$input | tee %SystemDrive%\Unattended.log -Append"
-EXIT /B
+EXIT /B %ERRORLEVEL%
 
 :start
 SHIFT /1
@@ -15,11 +15,6 @@ SET "SCRIPT_DIR=%~dp0"
 SET ERRORS=0
 
 CALL :log ===== Starting %~f0
-
-CALL :log Disabling sleep when plugged in
-POWERCFG /CHANGE standby-timeout-ac 0 || (
-    CALL :error "POWERCFG /CHANGE standby-timeout-ac 0" failed
-)
 
 IF EXIST "%SCRIPT_DIR%SetNetworkCategory.ps1" (
     CALL :log Setting network category to Private for all Public connection profiles

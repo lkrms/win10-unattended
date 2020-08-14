@@ -2,19 +2,19 @@
 
 NET SESSION >NUL 2>NUL || (
     ECHO Please use "Run as administrator"
-    GOTO :exitError
+    EXIT /B 1
 )
 
 IF "%1"=="/start" GOTO :start
 CALL "%~0" /start %* 2>&1 | powershell -NoProfile -Command "$input | tee %SystemDrive%\Unattended.log -Append"
-IF "%1"=="/exit" EXIT 1
-EXIT /B
+EXIT /B %ERRORLEVEL%
 
 :start
 SHIFT /1
 SET "SCRIPT_DIR=%~dp0"
 SET ERRORS=0
 SET CHOCO_COUNT=0
+SET CHOCO_EXTRAS=0
 SET CHOCO_ERRORS=0
 
 CALL :log ===== Starting %~f0
@@ -65,7 +65,7 @@ IF %SECONDS% GEQ 600 (
     >CON ECHO:
     CALL :log Exiting ^(no Internet connection after 10 minutes^)
     ping -n 6 127.0.0.1 >nul
-    GOTO :exitError
+    EXIT /B 1
 )
 :: Sleep for 2 seconds
 ping -n 3 127.0.0.1 >nul
@@ -92,14 +92,14 @@ WHERE /Q choco && (
     CALL :log Updating Chocolatey
     choco upgrade chocolatey -y --no-progress || (
         CALL :log Exiting ^("choco upgrade chocolatey -y --no-progress" failed^)
-        GOTO :exitError
+        EXIT /B 1
     )
     GOTO :skipChoco
 )
 CALL :log Installing Chocolatey
 powershell -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "[System.Net.ServicePointManager]::SecurityProtocol = 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" || (
     CALL :log Exiting ^(Chocolatey installation failed^)
-    GOTO :exitError
+    EXIT /B 1
 )
 SET "PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"
 
@@ -112,16 +112,15 @@ IF NOT EXIST "%USERPROFILE%\Desktop" MD "%USERPROFILE%\Desktop"
 
 CALL :choco 7zip
 CALL :choco Firefox
-CALL :choco flashplayerplugin
+:: CALL :choco flashplayerplugin
 CALL :choco GoogleChrome --ignore-checksum
 CALL :choco keepassxc --ia="AUTOSTARTPROGRAM=0"
-CALL :choco nextcloud-client
 CALL :choco notepadplusplus
 CALL :choco skype
 CALL :choco sumatrapdf --ia="/d ""%ProgramFiles%\SumatraPDF"""
-CALL :choco sysinternals
-CALL :choco tightvnc --ia="ADDLOCAL=Server SET_ACCEPTHTTPCONNECTIONS=1 SET_CONTROLPASSWORD=1 SET_PASSWORD=1 SET_RUNCONTROLINTERFACE=1 SET_USECONTROLAUTHENTICATION=1 SET_USEVNCAUTHENTICATION=1 VALUE_OF_ACCEPTHTTPCONNECTIONS=0 VALUE_OF_CONTROLPASSWORD=nZ4yUJ3O VALUE_OF_PASSWORD=Shabbyr= VALUE_OF_RUNCONTROLINTERFACE=0 VALUE_OF_USECONTROLAUTHENTICATION=1 VALUE_OF_USEVNCAUTHENTICATION=1"
 CALL :choco vlc
+
+FOR %%a IN (%*) DO CALL :arg %%a
 
 CALL :log %CHOCO_COUNT% packages installed or updated by Chocolatey ^(errors: %CHOCO_ERRORS%^)
 
@@ -133,18 +132,8 @@ CALL :log Enabling Process Monitor log of next boot
 Procmon /AcceptEula /EnableBootLogging
 
 :noDebug
-IF "%1"=="/exit" GOTO :exit
 CALL :log ===== %~f0 finished with %ERRORS% errors
 IF %ERRORS% EQU 0 EXIT /B 0
-EXIT /B 1
-
-:exit
-CALL :log ===== Quitting CMD after %~f0 finished with %ERRORS% errors
-IF %ERRORS% EQU 0 EXIT 0
-EXIT 1
-
-:exitError
-IF "%1"=="/exit" EXIT 1
 EXIT /B 1
 
 
@@ -164,6 +153,15 @@ SET /A "CHOCO_COUNT+=1"
 choco upgrade %* -y --no-progress || (
     CALL :error "choco upgrade %* -y --no-progress" failed
     SET /A "CHOCO_ERRORS+=1"
+)
+EXIT /B
+
+:arg
+SET ARG=%1
+IF NOT %ARG:~0,1%==/ (
+    IF %CHOCO_EXTRAS% EQU 0 CALL :log "Installing command-line packages"
+    SET /A "CHOCO_EXTRAS+=1"
+    CALL :choco %ARG%
 )
 EXIT /B
 

@@ -7,7 +7,7 @@ NET SESSION >NUL 2>NUL || (
 
 IF "%1"=="/start" GOTO :start
 CALL "%~0" /start %* 2>&1 | powershell -NoProfile -Command "$input | tee %SystemDrive%\Unattended.log -Append"
-EXIT /B
+EXIT /B %ERRORLEVEL%
 
 :start
 SHIFT /1
