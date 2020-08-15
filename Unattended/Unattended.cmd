@@ -159,7 +159,7 @@ EXIT /B
 :arg
 SET ARG=%1
 IF NOT %ARG:~0,1%==/ (
-    IF %CHOCO_EXTRAS% EQU 0 CALL :log "Installing command-line packages"
+    IF %CHOCO_EXTRAS% EQU 0 CALL :log Installing command-line packages
     SET /A "CHOCO_EXTRAS+=1"
     CALL :choco %ARG%
 )
