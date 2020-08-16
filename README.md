@@ -9,7 +9,7 @@ See [`Unattended.cmd`](./Unattended/Unattended.cmd) and
 ## How to use it
 
 Skip Office-related steps and exclude the [`Office365`](./Office365/) folder
-from your removable media if not installing Microsoft Office 365.
+from your removable media if not installing Microsoft Office 365 or OneDrive.
 
 1. Clone this repo to your system
 
@@ -46,6 +46,13 @@ from your removable media if not installing Microsoft Office 365.
      document](https://docs.microsoft.com/en-us/windows/application-management/apps-in-windows-10)
      as a reference if needed
 
+1. Download the latest
+   [OneDriveSetup.exe](https://go.microsoft.com/fwlink/?linkid=844652) to the
+   [`Office365`](./Office365/) folder
+
+   - The version of OneDrive packaged with Windows doesn't support machine-wide
+     (`/allusers`) installation
+
 1. Download and install the latest [Office Deployment
    Tool](https://www.microsoft.com/en-au/download/details.aspx?id=49117) from
    Microsoft's website to the [`Office365`](./Office365/) folder
@@ -78,6 +85,7 @@ from your removable media if not installing Microsoft Office 365.
      [`UnattendedFirstBoot.cmd`](./Unattended/UnattendedFirstBoot.cmd))*
    - [`Drivers`](./Drivers/) *(optional)*
    - [`Office365`](./Office365/) *(optional)*
+   - [`Office365\OneDriveSetup.exe`](./Office365/OneDriveSetup.exe) *(optional)*
 
 1. Assuming `<UILanguage>` values in your
    [`Autounattend.xml`](./Autounattend.xml) match your install media language,

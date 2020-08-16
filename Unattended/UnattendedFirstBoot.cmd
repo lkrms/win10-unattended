@@ -49,6 +49,13 @@ IF EXIST %SystemDrive%\Office365\install.cmd (
     )
 )
 
+IF EXIST %SystemDrive%\Office365\OneDriveSetup.exe (
+    CALL :log Installing OneDrive for all users
+    %SystemDrive%\Office365\OneDriveSetup.exe /silent /allusers || (
+        CALL :error "%SystemDrive%\Office365\OneDriveSetup.exe /silent /allusers" failed
+    )
+)
+
 IF %ERRORS% EQU 0 (
     CALL :log Disabling first boot scheduled task
     SCHTASKS /Change /TN "Unattended - first boot" /DISABLE
