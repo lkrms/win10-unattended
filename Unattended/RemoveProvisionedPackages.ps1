@@ -1,24 +1,40 @@
 $ErrorActionPreference = "Stop"
 
+# See: https://docs.microsoft.com/en-us/windows/application-management/apps-in-windows-10
 $packageNames = @(
+    # Cortana
     "Microsoft.549981C3F5F10"
     "Microsoft.GetHelp"
+    # Microsoft Tips
     "Microsoft.Getstarted"
+    # "Office"
     "Microsoft.MicrosoftOfficeHub"
     "Microsoft.MixedReality.Portal"
+    # OneNote for Windows 10
     "Microsoft.Office.OneNote"
+    # Skype
     "Microsoft.SkypeApp"
+    # Microsoft Pay
     "Microsoft.Wallet"
+    # Mail and Calendar
     "microsoft.windowscommunicationsapps"
     "Microsoft.WindowsFeedbackHub"
-    "Microsoft.Xbox.TCUI"
-    "Microsoft.XboxApp"
+    # Xbox Live in-game experience
+    #"Microsoft.Xbox.TCUI"
+    # Xbox Console Companion
+    #"Microsoft.XboxApp"
+    # Xbox Game Bar Plugin
     "Microsoft.XboxGameOverlay"
-    "Microsoft.XboxGamingOverlay"
+    # Xbox Game Bar
+    #"Microsoft.XboxGamingOverlay"
+    # Xbox Identity Provider
     "Microsoft.XboxIdentityProvider"
     "Microsoft.XboxSpeechToTextOverlay"
+    # Your Phone
     "Microsoft.YourPhone"
+    # Groove Music
     "Microsoft.ZuneMusic"
+    # Movies & TV
     "Microsoft.ZuneVideo"
 )
 

@@ -9,7 +9,7 @@ Windows Registry Editor Version 5.00
 ; Disable "This won't take long" etc.
 "EnableFirstLogonAnimation"=dword:00000000
 ; Force "Sign out"
-"HideFastUserSwitching"=dword:00000001
+;"HideFastUserSwitching"=dword:00000001
 ; Lock session when screen is turned off, or after 15 minutes (0x384 seconds) of inactivity
 "InactivityTimeoutSecs"=dword:00000384
 ; Display detailed messages during logon
