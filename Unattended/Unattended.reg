@@ -33,6 +33,15 @@ Windows Registry Editor Version 5.00
 "ConnectedSearchUseWeb"=dword:00000000
 "DisableWebSearch"=dword:00000001
 
+[HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Edge]
+"HideFirstRunExperience"=dword:00000001
+"ShowRecommendationsEnabled"=dword:00000000
+"StartupBoostEnabled"=dword:00000000
+"WebWidgetAllowed"=dword:00000000
+
+[HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\EdgeUpdate]
+"CreateDesktopShortcutDefault"=dword:00000000
+
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MicrosoftEdge\Main]
 "AllowPrelaunch"=-
 "PreventFirstRunPage"=dword:00000001

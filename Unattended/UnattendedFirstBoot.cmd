@@ -56,6 +56,11 @@ IF EXIST %SystemDrive%\Office365\OneDriveSetup.exe (
     )
 )
 
+CALL :log Disabling password expiry for all users
+WMIC USERACCOUNT WHERE Disabled=FALSE SET PasswordExpires=FALSE || (
+    CALL :error "WMIC USERACCOUNT WHERE Disabled=FALSE SET PasswordExpires=FALSE" failed
+)
+
 IF %ERRORS% EQU 0 (
     CALL :log Disabling first boot scheduled task
     SCHTASKS /Change /TN "Unattended - first boot" /DISABLE

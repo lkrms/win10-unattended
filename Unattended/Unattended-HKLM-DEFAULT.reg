@@ -31,3 +31,6 @@ Windows Registry Editor Version 5.00
 "ScreenSaverIsSecure"="1"
 "ScreenSaveTimeOut"="300"
 
+[HKEY_LOCAL_MACHINE\DEFAULT\SOFTWARE\Policies\Microsoft\Windows\Explorer]
+"DisableSearchBoxSuggestions"=dword:00000001
+
