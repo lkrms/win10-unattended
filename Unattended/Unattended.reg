@@ -33,13 +33,13 @@ Windows Registry Editor Version 5.00
 "ConnectedSearchUseWeb"=dword:00000000
 "DisableWebSearch"=dword:00000001
 
-[HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Edge]
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge]
 "HideFirstRunExperience"=dword:00000001
 "ShowRecommendationsEnabled"=dword:00000000
 "StartupBoostEnabled"=dword:00000000
 "WebWidgetAllowed"=dword:00000000
 
-[HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\EdgeUpdate]
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\EdgeUpdate]
 "CreateDesktopShortcutDefault"=dword:00000000
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MicrosoftEdge\Main]
@@ -52,22 +52,29 @@ Windows Registry Editor Version 5.00
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MicrosoftEdge\TabPreloader]
 "AllowTabPreloading"=-
 
-[HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\OOBE]
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\OOBE]
 "DisablePrivacyExperience"=dword:00000001
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate]
+"TargetReleaseVersionInfo"="20H2"
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU]
 "NoAutoRebootWithLoggedOnUsers"=dword:00000001
 "NoAutoUpdate"=dword:00000000
+; "Automatic download and scheduled installation" (requires ScheduledInstallDay and ScheduledInstallTime)
 "AUOptions"=dword:00000004
 "AutomaticMaintenanceEnabled"=-
+; Every day
 "ScheduledInstallDay"=dword:00000000
+; 6pm
 "ScheduledInstallTime"=dword:00000018
 "ScheduledInstallEveryWeek"=-
 "ScheduledInstallFirstWeek"=-
 "ScheduledInstallSecondWeek"=-
 "ScheduledInstallThirdWeek"=-
 "ScheduledInstallFourthWeek"=-
-"AllowMUUpdateService"=dword:00000001
+; Disable Microsoft Update
+"AllowMUUpdateService"=dword:00000000
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender]
 "DisableAntiSpyware"=dword:00000001
