@@ -65,6 +65,14 @@
       <UserAccounts>
         <LocalAccounts>
           <LocalAccount wcm:action="add">
+            <Name>admin</Name>
+            <Group>Administrators</Group>
+            <Password>
+              <Value>YWRtaW4tcGFzcw==</Value>
+              <PlainText>true</PlainText>
+            </Password>
+          </LocalAccount>
+          <LocalAccount wcm:action="add">
             <DisplayName>Luke</DisplayName>
             <Name>lina</Name>
             <Group>Administrators</Group>
@@ -111,7 +119,7 @@
         <RunSynchronousCommand wcm:action="add">
           <Order>1</Order>
           <Description>Set the product key, configure Wi-Fi, install software, apply default settings</Description>
-          <Path>CMD /C FOR %i IN (C D E X) DO IF EXIST %i:\Autounattend.xml (CALL %i:\Unattended\Unattended.cmd nextcloud-client sysinternals &amp; EXIT /B %ERRORLEVEL%)</Path>
+          <Path>CMD /C FOR %i IN (C D E X) DO IF EXIST %i:\Autounattend.xml (CALL %i:\Unattended\Unattended.cmd &amp; EXIT /B %ERRORLEVEL%)</Path>
         </RunSynchronousCommand>
         <RunSynchronousCommand wcm:action="add">
           <Order>2</Order>
@@ -121,5 +129,5 @@
       </RunSynchronous>
     </component>
   </settings>
-  <cpi:offlineImage cpi:source="catalog://hub/lina/sources/install_windows 10 pro.clg" xmlns:cpi="urn:schemas-microsoft-com:cpi" />
+  <cpi:offlineImage cpi:source="catalog://doo/lina/sources/install_windows 10 pro.clg" xmlns:cpi="urn:schemas-microsoft-com:cpi" />
 </unattend>

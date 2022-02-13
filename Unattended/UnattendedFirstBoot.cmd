@@ -23,6 +23,13 @@ IF EXIST "%SCRIPT_DIR%SetNetworkCategory.ps1" (
     )
 )
 
+IF EXIST "%SCRIPT_DIR%EnableFileSharing.ps1" (
+    CALL :log Enabling file sharing on private network connections
+    powershell -NoProfile -ExecutionPolicy Bypass -File "%SCRIPT_DIR%EnableFileSharing.ps1" || (
+        CALL :error "powershell -NoProfile -ExecutionPolicy Bypass -File "%SCRIPT_DIR%EnableFileSharing.ps1"" failed
+    )
+)
+
 CALL :log Disabling reserved storage
 DISM /Online /Set-ReservedStorageState /State:Disabled || (
     CALL :error "DISM /Online /Set-ReservedStorageState /State:Disabled" failed

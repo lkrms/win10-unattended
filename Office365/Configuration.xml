@@ -1,19 +1,18 @@
 <Configuration>
-  <Add OfficeClientEdition="64" Channel="Current" SourcePath="\\hub\unattend\Office365" AllowCdnFallback="FALSE">
+  <Add OfficeClientEdition="64" Channel="Current" SourcePath="\\doo\unattend\Office365" AllowCdnFallback="FALSE">
     <Product ID="O365ProPlusRetail">
       <Language ID="en-us" />
       <ExcludeApp ID="Access" />
       <ExcludeApp ID="Groove" />
       <ExcludeApp ID="Lync" />
       <ExcludeApp ID="OneDrive" />
-      <ExcludeApp ID="Teams" />
       <ExcludeApp ID="Bing" />
     </Product>
   </Add>
   <Property Name="SharedComputerLicensing" Value="0" />
   <Property Name="SCLCacheOverride" Value="0" />
   <Property Name="AUTOACTIVATE" Value="0" />
-  <Property Name="FORCEAPPSHUTDOWN" Value="TRUE" />
+  <Property Name="FORCEAPPSHUTDOWN" Value="FALSE" />
   <Property Name="DeviceBasedLicensing" Value="0" />
   <Updates Enabled="TRUE" />
   <RemoveMSI />
