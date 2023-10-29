@@ -34,10 +34,10 @@ IF EXIST "%SCRIPT_DIR%MapNetworkDrives.cmd" (
     COPY "%SCRIPT_DIR%MapNetworkDrives.cmd" "%SystemRoot%" /Y
     REG ADD "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" /v MapNetworkDrives /t REG_EXPAND_SZ /d "%%SystemRoot%%\MapNetworkDrives.cmd" /f
 )
-REG ADD "HKLM\DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" /v {374DE290-123F-4565-9164-39C4925E467B} /t REG_EXPAND_SZ /d "\\doo\%%USERNAME%%\Downloads" /f
+:: REG ADD "HKLM\DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" /v {374DE290-123F-4565-9164-39C4925E467B} /t REG_EXPAND_SZ /d "\\doo\%%USERNAME%%\Downloads" /f
 :: REG ADD "HKLM\DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" /v Desktop /t REG_EXPAND_SZ /d "\\doo\%%USERNAME%%\Desktop" /f
-REG ADD "HKLM\DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" /v Personal /t REG_EXPAND_SZ /d "\\doo\%%USERNAME%%\Documents" /f
-REG ADD "HKLM\DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" /v "My Pictures" /t REG_EXPAND_SZ /d "\\doo\%%USERNAME%%\Pictures" /f
+:: REG ADD "HKLM\DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" /v Personal /t REG_EXPAND_SZ /d "\\doo\%%USERNAME%%\Documents" /f
+:: REG ADD "HKLM\DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" /v "My Pictures" /t REG_EXPAND_SZ /d "\\doo\%%USERNAME%%\Pictures" /f
 IF EXIST "%SCRIPT_DIR%ResetTaskbar.reg" (
     COPY "%SCRIPT_DIR%ResetTaskbar.reg" "%SystemRoot%" /Y
     :: After each user's first login, reset their taskbar to remove Edge and Mail

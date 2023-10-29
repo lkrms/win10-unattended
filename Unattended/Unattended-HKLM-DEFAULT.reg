@@ -23,8 +23,8 @@ Windows Registry Editor Version 5.00
 [HKEY_LOCAL_MACHINE\DEFAULT\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Windows]
 "LegacyDefaultPrinterMode"=dword:00000001
 
-[HKEY_LOCAL_MACHINE\DEFAULT\SOFTWARE\Policies\Microsoft\Office\16.0\Teams]
-"PreventFirstLaunchAfterInstall"=dword:00000001
+;[HKEY_LOCAL_MACHINE\DEFAULT\SOFTWARE\Policies\Microsoft\Office\16.0\Teams]
+;"PreventFirstLaunchAfterInstall"=dword:00000001
 
 [HKEY_LOCAL_MACHINE\DEFAULT\SOFTWARE\Policies\Microsoft\Windows\Control Panel\Desktop]
 "ScreenSaveActive"="1"

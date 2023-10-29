@@ -56,7 +56,9 @@ Windows Registry Editor Version 5.00
 "DisablePrivacyExperience"=dword:00000001
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate]
-"TargetReleaseVersionInfo"="20H2"
+"TargetReleaseVersion"=dword:00000001
+"ProductVersion"="Windows 10"
+"TargetReleaseVersionInfo"="21H2"
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU]
 "NoAutoRebootWithLoggedOnUsers"=dword:00000001
@@ -73,27 +75,27 @@ Windows Registry Editor Version 5.00
 "ScheduledInstallSecondWeek"=-
 "ScheduledInstallThirdWeek"=-
 "ScheduledInstallFourthWeek"=-
-; Disable Microsoft Update
-"AllowMUUpdateService"=dword:00000000
+; Enable Microsoft Update
+"AllowMUUpdateService"=dword:00000001
 
-[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender]
-"DisableAntiSpyware"=dword:00000001
-
-[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Features]
-; Without this, Windows 10 Home ignores DisableAntiSpyware etc.
-"TamperProtection"=dword:00000000
-
-[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection]
-"DisableBehaviorMonitoring"=dword:00000001
-"DisableIOAVProtection"=dword:00000001
-"DisableOnAccessProtection"=dword:00000001
-"DisableRealtimeMonitoring"=dword:00000001
-
-[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender Security Center\Systray]
-"HideSystray"=dword:00000001
-
-[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender Security Center\Virus and threat protection]
-"UILockdown"=dword:00000001
+;[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender]
+;"DisableAntiSpyware"=dword:00000001
+;
+;[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Features]
+;; Without this, Windows 10 Home ignores DisableAntiSpyware etc.
+;"TamperProtection"=dword:00000000
+;
+;[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection]
+;"DisableBehaviorMonitoring"=dword:00000001
+;"DisableIOAVProtection"=dword:00000001
+;"DisableOnAccessProtection"=dword:00000001
+;"DisableRealtimeMonitoring"=dword:00000001
+;
+;[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender Security Center\Systray]
+;"HideSystray"=dword:00000001
+;
+;[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender Security Center\Virus and threat protection]
+;"UILockdown"=dword:00000001
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\SystemRestore]
 "DisableSR"=dword:00000001

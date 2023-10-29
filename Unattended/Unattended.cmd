@@ -89,7 +89,7 @@ IF EXIST "%SCRIPT_DIR%SetRegistrySettings.cmd" (
 )
 
 :: Disable UAC remote restrictions (required for access to admin shares)
-REG ADD HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System /v LocalAccountTokenFilterPolicy /t REG_DWORD /d 1 /f
+:: REG ADD HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System /v LocalAccountTokenFilterPolicy /t REG_DWORD /d 1 /f
 
 :: Hide the "admin" user
 REG ADD "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\SpecialAccounts\UserList" /v admin /t REG_DWORD /d 0 /f
@@ -120,7 +120,7 @@ CALL :choco 7zip
 CALL :choco Firefox
 :: CALL :choco flashplayerplugin
 CALL :choco GoogleChrome --ignore-checksum
-CALL :choco keepassxc --ia="AUTOSTARTPROGRAM=0"
+:: CALL :choco keepassxc --ia="AUTOSTARTPROGRAM=0"
 CALL :choco notepadplusplus
 CALL :choco skype
 CALL :choco sumatrapdf --ia="/d ""%ProgramFiles%\SumatraPDF"""
