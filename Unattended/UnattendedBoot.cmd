@@ -21,22 +21,39 @@ EXIT /B %RETURN_CODE%
 
 :start
 SHIFT /1
+SET "SCRIPT_DIR=%SystemDrive%\Unattended\"
+SET ERRORS=0
 
-IF "%1"=="" GOTO :usage
-IF "%2"=="" GOTO :usage
+CALL :log ===== Starting %~f0
 
-CALL :log Installing TightVNC Server
-"%ALLUSERSPROFILE%\chocolatey\bin\choco" upgrade tightvnc --ia="ADDLOCAL=Server SET_ACCEPTHTTPCONNECTIONS=1 SET_CONTROLPASSWORD=1 SET_PASSWORD=1 SET_RUNCONTROLINTERFACE=1 SET_USECONTROLAUTHENTICATION=1 SET_USEVNCAUTHENTICATION=1 VALUE_OF_ACCEPTHTTPCONNECTIONS=0 VALUE_OF_CONTROLPASSWORD=""%~1"" VALUE_OF_PASSWORD=""%~2"" VALUE_OF_RUNCONTROLINTERFACE=0 VALUE_OF_USECONTROLAUTHENTICATION=1 VALUE_OF_USEVNCAUTHENTICATION=1" -y --no-progress || (
-    CALL :error "choco upgrade tightvnc -y --no-progress" failed
-    EXIT /B 1
-)
+CALL :optCmd ApplyRegistrySettings.cmd "/start /boot"
 
-EXIT /B 0
+CALL :optPs1 RemoveBloatware.ps1 "Removing bloatware"
 
-
-:usage
-ECHO Usage: UnattendedTightVNC.cmd ^<CONTROLPASSWORD^> ^<PASSWORD^>
+IF %ERRORS% EQU 0 EXIT /B 0
 EXIT /B 1
+
+
+:optCmd
+SET "SCRIPT=%SCRIPT_DIR%Optional\%~1"
+SET "ARGS=%~2"
+IF EXIST "%SCRIPT%" (
+    CALL "%SCRIPT%" %ARGS% || (
+        CALL :error "%SCRIPT%" failed
+    )
+)
+EXIT /B
+
+:optPs1
+SET "SCRIPT=%SCRIPT_DIR%Optional\%~1"
+SET "MESSAGE=%~2"
+IF EXIST "%SCRIPT%" (
+    IF NOT "%MESSAGE%"=="" CALL :log %MESSAGE%
+    powershell -NoProfile -ExecutionPolicy Bypass -File "%SCRIPT%" || (
+        CALL :error "%SCRIPT%" failed
+    )
+)
+EXIT /B
 
 :log
 ECHO [%DATE% %TIME%] %*
@@ -44,4 +61,5 @@ EXIT /B
 
 :error
 CALL :log ERROR ^(%ERRORLEVEL%^): %*
+SET /A "ERRORS+=1"
 EXIT /B

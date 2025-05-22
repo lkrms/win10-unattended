@@ -1,12 +1,13 @@
 @ECHO OFF
 
+SETLOCAL
+
 SET ERRORS=0
 
 (
-
     NET USE /PERSISTENT:NO
 
-    :: In case of persistent connections
+    rem In case of persistent connections
     NET USE H: /DELETE
     NET USE S: /DELETE
 

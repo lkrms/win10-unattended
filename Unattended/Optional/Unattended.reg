@@ -1,27 +1,42 @@
 Windows Registry Editor Version 5.00
 
-; Documented here: https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2008-R2-and-2008/gg252535(v=ws.10)
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\BitLocker]
+"PreventDeviceEncryption"=dword:00000001
+
+; See https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2008-R2-and-2008/gg252535(v=ws.10)
 [HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Network\NewNetworkWindowOff]
+
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters]
+; Needed for access to guest shares
+"RequireSecuritySignature"=dword:00000000
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer]
+; Disable "Meet Now" on Windows 10 taskbar
+"HideSCAMeetNow"=dword:00000001
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System]
 ; Sign users out whenever the system shuts down or restarts
 "DisableAutomaticRestartSignOn"=dword:00000001
 ; Disable "This won't take long" etc.
 "EnableFirstLogonAnimation"=dword:00000000
+; Display detailed messages during startup/shutdown/logon/logoff
+"VerboseStatus"=dword:00000001
 ; Force "Sign out"
 ;"HideFastUserSwitching"=dword:00000001
+
 ; Lock session when screen is turned off, or after 15 minutes (0x384 seconds) of inactivity
 "InactivityTimeoutSecs"=dword:00000384
-; Display detailed messages during logon
-"VerboseStatus"=dword:00000001
 
-[HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Power\PowerSettings\29F6C1DB-86DA-48C5-9FDB-F2B67B1F44DA]
+; Unattended sleep timeout (plugged in) = never
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Power\PowerSettings\7BC4A2F9-D8FC-4469-B07B-33EB785AACA0]
 "ACSettingIndex"=dword:00000000
 
-[HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Power\PowerSettings\7bc4a2f9-d8fc-4469-b07b-33eb785aaca0]
+; System sleep timeout (plugged in) = never
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Power\PowerSettings\29F6C1DB-86DA-48C5-9FDB-F2B67B1F44DA]
 "ACSettingIndex"=dword:00000000
 
-[HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Power\PowerSettings\9D7815A6-7EE4-497E-8888-515A05F02364]
+; System hibernate timeout (plugged in) = never
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Power\PowerSettings\9D7815A6-7EE4-497E-8888-515A05F02364]
 "ACSettingIndex"=dword:00000000
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer]
@@ -33,42 +48,57 @@ Windows Registry Editor Version 5.00
 "ConnectedSearchUseWeb"=dword:00000000
 "DisableWebSearch"=dword:00000001
 
+; See https://techcommunity.microsoft.com/blog/windows-itpro-blog/configuring-weather-and-more-on-the-lock-screen-in-windows/4101024
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Dsh]
+"AllowNewsAndInterests"=dword:00000000
+
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge]
 "HideFirstRunExperience"=dword:00000001
 "ShowRecommendationsEnabled"=dword:00000000
 "StartupBoostEnabled"=dword:00000000
-"WebWidgetAllowed"=dword:00000000
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\EdgeUpdate]
 "CreateDesktopShortcutDefault"=dword:00000000
 
-[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MicrosoftEdge\Main]
-"AllowPrelaunch"=-
-"PreventFirstRunPage"=dword:00000001
-
-[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MicrosoftEdge\ServiceUI]
-"AllowWebContentOnNewTabPage"=dword:00000000
-
-[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MicrosoftEdge\TabPreloader]
-"AllowTabPreloading"=-
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent]
+; Disable Windows spotlight on lock screen
+"IncludeEnterpriseSpotlight"=dword:00000000
+; Disable Windows tips
+"DisableSoftLanding"=dword:00000001
+; Disable account-related notifications
+"DisableConsumerAccountStateContent"=dword:00000001
+; Disable recommendations from Microsoft
+"DisableWindowsConsumerFeatures"=dword:00000001
+; Disable introductions to new features
+"DisableWindowsSpotlightWindowsWelcomeExperience"=dword:00000001
+; Disable suggestion notifications
+"DisableWindowsSpotlightOnActionCenter"=dword:00000001
+; Disable suggestions in settings
+"DisableWindowsSpotlightOnSettings"=dword:00000001
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\OOBE]
 "DisablePrivacyExperience"=dword:00000001
 
-[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate]
-"TargetReleaseVersion"=dword:00000001
-"ProductVersion"="Windows 10"
-"TargetReleaseVersionInfo"="21H2"
+; As above, see https://techcommunity.microsoft.com/blog/windows-itpro-blog/configuring-weather-and-more-on-the-lock-screen-in-windows/4101024
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System]
+"DisableLockScreenAppNotifications"=dword:00000001
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Feeds]
+; Disable news and interests on Windows 10 taskbar
+"EnableFeeds"=dword:00000000
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU]
 "NoAutoRebootWithLoggedOnUsers"=dword:00000001
 "NoAutoUpdate"=dword:00000000
-; "Automatic download and scheduled installation" (requires ScheduledInstallDay and ScheduledInstallTime)
+; - 3 = Automatically download and notify of installation
+; - 4 = Automatic download and scheduled installation (requires ScheduledInstallDay and ScheduledInstallTime)
 "AUOptions"=dword:00000004
 "AutomaticMaintenanceEnabled"=-
-; Every day
+; - 0 = Every day
+; - 1 to 7 = Sunday to Saturday
 "ScheduledInstallDay"=dword:00000000
-; 6pm
+; - 24 = Automatic
+; - 0 to 23 = 00:00 to 23:00
 "ScheduledInstallTime"=dword:00000018
 "ScheduledInstallEveryWeek"=-
 "ScheduledInstallFirstWeek"=-
@@ -78,29 +108,18 @@ Windows Registry Editor Version 5.00
 ; Enable Microsoft Update
 "AllowMUUpdateService"=dword:00000001
 
-;[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender]
-;"DisableAntiSpyware"=dword:00000001
-;
-;[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Features]
-;; Without this, Windows 10 Home ignores DisableAntiSpyware etc.
-;"TamperProtection"=dword:00000000
-;
-;[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection]
-;"DisableBehaviorMonitoring"=dword:00000001
-;"DisableIOAVProtection"=dword:00000001
-;"DisableOnAccessProtection"=dword:00000001
-;"DisableRealtimeMonitoring"=dword:00000001
-;
-;[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender Security Center\Systray]
-;"HideSystray"=dword:00000001
-;
-;[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender Security Center\Virus and threat protection]
-;"UILockdown"=dword:00000001
-
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\SystemRestore]
 "DisableSR"=dword:00000001
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services]
 ; Allow Remote Desktop connections
 "fDenyTSConnections"=dword:00000000
+
+[HKEY_LOCAL_MACHINE\SYSTEM\Setup\LabConfig]
+"BypassSecureBootCheck"=dword:00000001
+"BypassTPMCheck"=dword:00000001
+"BypassRAMCheck"=dword:00000001
+
+[HKEY_LOCAL_MACHINE\SYSTEM\Setup\MoSetup]
+"AllowUpgradesWithUnsupportedTPMOrCPU"=dword:00000001
 

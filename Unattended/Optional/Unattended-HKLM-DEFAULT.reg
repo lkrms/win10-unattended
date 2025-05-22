@@ -1,30 +1,97 @@
 Windows Registry Editor Version 5.00
 
-;[HKEY_LOCAL_MACHINE\DEFAULT\SOFTWARE\Microsoft\Office\Teams]
-;"PreventInstallationFromMsi"="1"
+[HKEY_LOCAL_MACHINE\DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager]
+; Disable silent installation of recommended apps
+"SilentInstalledAppsEnabled"=dword:00000000
 
-[HKEY_LOCAL_MACHINE\DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications\Microsoft.MicrosoftEdge_8wekyb3d8bbwe]
-"Disabled"=dword:00000001
-"DisabledByUser"=dword:00000001
+; Disable Windows tips (?)
+"SoftLandingEnabled"=dword:00000000
+
+; Disable "Get fun facts, tips, tricks and more on your lock screen"
+"RotatingLockScreenOverlayEnabled"=dword:00000000
+"SubscribedContent-338387Enabled"=dword:00000000
+
+; Disable "Show the Windows welcome experience after updates and when signed in to show what's new and suggested"
+"SubscribedContent-310093Enabled"=dword:00000000
+
+; Disable "Show suggestions occasionally in Start" (?)
+"SubscribedContent-338388Enabled"=dword:00000000
+"SystemPaneSuggestionsEnabled"=dword:00000000
+
+; Disable "Get tips and suggestions when using Windows"
+"SubscribedContent-338389Enabled"=dword:00000000
+
+; Disable "Show me suggested content in the Settings app"
+"SubscribedContent-338393Enabled"=dword:00000000
+"SubscribedContent-353694Enabled"=dword:00000000
+"SubscribedContent-353696Enabled"=dword:00000000
+
+; Disable "Show suggestions occasionally in Timeline" (?)
+"SubscribedContent-353698Enabled"=dword:00000000
 
 [HKEY_LOCAL_MACHINE\DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced]
 ; Open File Explorer to "This PC"
 "LaunchTo"=dword:00000001
+; Disable suggestions in File Explorer
+"ShowSyncProviderNotifications"=dword:00000000
+; Disable "Copilot in Windows (preview)" on the taskbar
+"ShowCopilotButton"=dword:00000000
+; Disable "Show account related notifications occasionally in Start"
+"Start_AccountNotifications"=dword:00000000
+; Disable "Show recommendations for tips, shortcuts, new apps, and more" in Start
+"Start_IrisRecommendations"=dword:00000000
+; Disable widgets on the taskbar
+"TaskbarDa"=dword:00000000
+
+[HKEY_LOCAL_MACHINE\DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\Notifications\Settings\Windows.SystemToast.Suggested]
+"Enabled"=dword:00000000
 
 [HKEY_LOCAL_MACHINE\DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\Run]
 ; Prevent OneDrive installing itself to %LOCALAPPDATA% for every user
 "OneDriveSetup"=-
 
+[HKEY_LOCAL_MACHINE\DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce]
+; More recent versions of OneDrive install from here
+"OneDrive"=-
+
 [HKEY_LOCAL_MACHINE\DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\Search]
-"SearchboxTaskbarMode"=dword:00000000
+;"SearchboxTaskbarMode"=dword:00000000
 ; Added in Windows 2004
 "BingSearchEnabled"=dword:00000000
+
+[HKEY_LOCAL_MACHINE\DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\SearchSettings]
+; Disable "Allow Windows Search to provide results from the apps and services that you are signed in to with your Microsoft account"
+"IsMSACloudSearchEnabled"=dword:00000000
+; Disable "Allow Windows Search to provide results from the apps and services that you are signed in to with your work or school account"
+"IsAADCloudSearchEnabled"=dword:00000000
+
+[HKEY_LOCAL_MACHINE\DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\SystemSettings\AccountNotifications]
+; Disable "Show me notifications in the Settings app"
+"EnableAccountNotifications"=dword:00000001
+
+[HKEY_LOCAL_MACHINE\DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\UserProfileEngagement]
+; Disable "Suggest ways to get the most out of Windows and finish setting up this device"
+"ScoobeSystemSettingEnabled"=dword:00000000
 
 [HKEY_LOCAL_MACHINE\DEFAULT\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Windows]
 "LegacyDefaultPrinterMode"=dword:00000001
 
-;[HKEY_LOCAL_MACHINE\DEFAULT\SOFTWARE\Policies\Microsoft\Office\16.0\Teams]
-;"PreventFirstLaunchAfterInstall"=dword:00000001
+[HKEY_LOCAL_MACHINE\DEFAULT\SOFTWARE\Microsoft\Office\16.0\Outlook\Options\General]
+"HideNewOutlookToggle"=dword:00000001
+
+[HKEY_LOCAL_MACHINE\DEFAULT\SOFTWARE\Microsoft\Siuf\Rules]
+; Feedback frequency: Never
+"NumberOfSIUFInPeriod"=dword:00000000
+"PeriodInNanoSeconds"=-
+
+[HKEY_LOCAL_MACHINE\DEFAULT\SOFTWARE\Policies\Microsoft\Office\16.0\Outlook\Options\General]
+"HideNewOutlookToggle"=dword:00000001
+
+[HKEY_LOCAL_MACHINE\DEFAULT\SOFTWARE\Policies\Microsoft\Office\16.0\Outlook\Preferences]
+"NewOutlookMigrationUserSetting"=dword:00000000
+
+[HKEY_LOCAL_MACHINE\DEFAULT\SOFTWARE\Policies\Microsoft\Office\16.0\Teams]
+"PreventFirstLaunchAfterInstall"=dword:00000001
 
 [HKEY_LOCAL_MACHINE\DEFAULT\SOFTWARE\Policies\Microsoft\Windows\Control Panel\Desktop]
 "ScreenSaveActive"="1"

@@ -1,60 +1,69 @@
 $ErrorActionPreference = "Stop"
 
-# See: https://docs.microsoft.com/en-us/windows/application-management/apps-in-windows-10
+# See: https://learn.microsoft.com/en-us/windows/application-management/remove-provisioned-apps-during-update
 $packageNames = @(
-    # Cortana
-    "Microsoft.549981C3F5F10"
+    "Clipchamp.Clipchamp"
+    "Microsoft.549981C3F5F10" # Cortana
+    "Microsoft.BingNews"
+    "Microsoft.BingSearch"
+    #"Microsoft.BingWeather"
+    "Microsoft.Copilot"
+    "Microsoft.Edge.GameAssist"
+    "Microsoft.GamingApp"
     "Microsoft.GetHelp"
-    # Microsoft Tips
-    "Microsoft.Getstarted"
-    # "Office"
+    "Microsoft.Getstarted" # Microsoft Tips
     "Microsoft.MicrosoftOfficeHub"
     "Microsoft.MixedReality.Portal"
-    # OneNote for Windows 10
     "Microsoft.Office.OneNote"
-    # Skype
+    "Microsoft.OneConnect"
+    "Microsoft.OneDriveSync" # Remove if not installing for all users
+    "Microsoft.OutlookForWindows" # New Outlook
+    "Microsoft.People"
     "Microsoft.SkypeApp"
-    # Microsoft Pay
-    "Microsoft.Wallet"
-    # Mail and Calendar
-    "microsoft.windowscommunicationsapps"
+    "Microsoft.Wallet" # Microsoft Pay
+    "microsoft.windowscommunicationsapps" # Mail and Calendar (deprecated)
     "Microsoft.WindowsFeedbackHub"
-    # Xbox Live in-game experience
-    #"Microsoft.Xbox.TCUI"
-    # Xbox Console Companion
-    #"Microsoft.XboxApp"
-    # Xbox Game Bar Plugin
+    "Microsoft.Xbox.TCUI"
+    "Microsoft.XboxApp"
     "Microsoft.XboxGameOverlay"
-    # Xbox Game Bar
-    #"Microsoft.XboxGamingOverlay"
-    # Xbox Identity Provider
+    "Microsoft.XboxGamingOverlay"
     "Microsoft.XboxIdentityProvider"
     "Microsoft.XboxSpeechToTextOverlay"
-    # Your Phone
     "Microsoft.YourPhone"
-    # Groove Music
     "Microsoft.ZuneMusic"
-    # Movies & TV
     "Microsoft.ZuneVideo"
+    #"MSTeams" # Removed until installed for all users
 )
 
 try {
     $packages = Get-ProvisionedAppxPackage -Online |
-    Where-Object DisplayName -CIn $packageNames
+        Where-Object DisplayName -CIn $packageNames
 
     if ($packages) {
-        $missing = $packageNames.Count - $packages.Count
         Write-Host "Removing provisioned packages:"
         Write-Host -NoNewline ($packages |
-            Format-Table -HideTableHeaders -Property DisplayName |
-            Out-String)
-        Write-Host "Total: $($packages.Count)" `
-            "($($missing) missing or previously removed)"
+                Format-Table -HideTableHeaders -Property DisplayName |
+                Out-String)
+        Write-Host "Total: $($packages.Count)"
         $packages | Remove-ProvisionedAppxPackage -Online
     } else {
         Write-Host "No provisioned packages to remove"
     }
+
+    $packages = Get-AppxPackage -AllUsers |
+        Where-Object Name -CIn $packageNames
+
+    if ($packages) {
+        Write-Host "Removing installed packages:"
+        Write-Host -NoNewline ($packages |
+                Format-Table -HideTableHeaders -Property Name |
+                Out-String)
+        Write-Host "Total: $($packages.Count)"
+        $packages | Remove-AppxPackage -AllUsers
+    } else {
+        Write-Host "No installed packages to remove"
+    }
 } catch {
-    Write-Host "Error removing provisioned packages:"
+    Write-Host "Error removing packages:"
     Write-Host $_
 }

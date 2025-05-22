@@ -2,15 +2,15 @@
 <unattend xmlns="urn:schemas-microsoft-com:unattend">
   <settings pass="windowsPE">
     <component name="Microsoft-Windows-International-Core-WinPE" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-      <!-- Windows 10 English: en-US -->
-      <!-- Windows 10 English International: en-GB -->
+      <!-- English: en-US -->
+      <!-- English International: en-GB -->
       <UILanguage>en-GB</UILanguage>
-      <InputLocale>en-AU</InputLocale>
-      <SystemLocale>en-AU</SystemLocale>
-      <UserLocale>en-AU</UserLocale>
       <SetupUILanguage>
         <UILanguage>en-GB</UILanguage>
       </SetupUILanguage>
+      <InputLocale>en-AU</InputLocale>
+      <SystemLocale>en-AU</SystemLocale>
+      <UserLocale>en-AU</UserLocale>
     </component>
     <component name="Microsoft-Windows-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
       <UserData>
@@ -27,90 +27,53 @@
         <OSImage>
           <InstallFrom>
             <MetaData wcm:action="add">
-              <!-- "Windows 10 Home" -->
-              <!-- "Windows 10 Pro" -->
+              <!-- Windows 11: "Windows 11 Home", "Windows 11 Pro" -->
+              <!-- Windows 10: "Windows 10 Home", "Windows 10 Pro" -->
               <Key>/IMAGE/DESCRIPTION</Key>
-              <Value>Windows 10 Home</Value>
+              <Value>Windows 11 Home</Value>
             </MetaData>
           </InstallFrom>
         </OSImage>
       </ImageInstall>
+      <RunSynchronous>
+        <RunSynchronousCommand wcm:action="add">
+          <Order>1</Order>
+          <Description>Bypass Windows 11 secure boot check</Description>
+          <Path>REG ADD HKLM\SYSTEM\Setup\LabConfig /v BypassSecureBootCheck /t REG_DWORD /d 1 /f</Path>
+        </RunSynchronousCommand>
+        <RunSynchronousCommand wcm:action="add">
+          <Order>2</Order>
+          <Description>Bypass Windows 11 TPM check</Description>
+          <Path>REG ADD HKLM\SYSTEM\Setup\LabConfig /v BypassTPMCheck /t REG_DWORD /d 1 /f</Path>
+        </RunSynchronousCommand>
+        <RunSynchronousCommand wcm:action="add">
+          <Order>3</Order>
+          <Description>Bypass Windows 11 RAM check</Description>
+          <Path>REG ADD HKLM\SYSTEM\Setup\LabConfig /v BypassRAMCheck /t REG_DWORD /d 1 /f</Path>
+        </RunSynchronousCommand>
+      </RunSynchronous>
     </component>
     <component name="Microsoft-Windows-PnpCustomizationsWinPE" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
       <DriverPaths>
         <PathAndCredentials wcm:keyValue="1" wcm:action="add">
-          <Path>C:\Drivers</Path>
-        </PathAndCredentials>
-        <PathAndCredentials wcm:keyValue="2" wcm:action="add">
           <Path>D:\Drivers</Path>
         </PathAndCredentials>
-        <PathAndCredentials wcm:keyValue="3" wcm:action="add">
-          <Path>E:\Drivers</Path>
-        </PathAndCredentials>
-        <PathAndCredentials wcm:keyValue="4" wcm:action="add">
+        <PathAndCredentials wcm:keyValue="2" wcm:action="add">
           <Path>X:\Drivers</Path>
         </PathAndCredentials>
+        <PathAndCredentials wcm:keyValue="3" wcm:action="add">
+          <Path>C:\Drivers</Path>
+        </PathAndCredentials>
+        <PathAndCredentials wcm:keyValue="4" wcm:action="add">
+          <Path>E:\Drivers</Path>
+        </PathAndCredentials>
+        <PathAndCredentials wcm:keyValue="5" wcm:action="add">
+          <Path>F:\Drivers</Path>
+        </PathAndCredentials>
+        <PathAndCredentials wcm:keyValue="6" wcm:action="add">
+          <Path>G:\Drivers</Path>
+        </PathAndCredentials>
       </DriverPaths>
-    </component>
-  </settings>
-  <settings pass="oobeSystem">
-    <component name="Microsoft-Windows-International-Core" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-      <InputLocale>en-AU</InputLocale>
-      <SystemLocale>en-AU</SystemLocale>
-      <UserLocale>en-AU</UserLocale>
-      <UILanguage>en-AU</UILanguage>
-      <UILanguageFallback>en-GB</UILanguageFallback>
-    </component>
-    <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-      <UserAccounts>
-        <LocalAccounts>
-          <LocalAccount wcm:action="add">
-            <Name>admin</Name>
-            <Group>Administrators</Group>
-            <Password>
-              <Value>YWRtaW4tcGFzcw==</Value>
-              <PlainText>true</PlainText>
-            </Password>
-          </LocalAccount>
-          <LocalAccount wcm:action="add">
-            <DisplayName>Luke</DisplayName>
-            <Name>lina</Name>
-            <Group>Administrators</Group>
-            <Password>
-              <Value>bGluYS1wYXNz</Value>
-              <PlainText>true</PlainText>
-            </Password>
-          </LocalAccount>
-          <LocalAccount wcm:action="add">
-            <DisplayName>Josiah</DisplayName>
-            <Name>josiah</Name>
-            <Password>
-              <Value>am9zaWFoLXBhc3M=</Value>
-              <PlainText>true</PlainText>
-            </Password>
-          </LocalAccount>
-          <LocalAccount wcm:action="add">
-            <DisplayName>Katie</DisplayName>
-            <Name>katie</Name>
-            <Password>
-              <Value>a2F0aWUtcGFzcw==</Value>
-              <PlainText>true</PlainText>
-            </Password>
-          </LocalAccount>
-        </LocalAccounts>
-      </UserAccounts>
-      <OOBE>
-        <HideOnlineAccountScreens>true</HideOnlineAccountScreens>
-        <HideEULAPage>true</HideEULAPage>
-        <HideWirelessSetupInOOBE>true</HideWirelessSetupInOOBE>
-        <ProtectYourPC>3</ProtectYourPC>
-        <HideLocalAccountScreen>true</HideLocalAccountScreen>
-        <HideOEMRegistrationScreen>true</HideOEMRegistrationScreen>
-        <SkipUserOOBE>true</SkipUserOOBE>
-      </OOBE>
-      <RegisteredOwner>Luke Arms</RegisteredOwner>
-      <RegisteredOrganization>LINA Creative</RegisteredOrganization>
-      <TimeZone>AUS Eastern Standard Time</TimeZone>
     </component>
   </settings>
   <settings pass="specialize">
@@ -118,16 +81,67 @@
       <RunSynchronous>
         <RunSynchronousCommand wcm:action="add">
           <Order>1</Order>
-          <Description>Set the product key, configure Wi-Fi, install software, apply default settings</Description>
-          <Path>CMD /C FOR %i IN (C D E X) DO IF EXIST %i:\Autounattend.xml (CALL %i:\Unattended\Unattended.cmd &amp; EXIT /B %ERRORLEVEL%)</Path>
+          <Description>Disable voice-over during OOBE</Description>
+          <Path>REG ADD HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\OOBE /v DisableVoice /t REG_DWORD /d 1 /f</Path>
+        </RunSynchronousCommand>
+      </RunSynchronous>
+    </component>
+    <!--
+    <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <ComputerName>DearlyDeployed</ComputerName>
+    </component>
+    -->
+  </settings>
+  <settings pass="oobeSystem">
+    <component name="Microsoft-Windows-Deployment" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <Reseal>
+        <Mode>Audit</Mode>
+      </Reseal>
+    </component>
+  </settings>
+  <settings pass="auditUser">
+    <component name="Microsoft-Windows-Deployment" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <Reseal>
+        <Mode>OOBE</Mode>
+      </Reseal>
+      <RunSynchronous>
+        <RunSynchronousCommand wcm:action="add">
+          <Order>1</Order>
+          <Description>Stop and disable Windows Update service</Description>
+          <Path>CMD /C "sc stop wuauserv &gt;NUL 2&gt;NUL &amp; sc config wuauserv start=disabled"</Path>
         </RunSynchronousCommand>
         <RunSynchronousCommand wcm:action="add">
           <Order>2</Order>
+          <Description>Install win10-unattended files, drivers and MSI packages</Description>
+          <Path>CMD /C "FOR %G IN (D X C E F G) DO IF EXIST %G:\Autounattend.xml (CALL %G:\Unattended\Unattended.cmd /1 &amp; EXIT)"</Path>
+          <!-- Reboot if necessary after running pnputil and msiexec -->
+          <WillReboot>OnRequest</WillReboot>
+        </RunSynchronousCommand>
+        <RunSynchronousCommand wcm:action="add">
+          <Order>3</Order>
+          <Description>Install original product key, Wi-Fi profile, software, registry settings</Description>
+          <Path>CMD /C "FOR %G IN (D X C E F G) DO IF EXIST %G:\Autounattend.xml (CALL %G:\Unattended\Unattended.cmd /2 &amp; EXIT)"</Path>
+          <!-- Reboot if Office 365 installer needs guest share access -->
+          <WillReboot>OnRequest</WillReboot>
+        </RunSynchronousCommand>
+        <RunSynchronousCommand wcm:action="add">
+          <Order>4</Order>
+          <Description>Install Office 365, remove bloatware</Description>
+          <Path>CMD /C "FOR %G IN (D X C E F G) DO IF EXIST %G:\Autounattend.xml (CALL %G:\Unattended\Unattended.cmd /3 &amp; EXIT)"</Path>
+        </RunSynchronousCommand>
+        <!--
+        <RunSynchronousCommand wcm:action="add">
+          <Order>5</Order>
           <Description>Install TightVNC Server</Description>
-          <Path>CMD /C FOR %i IN (C D E X) DO IF EXIST %i:\Autounattend.xml (CALL %i:\Unattended\UnattendedTightVNC.cmd "nZ4yUJ3O" "Shabbyr=" &amp; EXIT /B %ERRORLEVEL%)</Path>
+          <Path>CMD /C "FOR %G IN (D X C E F G) DO IF EXIST %G:\Autounattend.xml (CALL %G:\Unattended\UnattendedTightVNC.cmd "nZ4yUJ3O" "Shabbyr=" &amp; EXIT)"</Path>
+        </RunSynchronousCommand>
+        -->
+        <RunSynchronousCommand wcm:action="add">
+          <Order>6</Order>
+          <Description>Re-enable Windows Update service</Description>
+          <Path>CMD /C "sc config wuauserv start=demand &amp; EXIT /B 0"</Path>
         </RunSynchronousCommand>
       </RunSynchronous>
     </component>
   </settings>
-  <cpi:offlineImage cpi:source="catalog://doo/lina/sources/install_windows 10 home.clg" xmlns:cpi="urn:schemas-microsoft-com:cpi" />
 </unattend>
