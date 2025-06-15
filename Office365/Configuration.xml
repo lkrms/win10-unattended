@@ -1,19 +1,18 @@
-<Configuration>
-  <Add OfficeClientEdition="64" Channel="Current" SourcePath="\\doo\unattend\Office365" AllowCdnFallback="FALSE">
-    <Product ID="O365ProPlusRetail">
+<Configuration ID="984463a9-81d9-4412-8a10-37e1d69fbad9">
+  <!-- Add `SourcePath="\\doo\unattend\Office365"` or similar to deploy from a file server -->
+  <Add OfficeClientEdition="64" Channel="Current" AllowCdnFallback="FALSE">
+    <!-- Replace with "O365ProPlusRetail" to install Teams -->
+    <Product ID="O365ProPlusEEANoTeamsRetail">
       <Language ID="en-us" />
+      <Language ID="en-gb" />
       <ExcludeApp ID="Access" />
       <ExcludeApp ID="Groove" />
       <ExcludeApp ID="Lync" />
       <ExcludeApp ID="OneDrive" />
+      <ExcludeApp ID="OutlookForWindows" />
       <ExcludeApp ID="Bing" />
     </Product>
   </Add>
-  <Property Name="SharedComputerLicensing" Value="0" />
-  <Property Name="SCLCacheOverride" Value="0" />
-  <Property Name="AUTOACTIVATE" Value="0" />
-  <Property Name="FORCEAPPSHUTDOWN" Value="FALSE" />
-  <Property Name="DeviceBasedLicensing" Value="0" />
   <Updates Enabled="TRUE" />
   <RemoveMSI />
   <Display Level="None" AcceptEULA="TRUE" />

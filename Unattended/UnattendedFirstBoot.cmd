@@ -1,13 +1,23 @@
 @ECHO OFF
 
+SETLOCAL
+
 NET SESSION >NUL 2>NUL || (
     ECHO Please use "Run as administrator"
-    EXIT /B 1
+    EXIT /B 3
 )
 
 IF "%1"=="/start" GOTO :start
-CALL "%~0" /start %* 2>&1 | powershell -NoProfile -Command "$input | tee %SystemDrive%\Unattended.log -Append"
-EXIT /B %ERRORLEVEL%
+IF NOT EXIST %SystemDrive%\Unattended\Logs (
+    MD %SystemDrive%\Unattended\Logs || EXIT /B 3
+    IF EXIST %SystemDrive%\Unattended.log (MOVE /Y %SystemDrive%\Unattended.log %SystemDrive%\Unattended\Logs || EXIT /B 3)
+)
+SET "RETURN_CMD=%TEMP%\%~n0Return.cmd"
+SET RETURN_CODE=0
+(CMD /V:ON /C ""%~0" /start %* & ECHO SET RETURN_CODE=!ERRORLEVEL! >"%%RETURN_CMD%%"") 2>&1 | powershell -NoProfile -Command "$input | tee %SystemDrive%\Unattended\Logs\Unattended.log -Append"
+CALL "%RETURN_CMD%"
+DEL /F /Q "%RETURN_CMD%"
+EXIT /B %RETURN_CODE%
 
 :start
 SHIFT /1
@@ -16,65 +26,47 @@ SET ERRORS=0
 
 CALL :log ===== Starting %~f0
 
-IF EXIST "%SCRIPT_DIR%SetNetworkCategory.ps1" (
-    CALL :log Setting network category to Private for all Public connection profiles
-    powershell -NoProfile -ExecutionPolicy Bypass -File "%SCRIPT_DIR%SetNetworkCategory.ps1" || (
-        CALL :error "powershell -NoProfile -ExecutionPolicy Bypass -File "%SCRIPT_DIR%SetNetworkCategory.ps1"" failed
-    )
-)
+CALL :optPs1 SetNetworkCategory.ps1 "Setting network category of connected networks to Private"
 
-IF EXIST "%SCRIPT_DIR%EnableFileSharing.ps1" (
-    CALL :log Enabling file sharing on private network connections
-    powershell -NoProfile -ExecutionPolicy Bypass -File "%SCRIPT_DIR%EnableFileSharing.ps1" || (
-        CALL :error "powershell -NoProfile -ExecutionPolicy Bypass -File "%SCRIPT_DIR%EnableFileSharing.ps1"" failed
-    )
-)
+CALL :optPs1 EnableFileSharing.ps1 "Enabling file sharing on private network connections"
 
 CALL :log Disabling reserved storage
-DISM /Online /Set-ReservedStorageState /State:Disabled || (
-    CALL :error "DISM /Online /Set-ReservedStorageState /State:Disabled" failed
-)
+CALL :runOrReport DISM /Online /Set-ReservedStorageState /State:Disabled
 
-IF EXIST "%SCRIPT_DIR%AddPrinters.ps1" (
-    CALL :log Configuring printers
-    powershell -NoProfile -ExecutionPolicy Bypass -File "%SCRIPT_DIR%AddPrinters.ps1" || (
-        CALL :error "powershell -NoProfile -ExecutionPolicy Bypass -File "%SCRIPT_DIR%AddPrinters.ps1"" failed
-    )
-)
-
-IF EXIST "%SCRIPT_DIR%AppAssociations.xml" (
-    CALL :log Configuring default apps
-    DISM /Online /Import-DefaultAppAssociations:"%SCRIPT_DIR%AppAssociations.xml" || (
-        CALL :error "DISM /Online /Import-DefaultAppAssociations:"%SCRIPT_DIR%AppAssociations.xml"" failed
-    )
-)
-
-IF EXIST %SystemDrive%\Office365\install.cmd (
-    CALL :log Installing Office 365
-    CALL %SystemDrive%\Office365\install.cmd || (
-        CALL :error "%SystemDrive%\Office365\install.cmd" failed
-    )
-)
-
-IF EXIST %SystemDrive%\Office365\OneDriveSetup.exe (
-    CALL :log Installing OneDrive for all users
-    %SystemDrive%\Office365\OneDriveSetup.exe /silent /allusers || (
-        CALL :error "%SystemDrive%\Office365\OneDriveSetup.exe /silent /allusers" failed
-    )
-)
+CALL :optPs1 ConfigurePrinting.ps1 "Configuring printing"
 
 CALL :log Disabling password expiry for all users
-WMIC USERACCOUNT WHERE Disabled=FALSE SET PasswordExpires=FALSE || (
-    CALL :error "WMIC USERACCOUNT WHERE Disabled=FALSE SET PasswordExpires=FALSE" failed
+CALL :runOrReport powershell -NoProfile -Command ^"Get-CimInstance ^
+-Query 'select * from Win32_UserAccount where LocalAccount = true and Disabled = false and PasswordExpires = true' ^| ^
+Set-CimInstance -Property @{PasswordExpires=$false}^"
+
+IF EXIST "%SCRIPT_DIR%UnattendedBoot.cmd" (
+    CALL :log Scheduling system startup task
+    COPY "%SCRIPT_DIR%UnattendedBoot.cmd" "%SystemRoot%" /Y
+    SCHTASKS /Create /F /TN "Remove bloatware and reapply registry settings" /TR "%%SystemRoot%%\UnattendedBoot.cmd" /SC ONSTART /RU SYSTEM
 )
 
-IF %ERRORS% EQU 0 (
-    CALL :log Disabling first boot scheduled task
-    SCHTASKS /Change /TN "Unattended - first boot" /DISABLE
-    EXIT /B 0
-)
+CALL :log Deleting cached answer files
+DEL /F /Q "%WINDIR%\Panther\Unattend\Unattend.xml" "%WINDIR%\Panther\unattend.xml"
+
+IF %ERRORS% EQU 0 EXIT /B 0
 EXIT /B 1
 
+
+:optPs1
+SET "SCRIPT=%SCRIPT_DIR%Optional\%~1"
+SET "MESSAGE=%~2"
+IF EXIST "%SCRIPT%" (
+    IF NOT "%MESSAGE%"=="" CALL :log %MESSAGE%
+    powershell -NoProfile -ExecutionPolicy Bypass -File "%SCRIPT%" || (
+        CALL :error "%SCRIPT%" failed
+    )
+)
+EXIT /B
+
+:runOrReport
+%* || CALL :error "%*" failed
+EXIT /B
 
 :log
 ECHO [%DATE% %TIME%] %*

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DefaultAssociations>
+  <Association Identifier=".3fr" ProgId="AppX9rkaq77s0jzh1tyccadx9ghba15r6t3h" ApplicationName="Photos" />
+  <Association Identifier=".ari" ProgId="AppX9rkaq77s0jzh1tyccadx9ghba15r6t3h" ApplicationName="Photos" />
+  <Association Identifier=".arw" ProgId="AppX9rkaq77s0jzh1tyccadx9ghba15r6t3h" ApplicationName="Photos" />
+  <Association Identifier=".avci" ProgId="AppX9rkaq77s0jzh1tyccadx9ghba15r6t3h" ApplicationName="Photos" />
+  <Association Identifier=".avif" ProgId="AppX43hnxtbyyps62jhe9sqpdzxn1790zetc" ApplicationName="Photos" />
+  <Association Identifier=".bay" ProgId="AppX9rkaq77s0jzh1tyccadx9ghba15r6t3h" ApplicationName="Photos" />
+  <Association Identifier=".bmp" ProgId="AppX43hnxtbyyps62jhe9sqpdzxn1790zetc" ApplicationName="Photos" />
+  <Association Identifier=".cab" ProgId="CABFolder" ApplicationName="Windows Explorer" />
+  <Association Identifier=".cap" ProgId="AppX9rkaq77s0jzh1tyccadx9ghba15r6t3h" ApplicationName="Photos" />
+  <Association Identifier=".cr2" ProgId="AppX9rkaq77s0jzh1tyccadx9ghba15r6t3h" ApplicationName="Photos" />
+  <Association Identifier=".cr3" ProgId="AppX9rkaq77s0jzh1tyccadx9ghba15r6t3h" ApplicationName="Photos" />
+  <Association Identifier=".crw" ProgId="AppX9rkaq77s0jzh1tyccadx9ghba15r6t3h" ApplicationName="Photos" />
+  <Association Identifier=".dcr" ProgId="AppX9rkaq77s0jzh1tyccadx9ghba15r6t3h" ApplicationName="Photos" />
+  <Association Identifier=".dcs" ProgId="AppX9rkaq77s0jzh1tyccadx9ghba15r6t3h" ApplicationName="Photos" />
+  <Association Identifier=".dib" ProgId="AppX43hnxtbyyps62jhe9sqpdzxn1790zetc" ApplicationName="Photos" />
+  <Association Identifier=".dng" ProgId="AppXvvwq6wxamf7qhxd0vn6wm1wwehyxrdd6" ApplicationName="Photos" />
+  <Association Identifier=".drf" ProgId="AppX9rkaq77s0jzh1tyccadx9ghba15r6t3h" ApplicationName="Photos" />
+  <Association Identifier=".eip" ProgId="AppX9rkaq77s0jzh1tyccadx9ghba15r6t3h" ApplicationName="Photos" />
+  <Association Identifier=".emf" ProgId="AppXcesbfs704v2mjbts9dkr42s9vmrhxbkj" ApplicationName="Paint" />
+  <Association Identifier=".erf" ProgId="AppX9rkaq77s0jzh1tyccadx9ghba15r6t3h" ApplicationName="Photos" />
+  <Association Identifier=".fff" ProgId="AppX9rkaq77s0jzh1tyccadx9ghba15r6t3h" ApplicationName="Photos" />
+  <Association Identifier=".gif" ProgId="AppX43hnxtbyyps62jhe9sqpdzxn1790zetc" ApplicationName="Photos" />
+  <Association Identifier=".heic" ProgId="AppX43hnxtbyyps62jhe9sqpdzxn1790zetc" ApplicationName="Photos" />
+  <Association Identifier=".heif" ProgId="AppX43hnxtbyyps62jhe9sqpdzxn1790zetc" ApplicationName="Photos" />
+  <Association Identifier=".hif" ProgId="AppX43hnxtbyyps62jhe9sqpdzxn1790zetc" ApplicationName="Photos" />
+  <Association Identifier=".htm" ProgId="ChromeHTML" ApplicationName="Google Chrome" />
+  <Association Identifier=".html" ProgId="ChromeHTML" ApplicationName="Google Chrome" />
+  <Association Identifier=".ico" ProgId="AppX43hnxtbyyps62jhe9sqpdzxn1790zetc" ApplicationName="Photos" />
+  <Association Identifier=".iiq" ProgId="AppX9rkaq77s0jzh1tyccadx9ghba15r6t3h" ApplicationName="Photos" />
+  <Association Identifier=".inf" ProgId="Applications\notepad++.exe" ApplicationName="Notepad++" />
+  <Association Identifier=".ini" ProgId="Applications\notepad++.exe" ApplicationName="Notepad++" />
+  <Association Identifier=".jfif" ProgId="AppX43hnxtbyyps62jhe9sqpdzxn1790zetc" ApplicationName="Photos" />
+  <Association Identifier=".jpe" ProgId="AppX43hnxtbyyps62jhe9sqpdzxn1790zetc" ApplicationName="Photos" />
+  <Association Identifier=".jpeg" ProgId="AppX43hnxtbyyps62jhe9sqpdzxn1790zetc" ApplicationName="Photos" />
+  <Association Identifier=".jpg" ProgId="AppX43hnxtbyyps62jhe9sqpdzxn1790zetc" ApplicationName="Photos" />
+  <Association Identifier=".jxr" ProgId="AppX43hnxtbyyps62jhe9sqpdzxn1790zetc" ApplicationName="Photos" />
+  <Association Identifier=".k25" ProgId="AppX9rkaq77s0jzh1tyccadx9ghba15r6t3h" ApplicationName="Photos" />
+  <Association Identifier=".kdc" ProgId="AppX9rkaq77s0jzh1tyccadx9ghba15r6t3h" ApplicationName="Photos" />
+  <Association Identifier=".log" ProgId="Applications\notepad++.exe" ApplicationName="Notepad++" />
+  <Association Identifier=".mef" ProgId="AppX9rkaq77s0jzh1tyccadx9ghba15r6t3h" ApplicationName="Photos" />
+  <Association Identifier=".mht" ProgId="MSEdgeMHT" ApplicationName="Microsoft Edge" />
+  <Association Identifier=".mhtml" ProgId="ChromeHTML" ApplicationName="Google Chrome" />
+  <Association Identifier=".midi" ProgId="Applications\vlc.exe" ApplicationName="VLC media player" />
+  <Association Identifier=".mk3d" ProgId="Applications\vlc.exe" ApplicationName="VLC media player" />
+  <Association Identifier=".mos" ProgId="AppX9rkaq77s0jzh1tyccadx9ghba15r6t3h" ApplicationName="Photos" />
+  <Association Identifier=".MP2" ProgId="VLC.mp2" ApplicationName="VLC media player" />
+  <Association Identifier=".mrw" ProgId="AppX9rkaq77s0jzh1tyccadx9ghba15r6t3h" ApplicationName="Photos" />
+  <Association Identifier=".nef" ProgId="AppX9rkaq77s0jzh1tyccadx9ghba15r6t3h" ApplicationName="Photos" />
+  <Association Identifier=".nrw" ProgId="AppX9rkaq77s0jzh1tyccadx9ghba15r6t3h" ApplicationName="Photos" />
+  <Association Identifier=".orf" ProgId="AppX9rkaq77s0jzh1tyccadx9ghba15r6t3h" ApplicationName="Photos" />
+  <Association Identifier=".ori" ProgId="AppX9rkaq77s0jzh1tyccadx9ghba15r6t3h" ApplicationName="Photos" />
+  <Association Identifier=".pdf" ProgId="SumatraPDF.pdf" ApplicationName="SumatraPDF" />
+  <Association Identifier=".pef" ProgId="AppX9rkaq77s0jzh1tyccadx9ghba15r6t3h" ApplicationName="Photos" />
+  <Association Identifier=".png" ProgId="AppX43hnxtbyyps62jhe9sqpdzxn1790zetc" ApplicationName="Photos" />
+  <Association Identifier=".ps1" ProgId="Applications\notepad++.exe" ApplicationName="Notepad++" />
+  <Association Identifier=".psd1" ProgId="Applications\notepad++.exe" ApplicationName="Notepad++" />
+  <Association Identifier=".psm1" ProgId="Applications\notepad++.exe" ApplicationName="Notepad++" />
+  <Association Identifier=".raf" ProgId="AppX9rkaq77s0jzh1tyccadx9ghba15r6t3h" ApplicationName="Photos" />
+  <Association Identifier=".raw" ProgId="AppX9rkaq77s0jzh1tyccadx9ghba15r6t3h" ApplicationName="Photos" />
+  <Association Identifier=".rle" ProgId="AppXcesbfs704v2mjbts9dkr42s9vmrhxbkj" ApplicationName="Paint" />
+  <Association Identifier=".rw2" ProgId="AppX9rkaq77s0jzh1tyccadx9ghba15r6t3h" ApplicationName="Photos" />
+  <Association Identifier=".rwl" ProgId="AppX9rkaq77s0jzh1tyccadx9ghba15r6t3h" ApplicationName="Photos" />
+  <Association Identifier=".scp" ProgId="Applications\notepad++.exe" ApplicationName="Notepad++" />
+  <Association Identifier=".sr2" ProgId="AppX9rkaq77s0jzh1tyccadx9ghba15r6t3h" ApplicationName="Photos" />
+  <Association Identifier=".srf" ProgId="AppX9rkaq77s0jzh1tyccadx9ghba15r6t3h" ApplicationName="Photos" />
+  <Association Identifier=".srw" ProgId="AppX9rkaq77s0jzh1tyccadx9ghba15r6t3h" ApplicationName="Photos" />
+  <Association Identifier=".svg" ProgId="ChromeHTML" ApplicationName="Google Chrome" />
+  <Association Identifier=".thumb" ProgId="AppX43hnxtbyyps62jhe9sqpdzxn1790zetc" ApplicationName="Photos" />
+  <Association Identifier=".tif" ProgId="AppX43hnxtbyyps62jhe9sqpdzxn1790zetc" ApplicationName="Photos" />
+  <Association Identifier=".tiff" ProgId="AppX43hnxtbyyps62jhe9sqpdzxn1790zetc" ApplicationName="Photos" />
+  <Association Identifier=".txt" ProgId="Applications\notepad++.exe" ApplicationName="Notepad++" />
+  <Association Identifier=".url" ProgId="InternetShortcut" ApplicationName="Internet Browser" />
+  <Association Identifier=".wax" ProgId="WMP11.AssocFile.WAX" ApplicationName="Windows Media Player Legacy" />
+  <Association Identifier=".wdp" ProgId="AppX43hnxtbyyps62jhe9sqpdzxn1790zetc" ApplicationName="Photos" />
+  <Association Identifier=".webp" ProgId="AppX43hnxtbyyps62jhe9sqpdzxn1790zetc" ApplicationName="Photos" />
+  <Association Identifier=".wmf" ProgId="AppXcesbfs704v2mjbts9dkr42s9vmrhxbkj" ApplicationName="Paint" />
+  <Association Identifier=".wtx" ProgId="Applications\notepad++.exe" ApplicationName="Notepad++" />
+  <Association Identifier=".xht" ProgId="ChromeHTML" ApplicationName="Google Chrome" />
+  <Association Identifier=".xhtml" ProgId="ChromeHTML" ApplicationName="Google Chrome" />
+  <Association Identifier=".xml" ProgId="Applications\notepad++.exe" ApplicationName="Notepad++" />
+  <Association Identifier=".zip" ProgId="CompressedFolder" ApplicationName="Windows Explorer" />
+  <Association Identifier="ftp" ProgId="MSEdgeHTM" ApplicationName="Microsoft Edge" />
+  <Association Identifier="http" ProgId="ChromeHTML" ApplicationName="Google Chrome" />
+  <Association Identifier="https" ProgId="ChromeHTML" ApplicationName="Google Chrome" />
+  <Association Identifier="microsoft-edge" ProgId="MSEdgeHTM" ApplicationName="Microsoft Edge" />
+  <Association Identifier="microsoft-edge-holographic" ProgId="MSEdgeHTM" ApplicationName="Microsoft Edge" />
+  <Association Identifier="ms-screenclip" ProgId="AppXfeq5vwnakrw6cy02kzhq8ekhhsremh62" ApplicationName="Snipping Tool" />
+  <Association Identifier="ms-xbl-3d8b930f" ProgId="MSEdgeHTM" ApplicationName="Microsoft Edge" />
+  <Association Identifier="read" ProgId="MSEdgeHTM" ApplicationName="Microsoft Edge" />
+</DefaultAssociations>

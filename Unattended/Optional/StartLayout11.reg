@@ -1,0 +1,11 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PolicyManager\current\device\Start]
+"ConfigureStartPins"="{\"pinnedList\":[{\"packagedAppId\":\"windows.immersivecontrolpanel_cw5n1h2txyewy!microsoft.windows.immersivecontrolpanel\"},{\"desktopAppId\":\"Chrome\"},{\"desktopAppId\":\"Microsoft.Windows.Explorer\"},{\"packagedAppId\":\"Microsoft.WindowsCalculator_8wekyb3d8bbwe!App\"},{\"packagedAppId\":\"Microsoft.WindowsAlarms_8wekyb3d8bbwe!App\"},{\"packagedAppId\":\"Microsoft.WindowsTerminal_8wekyb3d8bbwe!App\"},{\"packagedAppId\":\"Microsoft.WindowsNotepad_8wekyb3d8bbwe!App\"},{\"desktopAppLink\":\"%ALLUSERSPROFILE%\\\\Microsoft\\\\Windows\\\\Start Menu\\\\Programs\\\\Notepad++.lnk\"},{\"packagedAppId\":\"Microsoft.Paint_8wekyb3d8bbwe!App\"},{\"packagedAppId\":\"Microsoft.ScreenSketch_8wekyb3d8bbwe!App\"}]}"
+"ConfigureStartPins_ProviderSet"=dword:00000001
+"ConfigureStartPins_WinningProvider"="B5292708-1619-419B-9923-E5D9F3925E71"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PolicyManager\providers\B5292708-1619-419B-9923-E5D9F3925E71\default\Device\Start]
+"ConfigureStartPins"="{\"pinnedList\":[{\"packagedAppId\":\"windows.immersivecontrolpanel_cw5n1h2txyewy!microsoft.windows.immersivecontrolpanel\"},{\"desktopAppId\":\"Chrome\"},{\"desktopAppId\":\"Microsoft.Windows.Explorer\"},{\"packagedAppId\":\"Microsoft.WindowsCalculator_8wekyb3d8bbwe!App\"},{\"packagedAppId\":\"Microsoft.WindowsAlarms_8wekyb3d8bbwe!App\"},{\"packagedAppId\":\"Microsoft.WindowsTerminal_8wekyb3d8bbwe!App\"},{\"packagedAppId\":\"Microsoft.WindowsNotepad_8wekyb3d8bbwe!App\"},{\"desktopAppLink\":\"%ALLUSERSPROFILE%\\\\Microsoft\\\\Windows\\\\Start Menu\\\\Programs\\\\Notepad++.lnk\"},{\"packagedAppId\":\"Microsoft.Paint_8wekyb3d8bbwe!App\"},{\"packagedAppId\":\"Microsoft.ScreenSketch_8wekyb3d8bbwe!App\"}]}"
+"ConfigureStartPins_LastWrite"=dword:00000001
+
