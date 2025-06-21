@@ -148,7 +148,7 @@ CALL :choco vlc
 CALL :choco shutup10
 
 :: See https://keepassxc.org/docs/KeePassXC_UserGuide#_installer_options
-CALL :choco keepassxc --install-args="'LAUNCHAPPONEXIT=0 AUTOSTARTPROGRAM=0'"
+CALL :osIs64Bit && CALL :choco keepassxc --install-args="'LAUNCHAPPONEXIT=0 AUTOSTARTPROGRAM=0'"
 
 IF "%2"=="/debug" CALL :choco procmon
 
@@ -267,6 +267,13 @@ EXIT /B
 ping -4 -n 1 -w 1000 1.1.1.1 | FINDSTR /R /C:"TTL=[0-9][0-9]*$" >NUL
 EXIT /B
 
+:osIs64Bit
+IF "%PROCESSOR_ARCHITECTURE%"=="AMD64" EXIT /B 0
+IF "%PROCESSOR_ARCHITEW6432%"=="AMD64" EXIT /B 0
+IF "%PROCESSOR_ARCHITECTURE%"=="ARM64" EXIT /B 0
+IF "%PROCESSOR_ARCHITEW6432%"=="ARM64" EXIT /B 0
+EXIT /B 1
+
 :choco
 CALL :log Deploying %1
 SET /A "CHOCO_COUNT+=1"
@@ -329,6 +336,7 @@ ECHO [%DATE% %TIME%] %*
 EXIT /B
 
 :error
-CALL :log ERROR ^(%ERRORLEVEL%^): %*
+SET RESULT=%ERRORLEVEL%
+CALL :log ERROR ^(%RESULT%^): %*
 SET /A "ERRORS+=1"
-EXIT /B
+EXIT /B %RESULT%

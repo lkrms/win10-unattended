@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <unattend xmlns="urn:schemas-microsoft-com:unattend">
   <settings pass="windowsPE">
+    <!-- Architecture: "amd64" -->
     <component name="Microsoft-Windows-International-Core-WinPE" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
       <!-- English: en-US -->
       <!-- English International: en-GB -->
@@ -75,8 +76,142 @@
         </PathAndCredentials>
       </DriverPaths>
     </component>
+    <!-- Architecture: "arm64" -->
+    <component name="Microsoft-Windows-International-Core-WinPE" processorArchitecture="arm64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <!-- English: en-US -->
+      <!-- English International: en-GB -->
+      <UILanguage>en-GB</UILanguage>
+      <SetupUILanguage>
+        <UILanguage>en-GB</UILanguage>
+      </SetupUILanguage>
+      <InputLocale>en-AU</InputLocale>
+      <SystemLocale>en-AU</SystemLocale>
+      <UserLocale>en-AU</UserLocale>
+    </component>
+    <component name="Microsoft-Windows-Setup" processorArchitecture="arm64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <UserData>
+        <ProductKey>
+          <!-- Home: YTMG3-N6DKC-DKB77-7M9GH-8HVX7 -->
+          <!-- Pro: VK7JG-NPHTM-C97JM-9MPGT-3V66T -->
+          <Key>YTMG3-N6DKC-DKB77-7M9GH-8HVX7</Key>
+        </ProductKey>
+        <AcceptEula>true</AcceptEula>
+        <FullName>Luke Arms</FullName>
+        <Organization>LINA Creative</Organization>
+      </UserData>
+      <ImageInstall>
+        <OSImage>
+          <InstallFrom>
+            <MetaData wcm:action="add">
+              <!-- Windows 11: "Windows 11 Home", "Windows 11 Pro" -->
+              <!-- Windows 10: "Windows 10 Home", "Windows 10 Pro" -->
+              <Key>/IMAGE/DESCRIPTION</Key>
+              <Value>Windows 11 Home</Value>
+            </MetaData>
+          </InstallFrom>
+        </OSImage>
+      </ImageInstall>
+      <RunSynchronous>
+        <RunSynchronousCommand wcm:action="add">
+          <Order>1</Order>
+          <Description>Bypass Windows 11 secure boot check</Description>
+          <Path>REG ADD HKLM\SYSTEM\Setup\LabConfig /v BypassSecureBootCheck /t REG_DWORD /d 1 /f</Path>
+        </RunSynchronousCommand>
+        <RunSynchronousCommand wcm:action="add">
+          <Order>2</Order>
+          <Description>Bypass Windows 11 TPM check</Description>
+          <Path>REG ADD HKLM\SYSTEM\Setup\LabConfig /v BypassTPMCheck /t REG_DWORD /d 1 /f</Path>
+        </RunSynchronousCommand>
+        <RunSynchronousCommand wcm:action="add">
+          <Order>3</Order>
+          <Description>Bypass Windows 11 RAM check</Description>
+          <Path>REG ADD HKLM\SYSTEM\Setup\LabConfig /v BypassRAMCheck /t REG_DWORD /d 1 /f</Path>
+        </RunSynchronousCommand>
+      </RunSynchronous>
+    </component>
+    <component name="Microsoft-Windows-PnpCustomizationsWinPE" processorArchitecture="arm64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <DriverPaths>
+        <PathAndCredentials wcm:keyValue="1" wcm:action="add">
+          <Path>D:\Drivers</Path>
+        </PathAndCredentials>
+        <PathAndCredentials wcm:keyValue="2" wcm:action="add">
+          <Path>X:\Drivers</Path>
+        </PathAndCredentials>
+        <PathAndCredentials wcm:keyValue="3" wcm:action="add">
+          <Path>C:\Drivers</Path>
+        </PathAndCredentials>
+        <PathAndCredentials wcm:keyValue="4" wcm:action="add">
+          <Path>E:\Drivers</Path>
+        </PathAndCredentials>
+        <PathAndCredentials wcm:keyValue="5" wcm:action="add">
+          <Path>F:\Drivers</Path>
+        </PathAndCredentials>
+        <PathAndCredentials wcm:keyValue="6" wcm:action="add">
+          <Path>G:\Drivers</Path>
+        </PathAndCredentials>
+      </DriverPaths>
+    </component>
+    <!-- Architecture: "x86" -->
+    <component name="Microsoft-Windows-International-Core-WinPE" processorArchitecture="x86" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <!-- English: en-US -->
+      <!-- English International: en-GB -->
+      <UILanguage>en-GB</UILanguage>
+      <SetupUILanguage>
+        <UILanguage>en-GB</UILanguage>
+      </SetupUILanguage>
+      <InputLocale>en-AU</InputLocale>
+      <SystemLocale>en-AU</SystemLocale>
+      <UserLocale>en-AU</UserLocale>
+    </component>
+    <component name="Microsoft-Windows-Setup" processorArchitecture="x86" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <UserData>
+        <ProductKey>
+          <!-- Home: YTMG3-N6DKC-DKB77-7M9GH-8HVX7 -->
+          <!-- Pro: VK7JG-NPHTM-C97JM-9MPGT-3V66T -->
+          <Key>YTMG3-N6DKC-DKB77-7M9GH-8HVX7</Key>
+        </ProductKey>
+        <AcceptEula>true</AcceptEula>
+        <FullName>Luke Arms</FullName>
+        <Organization>LINA Creative</Organization>
+      </UserData>
+      <ImageInstall>
+        <OSImage>
+          <InstallFrom>
+            <MetaData wcm:action="add">
+              <!-- Windows 10: "Windows 10 Home", "Windows 10 Pro" -->
+              <Key>/IMAGE/DESCRIPTION</Key>
+              <Value>Windows 10 Home</Value>
+            </MetaData>
+          </InstallFrom>
+          <Compact>true</Compact>
+        </OSImage>
+      </ImageInstall>
+    </component>
+    <component name="Microsoft-Windows-PnpCustomizationsWinPE" processorArchitecture="x86" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <DriverPaths>
+        <PathAndCredentials wcm:keyValue="1" wcm:action="add">
+          <Path>D:\Drivers</Path>
+        </PathAndCredentials>
+        <PathAndCredentials wcm:keyValue="2" wcm:action="add">
+          <Path>X:\Drivers</Path>
+        </PathAndCredentials>
+        <PathAndCredentials wcm:keyValue="3" wcm:action="add">
+          <Path>C:\Drivers</Path>
+        </PathAndCredentials>
+        <PathAndCredentials wcm:keyValue="4" wcm:action="add">
+          <Path>E:\Drivers</Path>
+        </PathAndCredentials>
+        <PathAndCredentials wcm:keyValue="5" wcm:action="add">
+          <Path>F:\Drivers</Path>
+        </PathAndCredentials>
+        <PathAndCredentials wcm:keyValue="6" wcm:action="add">
+          <Path>G:\Drivers</Path>
+        </PathAndCredentials>
+      </DriverPaths>
+    </component>
   </settings>
   <settings pass="specialize">
+    <!-- Architecture: "amd64" -->
     <component name="Microsoft-Windows-Deployment" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
       <RunSynchronous>
         <RunSynchronousCommand wcm:action="add">
@@ -91,16 +226,148 @@
       <ComputerName>DearlyDeployed</ComputerName>
     </component>
     -->
+    <!-- Architecture: "arm64" -->
+    <component name="Microsoft-Windows-Deployment" processorArchitecture="arm64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <RunSynchronous>
+        <RunSynchronousCommand wcm:action="add">
+          <Order>1</Order>
+          <Description>Disable voice-over during OOBE</Description>
+          <Path>REG ADD HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\OOBE /v DisableVoice /t REG_DWORD /d 1 /f</Path>
+        </RunSynchronousCommand>
+      </RunSynchronous>
+    </component>
+    <!--
+    <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="arm64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <ComputerName>DearlyDeployed</ComputerName>
+    </component>
+    -->
+    <!-- Architecture: "x86" -->
+    <component name="Microsoft-Windows-Deployment" processorArchitecture="x86" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <RunSynchronous>
+        <RunSynchronousCommand wcm:action="add">
+          <Order>1</Order>
+          <Description>Disable voice-over during OOBE</Description>
+          <Path>REG ADD HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\OOBE /v DisableVoice /t REG_DWORD /d 1 /f</Path>
+        </RunSynchronousCommand>
+      </RunSynchronous>
+    </component>
+    <!--
+    <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="x86" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <ComputerName>DearlyDeployed</ComputerName>
+    </component>
+    -->
   </settings>
   <settings pass="oobeSystem">
+    <!-- Architecture: "amd64" -->
     <component name="Microsoft-Windows-Deployment" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <Reseal>
+        <Mode>Audit</Mode>
+      </Reseal>
+    </component>
+    <!-- Architecture: "arm64" -->
+    <component name="Microsoft-Windows-Deployment" processorArchitecture="arm64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <Reseal>
+        <Mode>Audit</Mode>
+      </Reseal>
+    </component>
+    <!-- Architecture: "x86" -->
+    <component name="Microsoft-Windows-Deployment" processorArchitecture="x86" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
       <Reseal>
         <Mode>Audit</Mode>
       </Reseal>
     </component>
   </settings>
   <settings pass="auditUser">
+    <!-- Architecture: "amd64" -->
     <component name="Microsoft-Windows-Deployment" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <Reseal>
+        <Mode>OOBE</Mode>
+      </Reseal>
+      <RunSynchronous>
+        <RunSynchronousCommand wcm:action="add">
+          <Order>1</Order>
+          <Description>Stop and disable Windows Update service</Description>
+          <Path>CMD /C "sc stop wuauserv &gt;NUL 2&gt;NUL &amp; sc config wuauserv start=disabled"</Path>
+        </RunSynchronousCommand>
+        <RunSynchronousCommand wcm:action="add">
+          <Order>2</Order>
+          <Description>Install win10-unattended files, drivers and MSI packages</Description>
+          <Path>CMD /C "FOR %G IN (D X C E F G) DO IF EXIST %G:\Autounattend.xml (CALL %G:\Unattended\Unattended.cmd /1 &amp; EXIT)"</Path>
+          <!-- Reboot if necessary after running pnputil and msiexec -->
+          <WillReboot>OnRequest</WillReboot>
+        </RunSynchronousCommand>
+        <RunSynchronousCommand wcm:action="add">
+          <Order>3</Order>
+          <Description>Install original product key, Wi-Fi profile, software, registry settings</Description>
+          <Path>CMD /C "FOR %G IN (D X C E F G) DO IF EXIST %G:\Autounattend.xml (CALL %G:\Unattended\Unattended.cmd /2 &amp; EXIT)"</Path>
+          <!-- Reboot if Office 365 installer needs guest share access -->
+          <WillReboot>OnRequest</WillReboot>
+        </RunSynchronousCommand>
+        <RunSynchronousCommand wcm:action="add">
+          <Order>4</Order>
+          <Description>Install Office 365, remove bloatware</Description>
+          <Path>CMD /C "FOR %G IN (D X C E F G) DO IF EXIST %G:\Autounattend.xml (CALL %G:\Unattended\Unattended.cmd /3 &amp; EXIT)"</Path>
+        </RunSynchronousCommand>
+        <!--
+        <RunSynchronousCommand wcm:action="add">
+          <Order>5</Order>
+          <Description>Install TightVNC Server</Description>
+          <Path>CMD /C "FOR %G IN (D X C E F G) DO IF EXIST %G:\Autounattend.xml (CALL %G:\Unattended\UnattendedTightVNC.cmd "nZ4yUJ3O" "Shabbyr=" &amp; EXIT)"</Path>
+        </RunSynchronousCommand>
+        -->
+        <RunSynchronousCommand wcm:action="add">
+          <Order>6</Order>
+          <Description>Re-enable Windows Update service</Description>
+          <Path>CMD /C "sc config wuauserv start=demand &amp; EXIT /B 0"</Path>
+        </RunSynchronousCommand>
+      </RunSynchronous>
+    </component>
+    <!-- Architecture: "arm64" -->
+    <component name="Microsoft-Windows-Deployment" processorArchitecture="arm64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <Reseal>
+        <Mode>OOBE</Mode>
+      </Reseal>
+      <RunSynchronous>
+        <RunSynchronousCommand wcm:action="add">
+          <Order>1</Order>
+          <Description>Stop and disable Windows Update service</Description>
+          <Path>CMD /C "sc stop wuauserv &gt;NUL 2&gt;NUL &amp; sc config wuauserv start=disabled"</Path>
+        </RunSynchronousCommand>
+        <RunSynchronousCommand wcm:action="add">
+          <Order>2</Order>
+          <Description>Install win10-unattended files, drivers and MSI packages</Description>
+          <Path>CMD /C "FOR %G IN (D X C E F G) DO IF EXIST %G:\Autounattend.xml (CALL %G:\Unattended\Unattended.cmd /1 &amp; EXIT)"</Path>
+          <!-- Reboot if necessary after running pnputil and msiexec -->
+          <WillReboot>OnRequest</WillReboot>
+        </RunSynchronousCommand>
+        <RunSynchronousCommand wcm:action="add">
+          <Order>3</Order>
+          <Description>Install original product key, Wi-Fi profile, software, registry settings</Description>
+          <Path>CMD /C "FOR %G IN (D X C E F G) DO IF EXIST %G:\Autounattend.xml (CALL %G:\Unattended\Unattended.cmd /2 &amp; EXIT)"</Path>
+          <!-- Reboot if Office 365 installer needs guest share access -->
+          <WillReboot>OnRequest</WillReboot>
+        </RunSynchronousCommand>
+        <RunSynchronousCommand wcm:action="add">
+          <Order>4</Order>
+          <Description>Install Office 365, remove bloatware</Description>
+          <Path>CMD /C "FOR %G IN (D X C E F G) DO IF EXIST %G:\Autounattend.xml (CALL %G:\Unattended\Unattended.cmd /3 &amp; EXIT)"</Path>
+        </RunSynchronousCommand>
+        <!--
+        <RunSynchronousCommand wcm:action="add">
+          <Order>5</Order>
+          <Description>Install TightVNC Server</Description>
+          <Path>CMD /C "FOR %G IN (D X C E F G) DO IF EXIST %G:\Autounattend.xml (CALL %G:\Unattended\UnattendedTightVNC.cmd "nZ4yUJ3O" "Shabbyr=" &amp; EXIT)"</Path>
+        </RunSynchronousCommand>
+        -->
+        <RunSynchronousCommand wcm:action="add">
+          <Order>6</Order>
+          <Description>Re-enable Windows Update service</Description>
+          <Path>CMD /C "sc config wuauserv start=demand &amp; EXIT /B 0"</Path>
+        </RunSynchronousCommand>
+      </RunSynchronous>
+    </component>
+    <!-- Architecture: "x86" -->
+    <component name="Microsoft-Windows-Deployment" processorArchitecture="x86" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
       <Reseal>
         <Mode>OOBE</Mode>
       </Reseal>
