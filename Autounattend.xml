@@ -34,6 +34,7 @@
               <Value>Windows 11 Home</Value>
             </MetaData>
           </InstallFrom>
+          <!--<Compact>true</Compact>-->
         </OSImage>
       </ImageInstall>
       <RunSynchronous>
@@ -109,6 +110,7 @@
               <Value>Windows 11 Home</Value>
             </MetaData>
           </InstallFrom>
+          <!--<Compact>true</Compact>-->
         </OSImage>
       </ImageInstall>
       <RunSynchronous>

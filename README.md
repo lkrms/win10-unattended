@@ -1,89 +1,146 @@
 # win10-unattended
 
-Automatic deployment of Windows 10 or 11 from standard install media. For
-non-enterprise use.
+> Automatic deployment of Windows 10 or 11 from standard install media. Intended
+> for personal, non-enterprise use.
 
 ## What it does
 
-See [Unattended.cmd] and [UnattendedFirstBoot.cmd].
+1.  **Skips all Windows Setup and OOBE (out-of-box experience) prompts** except
+    target disk selection
+2.  **Disables Windows 11 eligibility checks** for secure boot support, TPM 2.0
+    and 4 GB RAM
+3.  **Installs system drivers** in two passes:
+    - `windowsPE` for [boot-critical drivers][Drivers]
+    - `auditUser` for [other drivers][Drivers.import], including any provided as
+      `.msi` packages
+4.  **Silences Cortana's OOBE voice-over** because there is never a good time to
+    hear "a little sign-in here, a touch of Wi-Fi there..."
+5.  **Sets computer name** _(if enabled by uncommenting `<ComputerName>` in
+    [Autounattend.xml])_
+6.  **Installs the system's OEM product key** for activation once online
+7.  **Adds a Wi-Fi profile** _(if provided)_ and waits for Internet connectivity
+8.  **Installs [Chocolatey]** with the following packages:
+    - 7-Zip
+    - Firefox
+    - Google Chrome
+    - Notepad++
+    - Sumatra PDF
+    - VLC media player
+    - O&O ShutUp10++ _(optional)_
+    - KeePassXC _(optional)_
+9.  **Installs standalone `.msi` packages** _(if provided)_
+10. **Deploys Microsoft Office 365, OneDrive and Teams** via their offline
+    installers
+11. **Applies policies and registry settings** to improve UX and mitigate the
+    worst of Microsoft's built-in privacy and autonomy travesties
+12. **Removes bloatware** installed by Microsoft
+13. **Reapplies policies, registry settings and bloatware removal on boot** to
+    restore order after updates
+14. **Deploys TightVNC Server** for remote desktop access _(if enabled by
+    uncommenting the relevant `<RunSynchronousCommand>` in [Autounattend.xml])_
+15. **Creates local user accounts**, skipping "Sign in with Microsoft" prompts
+16. **Deletes cached answer files** for security
 
 ## How to use it
+
+> [!TIP]
+>
+> Architecture-specific answer files in [Build] can be used as drop-in
+> replacements for [Autounattend.xml] and [Audit.xml].
+
+> [!NOTE]
+>
+> If not deploying Microsoft Office 365, OneDrive or Teams, skip steps that
+> mention them and exclude the `Office365` directory from your removable media.
 
 > [!CAUTION]
 >
 > If deployed, the local `admin` account will not appear in the user list during
 > sign-in, but it will be available for authentication in other contexts and
-> **has no password by default**. Setting a strong default password for this
-> account is highly recommended, otherwise it should be removed from your
-> `Autounattend.xml` file.
+> **has no password by default**. Please set a strong default password for this
+> account or remove it from your `Audit.xml` file.
 
-> [!NOTE]
->
-> If not installing Office 365, OneDrive or Teams, skip steps that mention them
-> and exclude the `Office365` folder from your removable media.
+1. Clone this repository to your system
 
-1. Clone this repo to your system
+2. Personalise answer files [Autounattend.xml] and [Audit.xml]
 
-1. Personalise [Autounattend.xml] and [Audit.xml]
+   - (**_optional_**) Remove components that don't apply to the architecture of
+     the target system from both files
 
-   - Check language settings
+     - e.g. for an `amd64` system with a 32-bit UEFI, remove:
+       - all `processorArchitecture="arm64"` components
+       - `processorArchitecture="amd64"` components in the `windowsPE` pass
+       - `processorArchitecture="x86"` components NOT in the `windowsPE` pass
+     - Unnecessary if install media is architecture-specific
+     - **Changes to settings should be identical for every architecture that
+       remains**
 
-     - `UILanguage` values must correspond to your install media
+   - Check language settings in both files
 
-   - Check the product key is correct for your version of Windows
+     - Every `UILanguage` value must correspond to the language of your install
+       media
+
+   - Replace my particulars (`Luke Arms`; `LINA Creative`; `lina`) with your own
+     in both files
+
+   - Check the product key is correct for your version of Windows in
+     [Autounattend.xml]
 
      - Generic keys for Windows Home and Windows Pro are provided
      - For other versions, search online for "generic Windows RTM key"
-     - **Don't use a real product key here**; generic keys are replaced with OEM
-       keys [during deployment][InstallOriginalProductKey.ps1]
+     - **Don't use a real product key here**; it will be replaced with an OEM
+       key during deployment
 
    - Check the image description matches your install media and is correct for
-     your version of Windows
+     your version of Windows in [Autounattend.xml]
 
-   - Configure local user accounts
+   - Configure local user accounts in [Audit.xml]
 
-     - Use Windows SIM or the [password encoder][] below to apply non-empty
-       passwords if required
+     - Use Windows SIM or [EncodeUnattendPassword.sh] to encode passwords if
+       required
 
-   - See [Windows Unattended Setup Reference] if needed
+   > Relevant documentation:
+   >
+   > - [Windows Unattended Setup Reference]
 
-1. Personalise or remove [Wi-Fi.xml]
+3. Personalise or remove [Wi-Fi.xml]
 
-   - For example, to replace `Wi-Fi.xml` on a Windows system where your Wi-Fi
-     network is already connected:
+   - e.g. to replace `Wi-Fi.xml` on a Windows system connected to Wi-Fi network
+     `NoStrings`:
 
      ```bat
-     :: List configured Wi-Fi profiles
+     rem Check profiles
      netsh wlan show profiles
-
-     :: Export the relevant profile without passphrase encryption
-     netsh wlan export profile key=clear name="MySSID"
-
-     :: Rename the generated XML file to Wi-Fi.xml
-     move "Wi-Fi-MySSID.xml" "Wi-Fi.xml" /Y
+     netsh wlan export profile key=clear name="NoStrings"
+     move "Wi-Fi-NoStrings.xml" "\path\to\win10-unattended\Wi-Fi.xml" /Y
      ```
 
-1. Personalise or remove files in the [Optional] folder
+   - If the target system has an Ethernet connection to the Internet,
+     `Wi-Fi.xml` can be deleted or excluded from your removable media
+
+4. Personalise or remove files in the [Optional] directory
 
    - [ConfigurePrinting.ps1][]: add any printer drivers you reference to
      [Drivers.import]
+
+   - [InstallOriginalProductKey.ps1]
 
    - [MapNetworkDrives.cmd]
 
    - [RemoveBloatware.ps1]
 
-1. Download the latest [OneDriveSetup.exe], [teamsbootstrapper.exe] and
-   [MSTeams-x64.msix] files to the [Office365] folder
+5. Download the latest [OneDriveSetup.exe], [teamsbootstrapper.exe] and
+   [MSTeams-x64.msix] files to the [Office365] directory
 
    - Included because the versions bundled with Windows and Office don't support
      machine-wide installation
 
-1. Download and install the latest [Office Deployment Tool] from Microsoft's
-   website to the [Office365] folder
+6. Download and install the latest [Office Deployment Tool] from Microsoft's
+   website to the [Office365] directory
 
    - The file [Office365/setup.exe] must exist after this step
 
-1. Edit or replace the Office 365 configuration file at
+7. Edit or replace the Office 365 configuration file at
    [Office365/Configuration.xml]
 
    - Use the [Office 365 Client Configuration Service] to generate a new
@@ -91,7 +148,7 @@ See [Unattended.cmd] and [UnattendedFirstBoot.cmd].
 
    - See [Office Deployment Tool configuration options] if needed
 
-1. Run [download.cmd] to download Office 365 install files to the location
+8. Run [download.cmd] to download Office 365 install files to the location
    specified in [Office365/Configuration.xml]
 
    - Install files are downloaded to a subdirectory of [Office365] by default,
@@ -99,7 +156,7 @@ See [Unattended.cmd] and [UnattendedFirstBoot.cmd].
 
    - The user running [download.cmd] must have write access to the install files
 
-1. Add system drivers to [Drivers] and [Drivers.import]
+9. Add system drivers to [Drivers] and [Drivers.import]
 
    - Boot-critical drivers must be added to [Drivers], otherwise drivers should
      generally be added to [Drivers.import]
@@ -109,54 +166,81 @@ See [Unattended.cmd] and [UnattendedFirstBoot.cmd].
    - `.msi` packages in [Drivers.import] are silently installed after drivers in
      the same directory
 
-1. Add standalone `.msi` packages to the [MSI] directory for silent installation
-   after Chocolatey packages
+10. Add standalone `.msi` packages to the [MSI] directory for silent
+    installation after Chocolatey packages
 
-1. Add troubleshooting tools to the [Tools] directory
+11. Add troubleshooting tools to the [Tools] directory
 
-1. Copy the following files and directories to the root of a USB flash drive and
-   connect it to the target system when booting into Windows Setup
-   (alternatively, if installing Windows from a USB drive with sufficient
-   capacity, you can copy everything to the root of the same drive rather than
-   using two flash drives):
+12. Copy the following files and directories to the root of a USB flash drive
+    and connect it to the target system when booting into Windows Setup
+    (alternatively, if installing Windows from a USB drive with sufficient
+    capacity, you can copy everything to the root of the same drive rather than
+    using two flash drives):
 
-   - [Audit.xml]
-   - [Autounattend.xml]
-   - [Wi-Fi.xml] - _optional for targets connected via Ethernet_
-   - [Unattended] - _contents required except:_
-     - [Optional] - _may be excluded if no files remain after personalisation_
-     - [install.ps1] - _may be downloaded to speed up Chocolatey installation_
-   - [Drivers] - _optional_
-   - [Drivers.import] - _optional_
-   - [MSI] - _optional_
-   - [Office365] - _optional_
-   - [Tools] - _optional_
+    - [Audit.xml]
+    - [Autounattend.xml]
+    - [Wi-Fi.xml] - _optional for targets connected via Ethernet_
+    - [Unattended] - _contents required except:_
+      - [Optional] - _may be excluded if no files remain after personalisation_
+      - [install.ps1] - _may be downloaded to speed up Chocolatey installation_
+    - [Drivers] - _optional_
+    - [Drivers.import] - _optional_
+    - [MSI] - _optional_
+    - [Office365] - _optional_
+    - [Tools] - _optional_
 
-1. Choose an install partition, then leave the USB flash drive connected until
-   the login screen appears
+13. Choose an install partition, then leave the USB flash drive connected until
+    the login screen appears
 
-### How to encode a local account password for `Autounattend.xml`
+## FAQ
 
-In Bash:
+### Can I use this to deploy Windows to `arm64` and `x86` devices?
 
-```bash
-(
-    while :; do
-        read -rsp "Password: " PW && echo &&
-            read -rsp "Password (again): " PW2 && echo || exit
-        [[ $PW != "$PW2" ]] || break
-        echo "Passwords did not match"
-    done
-    PW=$(printf '%sPassword' "$PW" | perl -pe 's/(.)/\1\0/g' | base64) &&
-        cat <<XML
+Yes, you can. The only difference between settings applied to `amd64`, `arm64`
+and `x86` builds by [Autounattend.xml] and [Audit.xml] is that [Compact OS] is
+enabled on 32-bit systems because they tend to have limited storage.
 
-<Password>
-   <Value>$PW</Value>
-   <PlainText>false</PlainText>
-</Password>
-XML
-)
-```
+### Are two answer files really necessary?
+
+Inelegant as they may be, [Autounattend.xml] and [Audit.xml] are both needed for
+Windows OOBE (out-of-box experience) prompts to be skipped.
+
+This is because `oobeSystem` settings in [Autounattend.xml] are applied before
+audit mode starts, leaving no pending settings to apply when it concludes and
+the OOBE starts for the second time. Copying [Audit.xml] to the system just
+before this happens makes it the answer file for the second `oobeSystem` pass
+and allows Windows Setup to continue without user interaction.
+
+One answer file would be sufficient if the `specialize` pass were used to
+install software instead of audit mode, but some apps - including Microsoft
+Office 365 and OneDrive - fail to install without the Network List Service
+(`netprofm`), which cannot be started in `specialize`. Deploying these apps on
+first boot fails intermittently, and using `<FirstLogonCommands>` for
+long-running tasks is discouraged, so unless the problematic installers improve,
+two answer files will continue to be necessary.
+
+> Relevant documentation:
+>
+> - [Reseal]
+> - [Implicit Answer File Search Order]
+> - [Use Unattend to run scripts]
+
+### Why are system drivers installed in two passes?
+
+There are two reasons for this:
+
+1. Because some drivers (e.g. for storage controllers and input devices) need to
+   be installed before Windows Setup can start, and others (usually graphics
+   card drivers) need to be installed later or they will crash Windows PE.
+
+2. Because providing multiple drivers for one device via `<DriverPaths>` in
+   `windowsPE` or `offlineServicing` triggers the error below, but the same
+   drivers can be installed by running `pnputil /add-driver` from a command in
+   `auditUser` or `specialize`.
+
+   ```
+   Windows installation encountered an unexpected error. Error code: 0x80070103 - 0x40031.
+   ```
 
 ## Links
 
@@ -166,10 +250,17 @@ XML
 [@cschneegans]: https://github.com/cschneegans
 [Audit.xml]: Audit.xml
 [Autounattend.xml]: Autounattend.xml
+[Build]: Build/
+[Chocolatey]: https://community.chocolatey.org/
+[Compact OS]:
+  https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/compact-os?view=windows-10
 [ConfigurePrinting.ps1]: Unattended/Optional/ConfigurePrinting.ps1
 [download.cmd]: Office365/download.cmd
 [Drivers]: Drivers/
 [Drivers.import]: Drivers.import/
+[EncodeUnattendPassword.sh]: Scripts/EncodeUnattendPassword.sh
+[Implicit Answer File Search Order]:
+  https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/windows-setup-automation-overview?view=windows-11#implicit-answer-file-search-order
 [install.ps1]: https://community.chocolatey.org/install.ps1
 [InstallOriginalProductKey.ps1]:
   Unattended/Optional/InstallOriginalProductKey.ps1
@@ -188,14 +279,17 @@ XML
 [online autounattend.xml generator]:
   https://schneegans.de/windows/unattend-generator/
 [Optional]: Unattended/Optional/
-[password encoder]: #how-to-encode-a-local-account-password-for-autounattendxml
 [RemoveBloatware.ps1]: Unattended/Optional/RemoveBloatware.ps1
+[Reseal]:
+  https://learn.microsoft.com/en-us/windows-hardware/customize/desktop/unattend/microsoft-windows-deployment-reseal
 [teamsbootstrapper.exe]:
   https://go.microsoft.com/fwlink/?linkid=2243204&clcid=0x409
 [Tools]: Tools/
 [Unattended.cmd]: Unattended/Unattended.cmd
 [Unattended]: Unattended/
 [UnattendedFirstBoot.cmd]: Unattended/UnattendedFirstBoot.cmd
+[Use Unattend to run scripts]:
+  https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/add-a-custom-script-to-windows-setup?view=windows-11#use-unattend-to-run-scripts
 [Wi-Fi.xml]: Wi-Fi.xml
 [Windows Unattended Setup Reference]:
   https://learn.microsoft.com/en-us/windows-hardware/customize/desktop/unattend/

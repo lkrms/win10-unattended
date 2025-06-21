@@ -1,6 +1,6 @@
 $ErrorActionPreference = "Stop"
 
-# See: https://learn.microsoft.com/en-us/windows/application-management/remove-provisioned-apps-during-update
+# See https://learn.microsoft.com/en-us/windows/application-management/remove-provisioned-apps-during-update
 $packageNames = @(
     "Clipchamp.Clipchamp"
     "Microsoft.549981C3F5F10" # Cortana
