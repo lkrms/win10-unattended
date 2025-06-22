@@ -34,7 +34,6 @@
               <PlainText>false</PlainText>
             </Password>
           </LocalAccount>
-          <!--
           <LocalAccount wcm:action="add">
             <Name>test-user</Name>
             <DisplayName>Test User</DisplayName>
@@ -43,7 +42,6 @@
               <PlainText>false</PlainText>
             </Password>
           </LocalAccount>
-          -->
         </LocalAccounts>
       </UserAccounts>
       <OOBE>
@@ -98,7 +96,6 @@
               <PlainText>false</PlainText>
             </Password>
           </LocalAccount>
-          <!--
           <LocalAccount wcm:action="add">
             <Name>test-user</Name>
             <DisplayName>Test User</DisplayName>
@@ -107,7 +104,6 @@
               <PlainText>false</PlainText>
             </Password>
           </LocalAccount>
-          -->
         </LocalAccounts>
       </UserAccounts>
       <OOBE>
@@ -162,7 +158,6 @@
               <PlainText>false</PlainText>
             </Password>
           </LocalAccount>
-          <!--
           <LocalAccount wcm:action="add">
             <Name>test-user</Name>
             <DisplayName>Test User</DisplayName>
@@ -171,7 +166,6 @@
               <PlainText>false</PlainText>
             </Password>
           </LocalAccount>
-          -->
         </LocalAccounts>
       </UserAccounts>
       <OOBE>
