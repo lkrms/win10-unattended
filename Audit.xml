@@ -34,16 +34,15 @@
               <PlainText>false</PlainText>
             </Password>
           </LocalAccount>
-          <!--
           <LocalAccount wcm:action="add">
             <Name>test-user</Name>
             <DisplayName>Test User</DisplayName>
             <Password>
+              <!-- No password -->
               <Value>UABhAHMAcwB3AG8AcgBkAA==</Value>
               <PlainText>false</PlainText>
             </Password>
           </LocalAccount>
-          -->
         </LocalAccounts>
       </UserAccounts>
       <OOBE>
@@ -98,16 +97,15 @@
               <PlainText>false</PlainText>
             </Password>
           </LocalAccount>
-          <!--
           <LocalAccount wcm:action="add">
             <Name>test-user</Name>
             <DisplayName>Test User</DisplayName>
             <Password>
+              <!-- No password -->
               <Value>UABhAHMAcwB3AG8AcgBkAA==</Value>
               <PlainText>false</PlainText>
             </Password>
           </LocalAccount>
-          -->
         </LocalAccounts>
       </UserAccounts>
       <OOBE>
@@ -162,16 +160,15 @@
               <PlainText>false</PlainText>
             </Password>
           </LocalAccount>
-          <!--
           <LocalAccount wcm:action="add">
             <Name>test-user</Name>
             <DisplayName>Test User</DisplayName>
             <Password>
+              <!-- No password -->
               <Value>UABhAHMAcwB3AG8AcgBkAA==</Value>
               <PlainText>false</PlainText>
             </Password>
           </LocalAccount>
-          -->
         </LocalAccounts>
       </UserAccounts>
       <OOBE>
