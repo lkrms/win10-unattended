@@ -35,8 +35,6 @@ CALL :log ===== Starting %~f0
 :: Start custom apps
 
 
-GOTO :skipCustomApps
-
 CALL :osIs64Bit && CALL :choco espanso
 CALL :enableDevelopmentMode && CALL :osIs64Bit && CALL :choco git --params="'/GitOnlyOnPath /NoShellIntegration /SChannel /NoOpenSSH /WindowsTerminalProfile /Symlinks'" && (
     SETX MSYS winsymlinks:nativestrict /M
@@ -51,8 +49,6 @@ CALL :choco SourceCodePro
 
 :: See https://keepassxc.org/docs/KeePassXC_UserGuide#_installer_options
 CALL :osIs64Bit && CALL :choco keepassxc --install-args="'LAUNCHAPPONEXIT=0 AUTOSTARTPROGRAM=0'"
-
-:skipCustomApps
 
 
 :: End custom apps
