@@ -39,8 +39,6 @@ CALL :log ===== Starting %~f0
 :: Start custom apps
 
 
-GOTO :skipCustomApps
-
 CALL :enableDeveloperMode
 CALL :osIs64Bit && CALL :winget Espanso.Espanso
 CALL :osIs64Bit && CALL :winget Flameshot.Flameshot
@@ -58,8 +56,6 @@ CALL :choco SourceCodePro
 
 :: See https://keepassxc.org/docs/KeePassXC_UserGuide#_installer_options
 CALL :osIs64Bit && CALL :winget KeePassXCTeam.KeePassXC --custom "LAUNCHAPPONEXIT=0 AUTOSTARTPROGRAM=0"
-
-:skipCustomApps
 
 
 :: End custom apps
