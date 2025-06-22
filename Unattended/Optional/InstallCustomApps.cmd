@@ -41,8 +41,6 @@ SET "OPTIONAL_DIR=%~dp0"
 :: Start custom apps
 
 
-GOTO :skipCustomApps
-
 CALL :enableDeveloperMode
 CALL :osIs64Bit && CALL :winget Flameshot.Flameshot && CALL :deleteDesktopIcon Flameshot.lnk
 CALL :osIs64Bit && CALL :winget Git.Git --override "%INNO_DEFAULT% /COMPONENTS=ext,ext\shellhere,gitlfs,assoc,assoc_sh,windowsterminal,scalar /o:EditorOption=Notepad++ /o:DefaultBranchOption=main /o:PathOption=Cmd /o:SSHOption=ExternalOpenSSH /o:CURLOption=WinSSL /o:EnableSymlinks=Enabled /o:PerformanceTweaksFSCache=Enabled" && (
@@ -64,8 +62,6 @@ CALL :choco SourceCodePro
 
 :: See https://keepassxc.org/docs/KeePassXC_UserGuide#_installer_options
 CALL :osIs64Bit && CALL :winget KeePassXCTeam.KeePassXC --custom "LAUNCHAPPONEXIT=0 AUTOSTARTPROGRAM=0"
-
-:skipCustomApps
 
 
 :: End custom apps
