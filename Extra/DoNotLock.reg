@@ -1,0 +1,11 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System]
+"DisableAutomaticRestartSignOn"=dword:00000000
+"InactivityTimeoutSecs"=-
+
+[HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\Windows\Control Panel\Desktop]
+"ScreenSaveActive"="0"
+"ScreenSaverIsSecure"="0"
+"ScreenSaveTimeOut"=-
+
