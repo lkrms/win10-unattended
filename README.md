@@ -13,13 +13,15 @@
     - `windowsPE` for [boot-critical drivers][Drivers]
     - `auditUser` for [other drivers][Drivers.import], including any provided as
       `.msi` packages
-4.  **Silences Cortana's OOBE voice-over** because there is never a good time to
+4.  **Installs `.cab` and `.msu` update packages** downloaded from [Windows
+    Update][Microsoft Update Catalog] _(if provided)_
+5.  **Silences Cortana's OOBE voice-over** because there is never a good time to
     hear "a little sign-in here, a touch of Wi-Fi there..."
-5.  **Sets computer name** _(if enabled by uncommenting `<ComputerName>` in
+6.  **Sets computer name** _(if enabled by uncommenting `<ComputerName>` in
     [Autounattend.xml])_
-6.  **Installs the system's OEM product key** for activation once online
-7.  **Adds a Wi-Fi profile** _(if provided)_ and waits for Internet connectivity
-8.  **Installs [Chocolatey]** with the following packages:
+7.  **Installs the system's OEM product key** for activation once online
+8.  **Adds a Wi-Fi profile** _(if provided)_ and waits for Internet connectivity
+9.  **Installs [Chocolatey]** with the following packages:
     - 7-Zip
     - Firefox
     - Google Chrome
@@ -28,18 +30,18 @@
     - VLC media player
     - O&O ShutUp10++ _(optional)_
     - KeePassXC _(optional)_
-9.  **Installs standalone `.msi` packages** _(if provided)_
-10. **Deploys Microsoft Office 365, OneDrive and Teams** via their offline
+10. **Installs standalone `.msi` packages** _(if provided)_
+11. **Deploys Microsoft Office 365, OneDrive and Teams** via their offline
     installers
-11. **Applies policies and registry settings** to improve UX and mitigate the
+12. **Applies policies and registry settings** to improve UX and mitigate the
     worst of Microsoft's built-in privacy and autonomy travesties
-12. **Removes bloatware** installed by Microsoft
-13. **Reapplies policies, registry settings and bloatware removal on boot** to
+13. **Removes bloatware** installed by Microsoft
+14. **Reapplies policies, registry settings and bloatware removal on boot** to
     restore order after updates
-14. **Deploys TightVNC Server** for remote desktop access _(if enabled by
+15. **Deploys TightVNC Server** for remote desktop access _(if enabled by
     uncommenting the relevant `<RunSynchronousCommand>` in [Autounattend.xml])_
-15. **Creates local user accounts**, skipping "Sign in with Microsoft" prompts
-16. **Deletes cached answer files** for security
+16. **Creates local user accounts**, skipping "Sign in with Microsoft" prompts
+17. **Deletes cached answer files** for security
 
 ## How to use it
 
@@ -169,9 +171,16 @@
 10. Add standalone `.msi` packages to the [MSI] directory for silent
     installation after Chocolatey packages
 
-11. Add troubleshooting tools to the [Tools] directory
+11. Download updates from the [Microsoft Update Catalog] to the [Updates]
+    directory for your install media
 
-12. Copy the following files and directories to the root of a USB flash drive
+    - "Dynamic Cumulative" updates are preferred where possible
+    - Directories with at least one `.cab` or `.msu` file are passed to
+      `DISM /Add-Package`, one directory per run
+
+12. Add troubleshooting tools to the [Tools] directory
+
+13. Copy the following files and directories to the root of a USB flash drive
     and connect it to the target system when booting into Windows Setup
     (alternatively, if installing Windows from a USB drive with sufficient
     capacity, you can copy everything to the root of the same drive rather than
@@ -188,8 +197,9 @@
     - [MSI] - _optional_
     - [Office365] - _optional_
     - [Tools] - _optional_
+    - [Updates] - _optional_
 
-13. Choose an install partition, then leave the USB flash drive connected until
+14. Choose an install partition, then leave the USB flash drive connected until
     the login screen appears
 
 ## FAQ
@@ -265,6 +275,7 @@ There are two reasons for this:
 [InstallOriginalProductKey.ps1]:
   Unattended/Optional/InstallOriginalProductKey.ps1
 [MapNetworkDrives.cmd]: Unattended/Optional/MapNetworkDrives.cmd
+[Microsoft Update Catalog]: https://catalog.update.microsoft.com/
 [MSI]: MSI/
 [MSTeams-x64.msix]: https://go.microsoft.com/fwlink/?linkid=2196106
 [Office 365 Client Configuration Service]: https://config.office.com/
@@ -288,6 +299,7 @@ There are two reasons for this:
 [Unattended.cmd]: Unattended/Unattended.cmd
 [Unattended]: Unattended/
 [UnattendedFirstBoot.cmd]: Unattended/UnattendedFirstBoot.cmd
+[Updates]: Updates/
 [Use Unattend to run scripts]:
   https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/add-a-custom-script-to-windows-setup?view=windows-11#use-unattend-to-run-scripts
 [Wi-Fi.xml]: Wi-Fi.xml

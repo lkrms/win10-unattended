@@ -99,32 +99,39 @@
         </RunSynchronousCommand>
         <RunSynchronousCommand wcm:action="add">
           <Order>2</Order>
-          <Description>Install win10-unattended files, drivers and MSI packages</Description>
+          <Description>Install "Unattended" directory, drivers, driver .msi packages</Description>
           <Path>CMD /C "FOR %G IN (D X C E F G) DO IF EXIST %G:\Autounattend.xml (CALL %G:\Unattended\Unattended.cmd /1 &amp; EXIT)"</Path>
           <!-- Reboot if necessary after running pnputil and msiexec -->
           <WillReboot>OnRequest</WillReboot>
         </RunSynchronousCommand>
         <RunSynchronousCommand wcm:action="add">
           <Order>3</Order>
-          <Description>Install original product key, Wi-Fi profile, software, registry settings</Description>
+          <Description>Install .cab and .msu update packages</Description>
           <Path>CMD /C "FOR %G IN (D X C E F G) DO IF EXIST %G:\Autounattend.xml (CALL %G:\Unattended\Unattended.cmd /2 &amp; EXIT)"</Path>
-          <!-- Reboot if Office 365 installer needs guest share access -->
+          <!-- Reboot if necessary after running dism -->
           <WillReboot>OnRequest</WillReboot>
         </RunSynchronousCommand>
         <RunSynchronousCommand wcm:action="add">
           <Order>4</Order>
-          <Description>Install Office 365, remove bloatware</Description>
+          <Description>Install original product key, Wi-Fi profile, software, registry settings</Description>
           <Path>CMD /C "FOR %G IN (D X C E F G) DO IF EXIST %G:\Autounattend.xml (CALL %G:\Unattended\Unattended.cmd /3 &amp; EXIT)"</Path>
+          <!-- Reboot if Office 365 installer needs guest share access -->
+          <WillReboot>OnRequest</WillReboot>
+        </RunSynchronousCommand>
+        <RunSynchronousCommand wcm:action="add">
+          <Order>5</Order>
+          <Description>Install Office 365, remove bloatware</Description>
+          <Path>CMD /C "FOR %G IN (D X C E F G) DO IF EXIST %G:\Autounattend.xml (CALL %G:\Unattended\Unattended.cmd /4 &amp; EXIT)"</Path>
         </RunSynchronousCommand>
         <!--
         <RunSynchronousCommand wcm:action="add">
-          <Order>5</Order>
+          <Order>6</Order>
           <Description>Install TightVNC Server</Description>
           <Path>CMD /C "FOR %G IN (D X C E F G) DO IF EXIST %G:\Autounattend.xml (CALL %G:\Unattended\UnattendedTightVNC.cmd "nZ4yUJ3O" "Shabbyr=" &amp; EXIT)"</Path>
         </RunSynchronousCommand>
         -->
         <RunSynchronousCommand wcm:action="add">
-          <Order>6</Order>
+          <Order>7</Order>
           <Description>Re-enable Windows Update service</Description>
           <Path>CMD /C "sc config wuauserv start=demand &amp; EXIT /B 0"</Path>
         </RunSynchronousCommand>
