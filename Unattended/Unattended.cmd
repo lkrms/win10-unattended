@@ -145,12 +145,15 @@ CALL :choco notepadplusplus
 CALL :choco sumatrapdf
 CALL :choco vlc
 
-CALL :choco shutup10
+CALL :optCmd InstallCustomApps.cmd "/unattended"
 
-:: See https://keepassxc.org/docs/KeePassXC_UserGuide#_installer_options
-CALL :osIs64Bit && CALL :choco keepassxc --install-args="'LAUNCHAPPONEXIT=0 AUTOSTARTPROGRAM=0'"
+IF "%2"=="/debug" (
+    rem Don't install procmon if it's already installed, e.g. via sysinternals
+    WHERE /Q Procmon || CALL :choco procmon
 
-IF "%2"=="/debug" CALL :choco procmon
+    CALL :log Enabling Process Monitor log of next boot
+    Procmon /AcceptEula /EnableBootLogging
+)
 
 CALL :log %CHOCO_COUNT% packages deployed by Chocolatey ^(errors: %CHOCO_ERRORS%^)
 
@@ -182,14 +185,6 @@ IF EXIST "%SCRIPT_DIR%Optional\AppAssociations.xml" (
     CALL :runOrReport DISM /Online /Import-DefaultAppAssociations:"%SCRIPT_DIR%Optional\AppAssociations.xml"
 )
 
-IF NOT "%2"=="/debug" GOTO :noDebug
-CALL :log Exporting registry settings
-REG EXPORT HKLM\SOFTWARE %SystemDrive%\Unattended-HKLM-SOFTWARE.reg
-
-CALL :log Enabling Process Monitor log of next boot
-Procmon /AcceptEula /EnableBootLogging
-
-:noDebug
 IF %ERRORS% NEQ 0 GOTO :endPass2
 IF NOT EXIST "%SCRIPT_DIR%..\Office365\install.cmd" GOTO :endPass2
 IF EXIST "%SCRIPT_DIR%..\Office365\Office" GOTO :endPass2
@@ -266,13 +261,6 @@ EXIT /B
 :online
 ping -4 -n 1 -w 1000 1.1.1.1 | FINDSTR /R /C:"TTL=[0-9][0-9]*$" >NUL
 EXIT /B
-
-:osIs64Bit
-IF "%PROCESSOR_ARCHITECTURE%"=="AMD64" EXIT /B 0
-IF "%PROCESSOR_ARCHITEW6432%"=="AMD64" EXIT /B 0
-IF "%PROCESSOR_ARCHITECTURE%"=="ARM64" EXIT /B 0
-IF "%PROCESSOR_ARCHITEW6432%"=="ARM64" EXIT /B 0
-EXIT /B 1
 
 :choco
 CALL :log Deploying %1
