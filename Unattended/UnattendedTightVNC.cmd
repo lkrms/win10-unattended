@@ -7,7 +7,7 @@ NET SESSION >NUL 2>NUL || (
     EXIT /B 3
 )
 
-IF "%1"=="/start" GOTO :start
+IF "%~1"=="/start" GOTO :start
 IF NOT EXIST %SystemDrive%\Unattended\Logs (
     MD %SystemDrive%\Unattended\Logs || EXIT /B 3
     IF EXIST %SystemDrive%\Unattended.log (MOVE /Y %SystemDrive%\Unattended.log %SystemDrive%\Unattended\Logs || EXIT /B 3)
@@ -21,16 +21,21 @@ EXIT /B %RETURN_CODE%
 
 :start
 SHIFT /1
+SET ERRORS=0
 
-IF "%1"=="" GOTO :usage
-IF "%2"=="" GOTO :usage
+IF "%~1"=="" GOTO :usage
+IF "%~2"=="" GOTO :usage
 
-CALL :log Installing TightVNC Server
-"%ALLUSERSPROFILE%\chocolatey\bin\choco" upgrade tightvnc --ia="ADDLOCAL=Server SET_ACCEPTHTTPCONNECTIONS=1 SET_CONTROLPASSWORD=1 SET_PASSWORD=1 SET_RUNCONTROLINTERFACE=1 SET_USECONTROLAUTHENTICATION=1 SET_USEVNCAUTHENTICATION=1 VALUE_OF_ACCEPTHTTPCONNECTIONS=0 VALUE_OF_CONTROLPASSWORD=""%~1"" VALUE_OF_PASSWORD=""%~2"" VALUE_OF_RUNCONTROLINTERFACE=0 VALUE_OF_USECONTROLAUTHENTICATION=1 VALUE_OF_USEVNCAUTHENTICATION=1" -y --no-progress || (
-    CALL :error "choco upgrade tightvnc -y --no-progress" failed
-    EXIT /B 1
+CALL :log ===== Starting %~f0
+
+:: See https://www.tightvnc.com/docs.php
+CALL :log Deploying TightVNC Server
+"%ALLUSERSPROFILE%\chocolatey\bin\choco" upgrade tightvnc --install-args="'ADDLOCAL=Server SET_ACCEPTHTTPCONNECTIONS=1 SET_CONTROLPASSWORD=1 SET_PASSWORD=1 SET_RUNCONTROLINTERFACE=1 SET_USECONTROLAUTHENTICATION=1 SET_USEVNCAUTHENTICATION=1 VALUE_OF_ACCEPTHTTPCONNECTIONS=0 VALUE_OF_CONTROLPASSWORD=""%~1"" VALUE_OF_PASSWORD=""%~2"" VALUE_OF_RUNCONTROLINTERFACE=0 VALUE_OF_USECONTROLAUTHENTICATION=1 VALUE_OF_USEVNCAUTHENTICATION=1'" -y --no-progress --fail-on-unfound || (
+    CALL :error "choco upgrade tightvnc" failed
 )
 
+CALL :log ===== %~f0 finished with %ERRORS% errors
+IF %ERRORS% NEQ 0 EXIT /B 1
 EXIT /B 0
 
 
@@ -43,5 +48,7 @@ ECHO [%DATE% %TIME%] %*
 EXIT /B
 
 :error
-CALL :log ERROR ^(%ERRORLEVEL%^): %*
-EXIT /B
+SET RESULT=%ERRORLEVEL%
+CALL :log ERROR ^(%RESULT%^): %*
+SET /A "ERRORS+=1"
+EXIT /B %RESULT%
