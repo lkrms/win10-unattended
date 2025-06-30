@@ -10,8 +10,10 @@
 /Office365/MSTeams-x64.msix
 /Tools/*
 /Unattended/install.ps1
+/Updates/*
 
 !/Drivers/README.md
 !/Drivers.import/README.md
 !/MSI/README.md
 !/Tools/README.md
+!/Updates/README.md

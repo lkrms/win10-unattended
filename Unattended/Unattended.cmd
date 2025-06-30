@@ -41,7 +41,8 @@ IF "%SETUP_STATE%"=="IMAGE_STATE_UNDEPLOYABLE" SET SETUP_STATE=audit
 IF "%1"=="/1" GOTO :pass1
 IF "%1"=="/2" GOTO :pass2
 IF "%1"=="/3" GOTO :pass3
-ECHO Usage: Unattended.cmd ^(/1^|/2^|/3^) [/debug]
+IF "%1"=="/4" GOTO :pass4
+ECHO Usage: Unattended.cmd ^(/1^|/2^|/3^|/4^) [/debug]
 EXIT /B 3
 
 
@@ -50,6 +51,12 @@ EXIT /B 3
 CALL :log ===== Starting %~f0 pass 1 ^(state: %SETUP_STATE%^)
 
 SETLOCAL EnableDelayedExpansion
+
+IF "%2"=="/debug" (
+    CALL :log Enabling remote access to admin shares
+    REG ADD HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System /v LocalAccountTokenFilterPolicy /t REG_DWORD /d 1 /f
+    SET RETURN_CODE=1
+)
 
 IF NOT "%SCRIPT_DIR%"=="%SystemDrive%\Unattended\" (
     CALL :log Copying %SCRIPT_DIR:~0,-1% to %SystemDrive%\Unattended
@@ -80,12 +87,6 @@ IF NOT "%SCRIPT_DIR%"=="%SystemDrive%\Unattended\" (
 
 CALL :runOrReport ATTRIB +S +H "%SystemDrive%\Unattended"
 
-IF "%2"=="/debug" (
-    rem Allow remote access to admin shares
-    REG ADD HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System /v LocalAccountTokenFilterPolicy /t REG_DWORD /d 1 /f
-    SET RETURN_CODE=1
-)
-
 IF %DISABLE_UCPD% NEQ 0 (
     rem - See https://kolbi.cz/blog/2024/04/03/userchoice-protection-driver-ucpd-sys/
     rem - Necessary if setting "TaskbarDa", for example
@@ -95,7 +96,7 @@ IF %DISABLE_UCPD% NEQ 0 (
     SET RETURN_CODE=1
 )
 
-if %RETURN_CODE% EQU 0 (
+IF %RETURN_CODE% EQU 0 (
     CALL :log ===== %~f0 pass 1 finished
 ) ELSE (
     CALL :log ===== %~f0 pass 1 finished; reboot required to finalise driver installation
@@ -106,6 +107,39 @@ EXIT /B %RETURN_CODE%
 :pass2
 
 CALL :log ===== Starting %~f0 pass 2 ^(state: %SETUP_STATE%^)
+
+SETLOCAL EnableDelayedExpansion
+
+IF EXIST "%SCRIPT_DIR%..\Updates" (
+    FOR /F "usebackq delims=" %%G IN (
+        `powershell -NoProfile -Command "Get-ChildItem -Path '%SCRIPT_DIR%..\Updates' -Include *.cab, *.msu -Recurse | Select-Object -ExpandProperty Directory -Unique | ForEach-Object FullName"`
+    ) DO (
+        IF !RETURN_CODE! EQU 1 (
+            CALL :log ===== %~f0 pass 2 not finished; reboot required to continue update servicing
+            EXIT /B 2
+        )
+        CALL :log Installing updates: %%G
+        DISM /Online /Add-Package /PackagePath:"%%G" /IgnoreCheck /NoRestart || (
+            IF !ERRORLEVEL! EQU 3010 (
+                SET RETURN_CODE=1
+            ) ELSE (
+                CALL :log "DISM /Online /Add-Package /PackagePath:"%%G"" return value: !ERRORLEVEL!
+            )
+        )
+    )
+)
+
+IF %RETURN_CODE% EQU 0 (
+    CALL :log ===== %~f0 pass 2 finished
+) ELSE (
+    CALL :log ===== %~f0 pass 2 finished with no errors; reboot required to finalise update servicing
+)
+EXIT /B %RETURN_CODE%
+
+
+:pass3
+
+CALL :log ===== Starting %~f0 pass 3 ^(state: %SETUP_STATE%^)
 
 CALL :optPs1 InstallOriginalProductKey.ps1 "Installing original product key"
 
@@ -145,12 +179,15 @@ CALL :choco notepadplusplus
 CALL :choco sumatrapdf
 CALL :choco vlc
 
-CALL :choco shutup10
+CALL :optCmd InstallCustomApps.cmd "/unattended"
 
-:: See https://keepassxc.org/docs/KeePassXC_UserGuide#_installer_options
-CALL :choco keepassxc --install-args="'LAUNCHAPPONEXIT=0 AUTOSTARTPROGRAM=0'"
+IF "%2"=="/debug" (
+    rem Don't install procmon if it's already installed, e.g. via sysinternals
+    WHERE /Q Procmon || CALL :choco procmon
 
-IF "%2"=="/debug" CALL :choco procmon
+    CALL :log Enabling Process Monitor log of next boot
+    Procmon /AcceptEula /EnableBootLogging
+)
 
 CALL :log %CHOCO_COUNT% packages deployed by Chocolatey ^(errors: %CHOCO_ERRORS%^)
 
@@ -182,29 +219,21 @@ IF EXIST "%SCRIPT_DIR%Optional\AppAssociations.xml" (
     CALL :runOrReport DISM /Online /Import-DefaultAppAssociations:"%SCRIPT_DIR%Optional\AppAssociations.xml"
 )
 
-IF NOT "%2"=="/debug" GOTO :noDebug
-CALL :log Exporting registry settings
-REG EXPORT HKLM\SOFTWARE %SystemDrive%\Unattended-HKLM-SOFTWARE.reg
-
-CALL :log Enabling Process Monitor log of next boot
-Procmon /AcceptEula /EnableBootLogging
-
-:noDebug
-IF %ERRORS% NEQ 0 GOTO :endPass2
-IF NOT EXIST "%SCRIPT_DIR%..\Office365\install.cmd" GOTO :endPass2
-IF EXIST "%SCRIPT_DIR%..\Office365\Office" GOTO :endPass2
-CALL :log ===== %~f0 pass 2 finished with no errors; reboot required for Office 365 installer guest share access
+IF %ERRORS% NEQ 0 GOTO :endPass3
+IF NOT EXIST "%SCRIPT_DIR%..\Office365\install.cmd" GOTO :endPass3
+IF EXIST "%SCRIPT_DIR%..\Office365\Office" GOTO :endPass3
+CALL :log ===== %~f0 pass 3 finished with no errors; reboot required for Office 365 installer guest share access
 EXIT /B 1
 
-:endPass2
-CALL :log ===== %~f0 pass 2 finished with %ERRORS% errors
+:endPass3
+CALL :log ===== %~f0 pass 3 finished with %ERRORS% errors
 IF %ERRORS% NEQ 0 EXIT /B 3
 EXIT /B 0
 
 
-:pass3
+:pass4
 
-CALL :log ===== Starting %~f0 pass 3 ^(state: %SETUP_STATE%^)
+CALL :log ===== Starting %~f0 pass 4 ^(state: %SETUP_STATE%^)
 
 IF EXIST "%SCRIPT_DIR%..\Office365\install.cmd" (
     CALL :awaitConnectivity || EXIT /B 3
@@ -220,7 +249,7 @@ IF NOT "%SETUP_STATE%"=="complete" (
     COPY "%SCRIPT_DIR%..\Audit.xml" "%WINDIR%\Panther\Unattend\Unattend.xml" /Y || EXIT /B 3
 )
 
-CALL :log ===== %~f0 pass 3 finished with %ERRORS% errors
+CALL :log ===== %~f0 pass 4 finished with %ERRORS% errors
 IF %ERRORS% NEQ 0 EXIT /B 3
 EXIT /B 0
 
@@ -329,6 +358,7 @@ ECHO [%DATE% %TIME%] %*
 EXIT /B
 
 :error
-CALL :log ERROR ^(%ERRORLEVEL%^): %*
+SET RESULT=%ERRORLEVEL%
+CALL :log ERROR ^(%RESULT%^): %*
 SET /A "ERRORS+=1"
-EXIT /B
+EXIT /B %RESULT%

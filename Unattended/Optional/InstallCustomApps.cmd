@@ -1,13 +1,15 @@
 @ECHO OFF
 
-SETLOCAL
-
 NET SESSION >NUL 2>NUL || (
     ECHO Please use "Run as administrator"
     EXIT /B 3
 )
 
-IF "%~1"=="/start" GOTO :start
+IF "%1"=="/unattended" GOTO :unattended
+
+SETLOCAL
+
+IF "%1"=="/start" GOTO :start
 IF NOT EXIST %SystemDrive%\Unattended\Logs (
     MD %SystemDrive%\Unattended\Logs || EXIT /B 3
     IF EXIST %SystemDrive%\Unattended.log (MOVE /Y %SystemDrive%\Unattended.log %SystemDrive%\Unattended\Logs || EXIT /B 3)
@@ -22,26 +24,49 @@ EXIT /B %RETURN_CODE%
 :start
 SHIFT /1
 SET ERRORS=0
-
-IF "%~1"=="" GOTO :usage
-IF "%~2"=="" GOTO :usage
+SET CHOCO_COUNT=0
+SET CHOCO_ERRORS=0
 
 CALL :log ===== Starting %~f0
 
-:: See https://www.tightvnc.com/docs.php
-CALL :log Deploying TightVNC Server
-"%ALLUSERSPROFILE%\chocolatey\bin\choco" upgrade tightvnc --install-args="'ADDLOCAL=Server SET_ACCEPTHTTPCONNECTIONS=1 SET_CONTROLPASSWORD=1 SET_PASSWORD=1 SET_RUNCONTROLINTERFACE=1 SET_USECONTROLAUTHENTICATION=1 SET_USEVNCAUTHENTICATION=1 VALUE_OF_ACCEPTHTTPCONNECTIONS=0 VALUE_OF_CONTROLPASSWORD=""%~1"" VALUE_OF_PASSWORD=""%~2"" VALUE_OF_RUNCONTROLINTERFACE=0 VALUE_OF_USECONTROLAUTHENTICATION=1 VALUE_OF_USEVNCAUTHENTICATION=1'" -y --no-progress --fail-on-unfound || (
-    CALL :error "choco upgrade tightvnc" failed
-)
+:unattended
 
+
+:: Start custom apps
+
+
+CALL :choco shutup10
+
+:: See https://keepassxc.org/docs/KeePassXC_UserGuide#_installer_options
+CALL :osIs64Bit && CALL :choco keepassxc --install-args="'LAUNCHAPPONEXIT=0 AUTOSTARTPROGRAM=0'"
+
+
+:: End custom apps
+
+
+IF "%1"=="/unattended" EXIT /B 0
+CALL :log %CHOCO_COUNT% packages deployed by Chocolatey ^(errors: %CHOCO_ERRORS%^)
 CALL :log ===== %~f0 finished with %ERRORS% errors
 IF %ERRORS% NEQ 0 EXIT /B 1
 EXIT /B 0
 
 
-:usage
-ECHO Usage: UnattendedTightVNC.cmd ^<CONTROLPASSWORD^> ^<PASSWORD^>
+:osIs64Bit
+IF "%PROCESSOR_ARCHITECTURE%"=="AMD64" EXIT /B 0
+IF "%PROCESSOR_ARCHITEW6432%"=="AMD64" EXIT /B 0
+IF "%PROCESSOR_ARCHITECTURE%"=="ARM64" EXIT /B 0
+IF "%PROCESSOR_ARCHITEW6432%"=="ARM64" EXIT /B 0
 EXIT /B 1
+
+:choco
+CALL :log Deploying %1
+SET /A "CHOCO_COUNT+=1"
+CALL :runOrReport choco upgrade %* -y --no-progress --fail-on-unfound || SET /A "CHOCO_ERRORS+=1"
+EXIT /B
+
+:runOrReport
+%* || CALL :error "%*" failed
+EXIT /B
 
 :log
 ECHO [%DATE% %TIME%] %*
