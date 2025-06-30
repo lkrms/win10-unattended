@@ -1,0 +1,22 @@
+; ----------------------------------------------------------------------
+; PARSING User POLICY
+; Source file:  registry.pol
+
+User
+Software\Policies\Microsoft\Windows\Control Panel\Desktop
+ScreenSaveActive
+SZ:1
+
+User
+Software\Policies\Microsoft\Windows\Control Panel\Desktop
+ScreenSaverIsSecure
+SZ:1
+
+User
+Software\Policies\Microsoft\Windows\Control Panel\Desktop
+ScreenSaveTimeOut
+SZ:300
+
+; PARSING COMPLETED.
+; ----------------------------------------------------------------------
+

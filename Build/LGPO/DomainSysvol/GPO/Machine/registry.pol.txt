@@ -1,0 +1,177 @@
+; ----------------------------------------------------------------------
+; PARSING Computer POLICY
+; Source file:  registry.pol
+
+Computer
+Software\Microsoft\Windows\CurrentVersion\Policies\Explorer
+*
+CREATEKEY
+
+Computer
+Software\Microsoft\Windows\CurrentVersion\Policies\System
+EnableFirstLogonAnimation
+DWORD:0
+
+Computer
+Software\Microsoft\Windows\CurrentVersion\Policies\System
+DisableAutomaticRestartSignOn
+DWORD:1
+
+Computer
+Software\Microsoft\Windows\CurrentVersion\Policies\System
+VerboseStatus
+DWORD:1
+
+Computer
+Software\Microsoft\Windows\CurrentVersion\Policies\System
+HideFastUserSwitching
+DWORD:1
+
+Computer
+Software\Policies\Microsoft\MicrosoftEdge\Main
+AllowPrelaunch
+DELETE
+
+Computer
+Software\Policies\Microsoft\MicrosoftEdge\Main
+PreventFirstRunPage
+DWORD:1
+
+Computer
+Software\Policies\Microsoft\MicrosoftEdge\ServiceUI
+AllowWebContentOnNewTabPage
+DWORD:0
+
+Computer
+Software\Policies\Microsoft\MicrosoftEdge\TabPreloader
+AllowTabPreloading
+DELETE
+
+Computer
+Software\Policies\Microsoft\Windows\Explorer
+NoNewAppAlert
+DWORD:1
+
+Computer
+Software\Policies\Microsoft\Windows\OOBE
+DisablePrivacyExperience
+DWORD:1
+
+Computer
+Software\Policies\Microsoft\Windows\Windows Search
+AllowCortana
+DWORD:0
+
+Computer
+Software\Policies\Microsoft\Windows\Windows Search
+DisableWebSearch
+DWORD:1
+
+Computer
+Software\Policies\Microsoft\Windows\Windows Search
+ConnectedSearchUseWeb
+DWORD:0
+
+Computer
+Software\Policies\Microsoft\Windows\WindowsUpdate\AU
+NoAutoUpdate
+DWORD:0
+
+Computer
+Software\Policies\Microsoft\Windows\WindowsUpdate\AU
+AUOptions
+DWORD:4
+
+Computer
+Software\Policies\Microsoft\Windows\WindowsUpdate\AU
+AutomaticMaintenanceEnabled
+DELETE
+
+Computer
+Software\Policies\Microsoft\Windows\WindowsUpdate\AU
+ScheduledInstallDay
+DWORD:0
+
+Computer
+Software\Policies\Microsoft\Windows\WindowsUpdate\AU
+ScheduledInstallTime
+DWORD:24
+
+Computer
+Software\Policies\Microsoft\Windows\WindowsUpdate\AU
+ScheduledInstallEveryWeek
+DELETE
+
+Computer
+Software\Policies\Microsoft\Windows\WindowsUpdate\AU
+ScheduledInstallFirstWeek
+DELETE
+
+Computer
+Software\Policies\Microsoft\Windows\WindowsUpdate\AU
+ScheduledInstallSecondWeek
+DELETE
+
+Computer
+Software\Policies\Microsoft\Windows\WindowsUpdate\AU
+ScheduledInstallThirdWeek
+DELETE
+
+Computer
+Software\Policies\Microsoft\Windows\WindowsUpdate\AU
+ScheduledInstallFourthWeek
+DELETE
+
+Computer
+Software\Policies\Microsoft\Windows\WindowsUpdate\AU
+AllowMUUpdateService
+DWORD:1
+
+Computer
+Software\Policies\Microsoft\Windows\WindowsUpdate\AU
+NoAutoRebootWithLoggedOnUsers
+DWORD:1
+
+Computer
+Software\Policies\Microsoft\Windows Defender\Real-Time Protection
+DisableOnAccessProtection
+DWORD:1
+
+Computer
+Software\Policies\Microsoft\Windows Defender\Real-Time Protection
+DisableIOAVProtection
+DWORD:1
+
+Computer
+Software\Policies\Microsoft\Windows Defender\Real-Time Protection
+DisableBehaviorMonitoring
+DWORD:1
+
+Computer
+Software\Policies\Microsoft\Windows Defender\Real-Time Protection
+DisableRealtimeMonitoring
+DWORD:1
+
+Computer
+Software\Policies\Microsoft\Windows Defender Security Center\Systray
+HideSystray
+DWORD:1
+
+Computer
+Software\Policies\Microsoft\Windows Defender Security Center\Virus and threat protection
+UILockdown
+DWORD:1
+
+Computer
+Software\Policies\Microsoft\Windows NT\SystemRestore
+DisableSR
+DWORD:1
+
+Computer
+Software\Policies\Microsoft\Windows NT\Terminal Services
+fDenyTSConnections
+DWORD:0
+
+; PARSING COMPLETED.
+; ----------------------------------------------------------------------
+
