@@ -21,3 +21,5 @@ but may be useful afterwards.
   simultaneously.
 - `SetTargetRelease.reg`: edit and apply to prevent--or accelerate--the
   installation of feature updates by Windows Update.
+- `UpdateImageOffline.cmd`: pre-apply updates to your install media (if it's
+  writable).
