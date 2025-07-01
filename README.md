@@ -32,7 +32,7 @@ not provided for an action that requires them, the action is silently skipped.
     and 4 GB RAM
 3.  **Installs system drivers** in two passes:
     - `windowsPE` for [boot-critical drivers][Drivers]
-    - `auditUser` for [other drivers][Drivers.import], including any provided as
+    - `auditUser` for [other drivers][Drivers2], including any provided as
       `.msi` packages
 4.  **Installs `.cab` and `.msu` update packages** downloaded from [Windows
     Update][Microsoft Update Catalog]
@@ -144,7 +144,7 @@ not provided for an action that requires them, the action is silently skipped.
 4. Personalise or remove files in the [Optional] directory
 
    - [ConfigurePrinting.ps1][]: add any printer drivers you reference to
-     [Drivers.import]
+     [Drivers2]
 
    - [InstallOriginalProductKey.ps1]
 
@@ -179,15 +179,15 @@ not provided for an action that requires them, the action is silently skipped.
 
    - The user running [download.cmd] must have write access to the install files
 
-9. Add system drivers to [Drivers] and [Drivers.import]
+9. Add system drivers to [Drivers] and [Drivers2]
 
    - Boot-critical drivers must be added to [Drivers], otherwise drivers should
-     generally be added to [Drivers.import]
+     generally be added to [Drivers2]
 
    - `.inf` files must be unpacked for recursive discovery
 
-   - `.msi` packages in [Drivers.import] are silently installed after drivers in
-     the same directory
+   - `.msi` packages in [Drivers2] are silently installed after drivers in the
+     same directory
 
 10. Add standalone `.msi` packages to the [MSI] directory for silent
     installation after Chocolatey packages
@@ -215,7 +215,7 @@ not provided for an action that requires them, the action is silently skipped.
       - [Optional] - _may be excluded if no files remain after personalisation_
       - [install.ps1] - _may be downloaded to speed up Chocolatey installation_
     - [Drivers] - _optional_
-    - [Drivers.import] - _optional_
+    - [Drivers2] - _optional_
     - [MSI] - _optional_
     - [Office365] - _optional_
     - [Tools] - _optional_
@@ -289,7 +289,7 @@ There are two reasons for this:
 [ConfigurePrinting.ps1]: Unattended/Optional/ConfigurePrinting.ps1
 [download.cmd]: Office365/download.cmd
 [Drivers]: Drivers/
-[Drivers.import]: Drivers.import/
+[Drivers2]: Drivers2/
 [EncodeUnattendPassword.sh]: Scripts/EncodeUnattendPassword.sh
 [Implicit Answer File Search Order]:
   https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/windows-setup-automation-overview?view=windows-11#implicit-answer-file-search-order

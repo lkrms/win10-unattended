@@ -67,9 +67,9 @@ IF NOT "%SCRIPT_DIR%"=="%SystemDrive%\Unattended\" (
         IF !ERRORLEVEL! GEQ 4 EXIT /B 3
     )
 
-    IF EXIST "%SCRIPT_DIR%..\Drivers.import" (
+    IF EXIST "%SCRIPT_DIR%..\Drivers2" (
         CALL :log Adding drivers
-        FOR /F "delims=" %%G IN ('WHERE /R "%SCRIPT_DIR%..\Drivers.import" *.inf 2^>NUL') DO (
+        FOR /F "delims=" %%G IN ('WHERE /R "%SCRIPT_DIR%..\Drivers2" *.inf 2^>NUL') DO (
             PNPUTIL /add-driver "%%G" /install || (
                 IF !ERRORLEVEL! EQU 3010 (
                     SET RETURN_CODE=1
@@ -79,7 +79,7 @@ IF NOT "%SCRIPT_DIR%"=="%SystemDrive%\Unattended\" (
             )
         )
 
-        FOR /F "delims=" %%G IN ('WHERE "%SCRIPT_DIR%..\Drivers.import:*.msi" 2^>NUL') DO (
+        FOR /F "delims=" %%G IN ('WHERE "%SCRIPT_DIR%..\Drivers2:*.msi" 2^>NUL') DO (
             CALL :installMsi "%%G" || IF !ERRORLEVEL! EQU 3010 SET RETURN_CODE=1
         )
     )
