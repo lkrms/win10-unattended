@@ -1,4 +1,7 @@
 *.cmd text eol=crlf
+*.csv text eol=crlf
+*.inf text eol=crlf working-tree-encoding=UTF-16
 *.ps1 text eol=crlf
 *.reg text eol=crlf
+*.txt text eol=crlf
 *.xml text eol=crlf
