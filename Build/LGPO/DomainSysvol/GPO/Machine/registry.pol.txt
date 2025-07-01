@@ -3,172 +3,292 @@
 ; Source file:  registry.pol
 
 Computer
-Software\Microsoft\Windows\CurrentVersion\Policies\Explorer
-*
-CREATEKEY
-
-Computer
-Software\Microsoft\Windows\CurrentVersion\Policies\System
-EnableFirstLogonAnimation
-DWORD:0
-
-Computer
-Software\Microsoft\Windows\CurrentVersion\Policies\System
+SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
 DisableAutomaticRestartSignOn
 DWORD:1
 
 Computer
-Software\Microsoft\Windows\CurrentVersion\Policies\System
+SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
+EnableFirstLogonAnimation
+DWORD:0
+
+Computer
+SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
 VerboseStatus
 DWORD:1
 
 Computer
-Software\Microsoft\Windows\CurrentVersion\Policies\System
-HideFastUserSwitching
-DWORD:1
-
-Computer
-Software\Policies\Microsoft\MicrosoftEdge\Main
-AllowPrelaunch
-DELETE
-
-Computer
-Software\Policies\Microsoft\MicrosoftEdge\Main
-PreventFirstRunPage
-DWORD:1
-
-Computer
-Software\Policies\Microsoft\MicrosoftEdge\ServiceUI
-AllowWebContentOnNewTabPage
+SOFTWARE\Policies\Microsoft\Dsh
+AllowNewsAndInterests
 DWORD:0
 
 Computer
-Software\Policies\Microsoft\MicrosoftEdge\TabPreloader
-AllowTabPreloading
+SOFTWARE\Policies\Microsoft\Edge
+AddressBarTrendingSuggestEnabled
+DWORD:0
+
+Computer
+SOFTWARE\Policies\Microsoft\Edge
+AlternateErrorPagesEnabled
+DWORD:0
+
+Computer
+SOFTWARE\Policies\Microsoft\Edge
+DefaultBrowserSettingEnabled
+DWORD:0
+
+Computer
+SOFTWARE\Policies\Microsoft\Edge
+DefaultBrowserSettingsCampaignEnabled
+DWORD:0
+
+Computer
+SOFTWARE\Policies\Microsoft\Edge
+DiagnosticData
+DWORD:0
+
+Computer
+SOFTWARE\Policies\Microsoft\Edge
+EdgeAutofillMlEnabled
+DWORD:0
+
+Computer
+SOFTWARE\Policies\Microsoft\Edge
+EdgeShoppingAssistantEnabled
+DWORD:0
+
+Computer
+SOFTWARE\Policies\Microsoft\Edge
+HideFirstRunExperience
+DWORD:1
+
+Computer
+SOFTWARE\Policies\Microsoft\Edge
+HubsSidebarEnabled
+DWORD:0
+
+Computer
+SOFTWARE\Policies\Microsoft\Edge
+NewTabPageContentEnabled
+DWORD:0
+
+Computer
+SOFTWARE\Policies\Microsoft\Edge
+NewTabPageHideDefaultTopSites
+DWORD:1
+
+Computer
+SOFTWARE\Policies\Microsoft\Edge
+NewTabPageSearchBox
+SZ:redirect
+
+Computer
+SOFTWARE\Policies\Microsoft\Edge
+PersonalizationReportingEnabled
+DWORD:0
+
+Computer
+SOFTWARE\Policies\Microsoft\Edge
+ShowAcrobatSubscriptionButton
+DWORD:0
+
+Computer
+SOFTWARE\Policies\Microsoft\Edge
+ShowRecommendationsEnabled
+DWORD:0
+
+Computer
+SOFTWARE\Policies\Microsoft\Edge
+StandaloneHubsSidebarEnabled
+DWORD:0
+
+Computer
+SOFTWARE\Policies\Microsoft\Edge
+StartupBoostEnabled
+DWORD:0
+
+Computer
+SOFTWARE\Policies\Microsoft\EdgeUpdate
+CreateDesktopShortcutDefault
+DWORD:0
+
+Computer
+SOFTWARE\Policies\Microsoft\Power\PowerSettings\29F6C1DB-86DA-48C5-9FDB-F2B67B1F44DA
+ACSettingIndex
+DWORD:0
+
+Computer
+SOFTWARE\Policies\Microsoft\Power\PowerSettings\7BC4A2F9-D8FC-4469-B07B-33EB785AACA0
+ACSettingIndex
+DWORD:0
+
+Computer
+SOFTWARE\Policies\Microsoft\Power\PowerSettings\9D7815A6-7EE4-497E-8888-515A05F02364
+ACSettingIndex
+DWORD:0
+
+Computer
+SOFTWARE\Policies\Microsoft\SystemCertificates\DPNGRA\Certificates
+*
+CREATEKEY
+
+Computer
+SOFTWARE\Policies\Microsoft\SystemCertificates\DPNGRA\CRLs
+*
+CREATEKEY
+
+Computer
+SOFTWARE\Policies\Microsoft\SystemCertificates\DPNGRA\CTLs
+*
+CREATEKEY
+
+Computer
+SOFTWARE\Policies\Microsoft\SystemCertificates\FVE\Certificates
+*
+CREATEKEY
+
+Computer
+SOFTWARE\Policies\Microsoft\SystemCertificates\FVE\CRLs
+*
+CREATEKEY
+
+Computer
+SOFTWARE\Policies\Microsoft\SystemCertificates\FVE\CTLs
+*
+CREATEKEY
+
+Computer
+SOFTWARE\Policies\Microsoft\Windows\CloudContent
+DisableConsumerAccountStateContent
+DWORD:1
+
+Computer
+SOFTWARE\Policies\Microsoft\Windows\CloudContent
+DisableSoftLanding
+DWORD:1
+
+Computer
+SOFTWARE\Policies\Microsoft\Windows\CloudContent
+DisableWindowsConsumerFeatures
+DWORD:1
+
+Computer
+SOFTWARE\Policies\Microsoft\Windows\DataCollection
+AllowTelemetry
 DELETE
 
 Computer
-Software\Policies\Microsoft\Windows\Explorer
+SOFTWARE\Policies\Microsoft\Windows\DataCollection
+DoNotShowFeedbackNotifications
+DWORD:1
+
+Computer
+SOFTWARE\Policies\Microsoft\Windows\Explorer
 NoNewAppAlert
 DWORD:1
 
 Computer
-Software\Policies\Microsoft\Windows\OOBE
+SOFTWARE\Policies\Microsoft\Windows\OOBE
 DisablePrivacyExperience
 DWORD:1
 
 Computer
-Software\Policies\Microsoft\Windows\Windows Search
+SOFTWARE\Policies\Microsoft\Windows\Safer
+*
+CREATEKEY
+
+Computer
+SOFTWARE\Policies\Microsoft\Windows\System
+DisableLockScreenAppNotifications
+DWORD:1
+
+Computer
+SOFTWARE\Policies\Microsoft\Windows\Windows Feeds
+EnableFeeds
+DWORD:0
+
+Computer
+SOFTWARE\Policies\Microsoft\Windows\Windows Search
 AllowCortana
 DWORD:0
 
 Computer
-Software\Policies\Microsoft\Windows\Windows Search
-DisableWebSearch
-DWORD:1
-
-Computer
-Software\Policies\Microsoft\Windows\Windows Search
+SOFTWARE\Policies\Microsoft\Windows\Windows Search
 ConnectedSearchUseWeb
 DWORD:0
 
 Computer
-Software\Policies\Microsoft\Windows\WindowsUpdate\AU
-NoAutoUpdate
-DWORD:0
+SOFTWARE\Policies\Microsoft\Windows\Windows Search
+DisableWebSearch
+DWORD:1
 
 Computer
-Software\Policies\Microsoft\Windows\WindowsUpdate\AU
-AUOptions
-DWORD:4
-
-Computer
-Software\Policies\Microsoft\Windows\WindowsUpdate\AU
+SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU
 AutomaticMaintenanceEnabled
 DELETE
 
 Computer
-Software\Policies\Microsoft\Windows\WindowsUpdate\AU
-ScheduledInstallDay
-DWORD:0
-
-Computer
-Software\Policies\Microsoft\Windows\WindowsUpdate\AU
-ScheduledInstallTime
-DWORD:24
-
-Computer
-Software\Policies\Microsoft\Windows\WindowsUpdate\AU
+SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU
 ScheduledInstallEveryWeek
 DELETE
 
 Computer
-Software\Policies\Microsoft\Windows\WindowsUpdate\AU
+SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU
 ScheduledInstallFirstWeek
 DELETE
 
 Computer
-Software\Policies\Microsoft\Windows\WindowsUpdate\AU
-ScheduledInstallSecondWeek
-DELETE
-
-Computer
-Software\Policies\Microsoft\Windows\WindowsUpdate\AU
-ScheduledInstallThirdWeek
-DELETE
-
-Computer
-Software\Policies\Microsoft\Windows\WindowsUpdate\AU
+SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU
 ScheduledInstallFourthWeek
 DELETE
 
 Computer
-Software\Policies\Microsoft\Windows\WindowsUpdate\AU
+SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU
+ScheduledInstallSecondWeek
+DELETE
+
+Computer
+SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU
+ScheduledInstallThirdWeek
+DELETE
+
+Computer
+SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU
 AllowMUUpdateService
 DWORD:1
 
 Computer
-Software\Policies\Microsoft\Windows\WindowsUpdate\AU
+SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU
+AUOptions
+DWORD:4
+
+Computer
+SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU
 NoAutoRebootWithLoggedOnUsers
 DWORD:1
 
 Computer
-Software\Policies\Microsoft\Windows Defender\Real-Time Protection
-DisableOnAccessProtection
-DWORD:1
+SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU
+NoAutoUpdate
+DWORD:0
 
 Computer
-Software\Policies\Microsoft\Windows Defender\Real-Time Protection
-DisableIOAVProtection
-DWORD:1
+SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU
+ScheduledInstallDay
+DWORD:4
 
 Computer
-Software\Policies\Microsoft\Windows Defender\Real-Time Protection
-DisableBehaviorMonitoring
-DWORD:1
+SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU
+ScheduledInstallTime
+DWORD:18
 
 Computer
-Software\Policies\Microsoft\Windows Defender\Real-Time Protection
-DisableRealtimeMonitoring
-DWORD:1
-
-Computer
-Software\Policies\Microsoft\Windows Defender Security Center\Systray
-HideSystray
-DWORD:1
-
-Computer
-Software\Policies\Microsoft\Windows Defender Security Center\Virus and threat protection
-UILockdown
-DWORD:1
-
-Computer
-Software\Policies\Microsoft\Windows NT\SystemRestore
+SOFTWARE\Policies\Microsoft\Windows NT\SystemRestore
 DisableSR
 DWORD:1
 
 Computer
-Software\Policies\Microsoft\Windows NT\Terminal Services
+SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services
 fDenyTSConnections
 DWORD:0
 

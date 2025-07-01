@@ -10,10 +10,6 @@ Windows Registry Editor Version 5.00
 ; Needed for access to guest shares
 "RequireSecuritySignature"=dword:00000000
 
-[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer]
-; Disable "Meet Now" on Windows 10 taskbar
-"HideSCAMeetNow"=dword:00000001
-
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System]
 ; Sign users out whenever the system shuts down or restarts
 "DisableAutomaticRestartSignOn"=dword:00000001
@@ -75,20 +71,16 @@ Windows Registry Editor Version 5.00
 "CreateDesktopShortcutDefault"=dword:00000000
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent]
-; Disable Windows spotlight on lock screen
-"IncludeEnterpriseSpotlight"=dword:00000000
-; Disable Windows tips
-"DisableSoftLanding"=dword:00000001
 ; Disable account-related notifications
 "DisableConsumerAccountStateContent"=dword:00000001
+; Disable Windows tips
+"DisableSoftLanding"=dword:00000001
 ; Disable recommendations from Microsoft
 "DisableWindowsConsumerFeatures"=dword:00000001
-; Disable introductions to new features
-"DisableWindowsSpotlightWindowsWelcomeExperience"=dword:00000001
-; Disable suggestion notifications
-"DisableWindowsSpotlightOnActionCenter"=dword:00000001
-; Disable suggestions in settings
-"DisableWindowsSpotlightOnSettings"=dword:00000001
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection]
+"AllowTelemetry"=-
+"DoNotShowFeedbackNotifications"=dword:00000001
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\OOBE]
 "DisablePrivacyExperience"=dword:00000001

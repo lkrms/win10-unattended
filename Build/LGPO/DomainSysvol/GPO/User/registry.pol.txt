@@ -3,19 +3,74 @@
 ; Source file:  registry.pol
 
 User
-Software\Policies\Microsoft\Windows\Control Panel\Desktop
+SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer
+HideSCAMeetNow
+DWORD:1
+
+User
+SOFTWARE\Microsoft\Windows NT\CurrentVersion\Windows
+LegacyDefaultPrinterMode
+DWORD:1
+
+User
+SOFTWARE\Policies\Microsoft\Office\16.0\Outlook\Options\General
+HideNewOutlookToggle
+DWORD:1
+
+User
+SOFTWARE\Policies\Microsoft\Office\16.0\Outlook\Preferences
+NewOutlookMigrationUserSetting
+DWORD:0
+
+User
+SOFTWARE\Policies\Microsoft\Office\16.0\Teams
+PreventFirstLaunchAfterInstall
+DWORD:1
+
+User
+SOFTWARE\Policies\Microsoft\Windows\CloudContent
+ConfigureWindowsSpotlight
+DWORD:2
+
+User
+SOFTWARE\Policies\Microsoft\Windows\CloudContent
+DisableWindowsSpotlightOnActionCenter
+DWORD:1
+
+User
+SOFTWARE\Policies\Microsoft\Windows\CloudContent
+DisableWindowsSpotlightOnSettings
+DWORD:1
+
+User
+SOFTWARE\Policies\Microsoft\Windows\CloudContent
+DisableWindowsSpotlightWindowsWelcomeExperience
+DWORD:1
+
+User
+SOFTWARE\Policies\Microsoft\Windows\CloudContent
+IncludeEnterpriseSpotlight
+DWORD:0
+
+User
+SOFTWARE\Policies\Microsoft\Windows\Control Panel\Desktop
 ScreenSaveActive
 SZ:1
 
 User
-Software\Policies\Microsoft\Windows\Control Panel\Desktop
+SOFTWARE\Policies\Microsoft\Windows\Control Panel\Desktop
 ScreenSaverIsSecure
 SZ:1
 
 User
-Software\Policies\Microsoft\Windows\Control Panel\Desktop
+SOFTWARE\Policies\Microsoft\Windows\Control Panel\Desktop
 ScreenSaveTimeOut
 SZ:300
+
+User
+SOFTWARE\Policies\Microsoft\Windows\Explorer
+DisableSearchBoxSuggestions
+DWORD:1
 
 ; PARSING COMPLETED.
 ; ----------------------------------------------------------------------
