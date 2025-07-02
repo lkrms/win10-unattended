@@ -3,24 +3,45 @@
 > Automatic deployment of Windows 10 or 11 from standard install media. Intended
 > for personal, non-enterprise use.
 
+The aim of this project is to make it relatively painless to provision "clean"
+Windows Home or Pro machines by using enterprise features like unattended
+installation and group policy to minimise the bloat, unnecessary notifications,
+unsolicited content, covert data collection, invasive advertising, coercive app
+provisioning and other horrors Microsoft enables by default.
+
+It provides a template you can download and customise as much or as little as
+you like (although I do recommend replacing my particulars with your own 😉).
+Then, copy everything you need to a USB flash drive, connect it to your target
+system, and boot into Windows Setup from standard install media. If it works as
+intended, you will be asked for an install location for Windows, then no further
+questions until provisioning is complete.
+
+> [!TIP]
+>
+> If you're Git-savvy, I suggest cloning the repository and creating a private
+> branch so you can easily rebase your changes onto `main` as needed.
+
 ## What it does
 
+Most of the actions taken by `win10-unattended` are optional, and if files are
+not provided for an action that requires them, the action is silently skipped.
+
 1.  **Skips all Windows Setup and OOBE (out-of-box experience) prompts** except
-    target disk selection
+    install location selection
 2.  **Disables Windows 11 eligibility checks** for secure boot support, TPM 2.0
     and 4 GB RAM
 3.  **Installs system drivers** in two passes:
     - `windowsPE` for [boot-critical drivers][Drivers]
-    - `auditUser` for [other drivers][Drivers.import], including any provided as
+    - `auditUser` for [other drivers][Drivers2], including any provided as
       `.msi` packages
 4.  **Installs `.cab` and `.msu` update packages** downloaded from [Windows
-    Update][Microsoft Update Catalog] _(if provided)_
+    Update][Microsoft Update Catalog]
 5.  **Silences Cortana's OOBE voice-over** because there is never a good time to
     hear "a little sign-in here, a touch of Wi-Fi there..."
 6.  **Sets computer name** _(if enabled by uncommenting `<ComputerName>` in
     [Autounattend.xml])_
 7.  **Installs the system's OEM product key** for activation once online
-8.  **Adds a Wi-Fi profile** _(if provided)_ and waits for Internet connectivity
+8.  **Adds a Wi-Fi profile** and waits for Internet connectivity
 9.  **Installs [Chocolatey]** with the following packages:
     - 7-Zip
     - Firefox
@@ -30,7 +51,7 @@
     - VLC media player
     - O&O ShutUp10++ _(optional)_
     - KeePassXC _(optional)_
-10. **Installs standalone `.msi` packages** _(if provided)_
+10. **Installs standalone `.msi` packages**
 11. **Deploys Microsoft Office 365, OneDrive and Teams** via their offline
     installers
 12. **Applies policies and registry settings** to improve UX and mitigate the
@@ -40,7 +61,7 @@
     restore order after updates
 15. **Deploys TightVNC Server** for remote desktop access _(if enabled by
     uncommenting the relevant `<RunSynchronousCommand>` in [Autounattend.xml])_
-16. **Creates local user accounts**, skipping "Sign in with Microsoft" prompts
+16. **Creates local user accounts**, bypassing "Sign in with Microsoft" prompts
 17. **Deletes cached answer files** for security
 
 ## How to use it
@@ -123,7 +144,7 @@
 4. Personalise or remove files in the [Optional] directory
 
    - [ConfigurePrinting.ps1][]: add any printer drivers you reference to
-     [Drivers.import]
+     [Drivers2]
 
    - [InstallOriginalProductKey.ps1]
 
@@ -158,15 +179,15 @@
 
    - The user running [download.cmd] must have write access to the install files
 
-9. Add system drivers to [Drivers] and [Drivers.import]
+9. Add system drivers to [Drivers] and [Drivers2]
 
    - Boot-critical drivers must be added to [Drivers], otherwise drivers should
-     generally be added to [Drivers.import]
+     generally be added to [Drivers2]
 
    - `.inf` files must be unpacked for recursive discovery
 
-   - `.msi` packages in [Drivers.import] are silently installed after drivers in
-     the same directory
+   - `.msi` packages in [Drivers2] are silently installed after drivers in the
+     same directory
 
 10. Add standalone `.msi` packages to the [MSI] directory for silent
     installation after Chocolatey packages
@@ -174,7 +195,8 @@
 11. Download updates from the [Microsoft Update Catalog] to the [Updates]
     directory for your install media
 
-    - "Dynamic Cumulative" updates are preferred where possible
+    - Cumulative updates without "Dynamic" or "Preview" in the title are
+      preferred where possible
     - Directories with at least one `.cab` or `.msu` file are passed to
       `DISM /Add-Package`, one directory per run
 
@@ -184,7 +206,7 @@
     and connect it to the target system when booting into Windows Setup
     (alternatively, if installing Windows from a USB drive with sufficient
     capacity, you can copy everything to the root of the same drive rather than
-    using two flash drives):
+    using two drives):
 
     - [Audit.xml]
     - [Autounattend.xml]
@@ -193,7 +215,7 @@
       - [Optional] - _may be excluded if no files remain after personalisation_
       - [install.ps1] - _may be downloaded to speed up Chocolatey installation_
     - [Drivers] - _optional_
-    - [Drivers.import] - _optional_
+    - [Drivers2] - _optional_
     - [MSI] - _optional_
     - [Office365] - _optional_
     - [Tools] - _optional_
@@ -267,7 +289,7 @@ There are two reasons for this:
 [ConfigurePrinting.ps1]: Unattended/Optional/ConfigurePrinting.ps1
 [download.cmd]: Office365/download.cmd
 [Drivers]: Drivers/
-[Drivers.import]: Drivers.import/
+[Drivers2]: Drivers2/
 [EncodeUnattendPassword.sh]: Scripts/EncodeUnattendPassword.sh
 [Implicit Answer File Search Order]:
   https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/windows-setup-automation-overview?view=windows-11#implicit-answer-file-search-order

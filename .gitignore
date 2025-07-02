@@ -1,6 +1,6 @@
 /Autounattend.xml
 /Drivers/*
-/Drivers.import/*
+/Drivers2/*
 /MSI/*
 /Office365/EULA
 /Office365/setup.exe
@@ -13,7 +13,7 @@
 /Updates/*
 
 !/Drivers/README.md
-!/Drivers.import/README.md
+!/Drivers2/README.md
 !/MSI/README.md
 !/Tools/README.md
 !/Updates/README.md
