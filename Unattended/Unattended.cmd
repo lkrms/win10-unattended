@@ -112,7 +112,7 @@ SETLOCAL EnableDelayedExpansion
 
 IF EXIST "%SCRIPT_DIR%..\Updates" (
     FOR /F "usebackq delims=" %%G IN (
-        `powershell -NoProfile -Command "Get-ChildItem -Path '%SCRIPT_DIR%..\Updates' -Include *.cab, *.msu -Recurse | Select-Object -ExpandProperty Directory -Unique | ForEach-Object FullName"`
+        `powershell -NoProfile -Command "Get-ChildItem -Path '%SCRIPT_DIR%..\Updates' -Include *.cab, *.msu -Recurse | Select-Object -ExpandProperty Directory | ForEach-Object FullName | Sort-Object -Unique"`
     ) DO (
         IF !RETURN_CODE! EQU 1 (
             CALL :log ===== %~f0 pass 2 not finished; reboot required to continue update servicing
