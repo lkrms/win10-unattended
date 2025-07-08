@@ -222,7 +222,7 @@ not provided for an action that requires them, the action is silently skipped.
     - [Updates] - _optional_
 
 14. Choose an install partition, then leave the USB flash drive connected until
-    the login screen appears
+    the logon screen appears
 
 ## FAQ
 
