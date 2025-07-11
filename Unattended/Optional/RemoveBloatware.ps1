@@ -13,13 +13,16 @@ $packageNames = @(
     "Microsoft.GetHelp"
     "Microsoft.Getstarted" # Microsoft Tips
     "Microsoft.MicrosoftOfficeHub"
+    "Microsoft.MicrosoftStickyNotes"
     "Microsoft.MixedReality.Portal"
     "Microsoft.Office.OneNote"
     "Microsoft.OneConnect"
     "Microsoft.OneDriveSync" # Remove if not installing for all users
     "Microsoft.OutlookForWindows" # New Outlook
     "Microsoft.People"
+    "Microsoft.PowerAutomateDesktop"
     "Microsoft.SkypeApp"
+    "Microsoft.Todos"
     "Microsoft.Wallet" # Microsoft Pay
     "microsoft.windowscommunicationsapps" # Mail and Calendar (deprecated)
     "Microsoft.WindowsFeedbackHub"
