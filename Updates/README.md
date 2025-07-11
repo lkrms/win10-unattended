@@ -3,6 +3,11 @@
 `.cab` and `.msu` update packages downloaded to this directory from the
 [Microsoft Update Catalog] are installed via `DISM /Add-Package`.
 
+> [!NOTE]
+>
+> `DISM /Add-Package` is called once per directory with at least one `.cab` or
+> `.msu` file, in case-insensitive directory order.
+
 Cumulative updates without "Dynamic" or "Preview" in the title are preferred
 where possible.
 
@@ -10,15 +15,12 @@ Package files should be provided in one directory per update, as listed in the
 update catalog, after checking the relevant knowledge base article for guidance
 related to dependencies and installation order.
 
-`DISM /Add-Package` is called once per directory with at least one `.cab` or
-`.msu` file, in case-insensitive directory order.
-
 ## Suggested structure on technician computer
 
 > [!IMPORTANT]
 >
-> Only copy top-level directories to removable media for targets they apply to.
-> In the hierarchy below, for example, updates for `Windows 11 24H2` must not be
+> Only copy updates to removable media for targets to which they apply. In the
+> hierarchy below, for example, updates for `Windows 11 24H2` must not be
 > provided when deploying `Windows 10 22H2`, and vice versa.
 
 ```

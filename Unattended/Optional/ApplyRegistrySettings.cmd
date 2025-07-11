@@ -34,6 +34,8 @@ IF NOT EXIST "%SCRIPT_DIR%Unattended.reg" GOTO :skipImport
 CALL :runOrReport REG IMPORT "%SCRIPT_DIR%Unattended.reg"
 IF NOT EXIST "%SCRIPT_DIR%Unattended-HKLM-DEFAULT.reg" GOTO :skipImport
 CALL :runOrReport REG IMPORT "%SCRIPT_DIR%Unattended-HKLM-DEFAULT.reg"
+IF NOT EXIST "%SCRIPT_DIR%Unattended.reg.d" GOTO :skipImport
+FOR /F "delims=" %%G IN ('WHERE "%SCRIPT_DIR%Unattended.reg.d:*.reg" 2^>NUL') DO CALL :runOrReport REG IMPORT "%%G"
 
 :skipImport
 IF EXIST "%SCRIPT_DIR%MapNetworkDrives.cmd" (
