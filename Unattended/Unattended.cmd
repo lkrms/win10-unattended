@@ -209,6 +209,9 @@ IF [%~2]==[/debug] (
 
 CALL :log Packages deployed: %PKG_COUNT% ^(errors: %PKG_ERRORS%^)
 
+:: Make package installation errors non-critical
+SET /A "ERRORS-=PKG_ERRORS"
+
 IF EXIST "%SCRIPT_DIR%..\MSI" (
     FOR /F "delims=" %%G IN ('WHERE /R "%SCRIPT_DIR%..\MSI" *.msi 2^>NUL') DO CALL :installMsi "%%G"
 )
