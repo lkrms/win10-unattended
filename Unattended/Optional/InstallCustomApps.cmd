@@ -26,6 +26,7 @@ SHIFT /1
 SET ERRORS=0
 SET PKG_COUNT=0
 SET PKG_ERRORS=0
+SET PKG_ERRORS_CRITICAL=0
 
 SET "INNO_DEFAULT=/SP- /VERYSILENT /SUPPRESSMSGBOXES /NORESTART"
 
@@ -63,6 +64,10 @@ CALL :osIs64Bit && CALL :winget KeePassXCTeam.KeePassXC --custom "LAUNCHAPPONEXI
 
 IF [%~1]==[/unattended] EXIT /B 0
 CALL :log Packages deployed: %PKG_COUNT% ^(errors: %PKG_ERRORS%^)
+
+:: Make package installation errors non-critical
+SET /A "ERRORS-=PKG_ERRORS_CRITICAL"
+
 CALL :log ===== %~f0 finished with %ERRORS% errors
 IF %ERRORS% NEQ 0 EXIT /B 1
 EXIT /B 0
@@ -87,6 +92,7 @@ choco upgrade %* -y --no-progress --fail-on-unfound && EXIT /B
 IF NOT DEFINED PKG_CRITICAL (CALL :log WARNING ^(%ERRORLEVEL%^): "choco upgrade %1" failed & SET /A "PKG_ERRORS+=1" & EXIT /B 0)
 CALL :error "choco upgrade %* -y --no-progress --fail-on-unfound" failed
 SET /A "PKG_ERRORS+=1"
+SET /A "PKG_ERRORS_CRITICAL+=1"
 EXIT /B %RESULT%
 
 :winget
@@ -103,6 +109,7 @@ IF NOT DEFINED PKG_CRITICAL (
 )
 CALL :error "winget install --id %* --scope machine --exact --silent --accept-source-agreements --disable-interactivity" failed, see %LOG_FILE%
 SET /A "PKG_ERRORS+=1"
+SET /A "PKG_ERRORS_CRITICAL+=1"
 EXIT /B %RESULT%
 
 :runOrReport
