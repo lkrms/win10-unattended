@@ -1,0 +1,114 @@
+<domain type="hvf">
+  <!-- Use Windows 11 Pro to enable Remote Desktop, which outperforms virtio graphics in the absence of SPICE -->
+  <name>win11pro</name>
+  <metadata>
+    <libosinfo:libosinfo xmlns:libosinfo="http://libosinfo.org/xmlns/libvirt/domain/1.0">
+      <libosinfo:os id="http://microsoft.com/win/11" />
+    </libosinfo:libosinfo>
+  </metadata>
+  <memory>4194304</memory>
+  <vcpu>4</vcpu>
+  <os firmware="efi">
+    <type arch="aarch64" machine="virt">hvm</type>
+  </os>
+  <features>
+    <acpi />
+    <!-- Hyper-V Enlightenments are only supported on x86 -->
+  </features>
+  <cpu mode="custom" match="exact">
+    <model>cortex-a57</model>
+    <!-- Windows Home and Pro only use 1 or 2 CPUs (sockets), so allocate vCPUs via cores and threads -->
+    <topology sockets="1" cores="4" threads="1" />
+  </cpu>
+  <clock offset="variable" basis="localtime" />
+  <!-- Uncomment to allow changes during setup -->
+  <!--<on_reboot>destroy</on_reboot>-->
+  <devices>
+    <emulator>/opt/homebrew/bin/qemu-system-aarch64</emulator>
+    <disk type="file" device="disk">
+      <driver name="qemu" type="qcow2" cache="none" discard="unmap" />
+      <source file="/path/to/win11pro.qcow2" />
+      <target dev="vda" bus="virtio" />
+      <boot order="1" />
+    </disk>
+    <disk type="file" device="disk">
+      <driver name="qemu" type="qcow2" />
+      <!--
+      Provide custom install media with:
+
+      - `viostor` and `vioscsi` drivers added to `boot.wim`
+      - all `virtio-win` drivers added to `install.wim`
+
+      This is a temporary workaround for the following bugs and limitations:
+
+      - Bugs in Windows Setup for Windows 11 24H2 on ARM64 (e.g. failure to apply boot-critical drivers provided via
+        `Autounattend.xml`; failure to propagate boot-critical drivers provided manually to the installed system)
+      - Limited availability of virtual ARM64 devices with `virtio-win` drivers supported by QEMU via libvirt
+      - Inadequate performance of VMs with generic storage devices
+      -->
+      <source file="/path/to/win11-arm64-disk-image-with-virtio-drivers.qcow2" />
+      <target dev="vdb" bus="virtio" />
+      <readonly />
+      <boot order="2" />
+    </disk>
+    <!--
+    Provide `win10-unattended` media with `arm64`-only answer files (Windows Setup for Windows 11 24H2 on ARM64 does not
+    ignore components for other architectures)
+    -->
+    <disk type="file" device="disk">
+      <driver name="qemu" type="qcow2" cache="none" discard="unmap" />
+      <source file="/path/to/win11pro-1.qcow2" />
+      <target dev="sdb" bus="usb" removable="on" />
+    </disk>
+    <controller type="usb" model="qemu-xhci" />
+    <controller type="scsi" model="virtio-scsi" />
+    <controller type="pci" model="pcie-root" />
+    <controller type="pci" model="pcie-root-port" />
+    <controller type="pci" model="pcie-root-port" />
+    <controller type="pci" model="pcie-root-port" />
+    <controller type="pci" model="pcie-root-port" />
+    <controller type="pci" model="pcie-root-port" />
+    <controller type="pci" model="pcie-root-port" />
+    <controller type="pci" model="pcie-root-port" />
+    <controller type="pci" model="pcie-root-port" />
+    <controller type="pci" model="pcie-root-port" />
+    <controller type="pci" model="pcie-root-port" />
+    <controller type="pci" model="pcie-root-port" />
+    <controller type="pci" model="pcie-root-port" />
+    <controller type="pci" model="pcie-root-port" />
+    <controller type="pci" model="pcie-root-port" />
+    <console type="pty" />
+    <channel type="unix">
+      <source mode="bind" />
+      <target type="virtio" name="org.qemu.guest_agent.0" />
+    </channel>
+    <input type="tablet" bus="usb" />
+    <input type="keyboard" bus="usb" />
+    <input type="tablet" bus="virtio" />
+    <input type="keyboard" bus="virtio" />
+    <tpm>
+      <backend type="emulator" version="2.0" />
+    </tpm>
+    <graphics type="vnc" port="-1" />
+    <!-- Replace `ramfb` with `virtio` after installation for higher resolution and to improve performance -->
+    <video>
+      <model type="ramfb" />
+    </video>
+  </devices>
+  <!-- Option 1 (for libvirt user sessions if QEMU does not have the `com.apple.vm.networking` entitlement) -->
+  <qemu:commandline xmlns:qemu="http://libvirt.org/schemas/domain/qemu/1.0">
+    <qemu:arg value="-netdev" />
+    <qemu:arg value="user,id=ua-net0,hostfwd=tcp::3389-:3389,hostfwd=udp::3389-:3389" />
+    <qemu:arg value="-device" />
+    <qemu:arg value="virtio-net,netdev=ua-net0,mac={{GUEST_MAC}},addr=10.0" />
+  </qemu:commandline>
+  <!-- Option 2 (for libvirt system sessions and QEMU builds with the `com.apple.vm.networking` entitlement) -->
+  <!--
+  <qemu:commandline xmlns:qemu="http://libvirt.org/schemas/domain/qemu/1.0">
+    <qemu:arg value="-netdev" />
+    <qemu:arg value="vmnet-bridged,id=ua-en0,ifname=en0" />
+    <qemu:arg value="-device" />
+    <qemu:arg value="virtio-net,netdev=ua-en0,mac={{GUEST_MAC}}" />
+  </qemu:commandline>
+  -->
+</domain>

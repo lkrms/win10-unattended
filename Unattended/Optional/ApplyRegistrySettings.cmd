@@ -32,6 +32,7 @@ CALL :runOrReport REG LOAD HKLM\DEFAULT %SystemDrive%\Users\Default\NTUSER.DAT |
 
 IF NOT EXIST "%SCRIPT_DIR%Unattended.reg" GOTO :skipImport
 CALL :runOrReport REG IMPORT "%SCRIPT_DIR%Unattended.reg"
+CALL :isPro && CALL :runOrReport netsh advfirewall firewall set rule group="Remote Desktop" new enable=yes
 IF NOT EXIST "%SCRIPT_DIR%Unattended-HKLM-DEFAULT.reg" GOTO :skipImport
 CALL :runOrReport REG IMPORT "%SCRIPT_DIR%Unattended-HKLM-DEFAULT.reg"
 IF NOT EXIST "%SCRIPT_DIR%Unattended.reg.d" GOTO :skipImport
@@ -85,6 +86,13 @@ IF NOT DEFINED BUILD_NUMBER FOR /F "delims=" %%G IN (
 ) DO SET BUILD_NUMBER=%%G
 IF %BUILD_NUMBER% LSS 10240 EXIT /B 1
 IF %BUILD_NUMBER% GEQ 22000 EXIT /B 1
+EXIT /B 0
+
+:isPro
+IF NOT DEFINED EDITION_ID FOR /F "delims=" %%G IN (
+    'powershell -NoProfile -Command "(Get-ItemProperty \"HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\").EditionID"'
+) DO SET EDITION_ID=%%G
+IF [%EDITION_ID%]==[Core] EXIT /B 1
 EXIT /B 0
 
 :runOrReport

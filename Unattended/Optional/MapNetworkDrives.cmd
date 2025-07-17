@@ -7,15 +7,14 @@ SET ERRORS=0
 (
     NET USE /PERSISTENT:NO
 
-    rem In case of persistent connections
+    rem Remove persistent connections from H: and S:
     NET USE H: /DELETE
     NET USE S: /DELETE
-
 ) >NUL 2>NUL
 
 @ECHO ON
-NET USE H: \\doo\%USERNAME% || SET /A "ERRORS+=1"
-NET USE S: \\doo\shared || SET /A "ERRORS+=1"
+NET USE H: \\doo\%USERNAME% || @SET /A "ERRORS+=1"
+NET USE S: \\doo\shared || @SET /A "ERRORS+=1"
 @ECHO OFF
 
 IF %ERRORS% EQU 0 EXIT /B 0
