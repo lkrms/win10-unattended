@@ -26,6 +26,7 @@ SET ERRORS=0
 SET RETURN_CODE=0
 SET PKG_COUNT=0
 SET PKG_ERRORS=0
+SET PKG_ERRORS_CRITICAL=0
 SET DISABLE_UCPD=1
 
 FOR /F "tokens=2,* skip=2" %%G IN (
@@ -238,6 +239,9 @@ IF EXIST "%ProgramFiles%\WinGet\Packages" (
 
 CALL :log Packages deployed: %PKG_COUNT% ^(errors: %PKG_ERRORS%^)
 
+:: Make package installation errors non-critical
+SET /A "ERRORS-=PKG_ERRORS_CRITICAL"
+
 IF EXIST "%SCRIPT_DIR%..\MSI" (
     FOR /F "delims=" %%G IN ('WHERE /R "%SCRIPT_DIR%..\MSI" *.msi 2^>NUL') DO CALL :installMsi "%%G"
 )
@@ -359,6 +363,7 @@ choco install %* -y --no-progress && EXIT /B
 IF NOT DEFINED PKG_CRITICAL (CALL :log WARNING ^(%ERRORLEVEL%^): "choco install %1" failed & SET /A "PKG_ERRORS+=1" & EXIT /B 0)
 CALL :error "choco install %1" failed
 SET /A "PKG_ERRORS+=1"
+SET /A "PKG_ERRORS_CRITICAL+=1"
 EXIT /B %RESULT%
 
 :: See https://github.com/microsoft/winget-cli/blob/master/src/AppInstallerSharedLib/Public/AppInstallerErrors.h
@@ -409,6 +414,7 @@ IF NOT DEFINED PKG_CRITICAL (
 :wingetError
 CALL :error "winget install %1" failed, see %LOG_FILE%
 SET /A "PKG_ERRORS+=1"
+SET /A "PKG_ERRORS_CRITICAL+=1"
 EXIT /B %RESULT%
 
 :wingetIsInstalled
