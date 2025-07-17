@@ -196,6 +196,9 @@ IF [%~2]==[/debug] (
 
 CALL :log %CHOCO_COUNT% packages deployed by Chocolatey ^(errors: %CHOCO_ERRORS%^)
 
+:: Make Chocolatey errors non-critical
+SET /A "ERRORS-=CHOCO_ERRORS"
+
 IF EXIST "%SCRIPT_DIR%..\MSI" (
     FOR /F "delims=" %%G IN ('WHERE /R "%SCRIPT_DIR%..\MSI" *.msi 2^>NUL') DO CALL :installMsi "%%G"
 )
