@@ -35,10 +35,14 @@ CALL :log ===== Starting %~f0
 :: Start custom apps
 
 
+GOTO :skipCustomApps
+
 CALL :choco shutup10
 
 :: See https://keepassxc.org/docs/KeePassXC_UserGuide#_installer_options
 CALL :osIs64Bit && CALL :choco keepassxc --install-args="'LAUNCHAPPONEXIT=0 AUTOSTARTPROGRAM=0'"
+
+:skipCustomApps
 
 
 :: End custom apps

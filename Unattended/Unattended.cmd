@@ -247,10 +247,12 @@ IF EXIST "%SCRIPT_DIR%..\Office365\install.cmd" (
 
 CALL :optPs1 RemoveBloatware.ps1 "Removing bloatware"
 
-IF NOT "%SETUP_STATE%"=="complete" (
-    CALL :log Installing answer file for generalize and OOBE passes
-    IF NOT EXIST "%WINDIR%\Panther\Unattend" MD "%WINDIR%\Panther\Unattend"
-    COPY "%SCRIPT_DIR%..\Audit.xml" "%WINDIR%\Panther\Unattend\Unattend.xml" /Y || EXIT /B 3
+IF EXIST "%SCRIPT_DIR%..\Audit.xml" (
+    IF NOT "%SETUP_STATE%"=="complete" (
+        CALL :log Installing answer file for generalize and OOBE passes
+        IF NOT EXIST "%WINDIR%\Panther\Unattend" MD "%WINDIR%\Panther\Unattend"
+        COPY "%SCRIPT_DIR%..\Audit.xml" "%WINDIR%\Panther\Unattend\Unattend.xml" /Y || EXIT /B 3
+    )
 )
 
 CALL :log ===== %~f0 pass 4 finished with %ERRORS% errors

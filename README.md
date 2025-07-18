@@ -49,8 +49,6 @@ not provided for an action that requires them, the action is silently skipped.
     - Notepad++
     - Sumatra PDF
     - VLC media player
-    - O&O ShutUp10++ _(optional)_
-    - KeePassXC _(optional)_
 10. **Installs standalone `.msi` packages**
 11. **Deploys Microsoft Office 365, OneDrive and Teams** via their offline
     installers

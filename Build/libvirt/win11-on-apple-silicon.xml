@@ -108,7 +108,7 @@
     <qemu:arg value="-netdev" />
     <qemu:arg value="vmnet-bridged,id=ua-en0,ifname=en0" />
     <qemu:arg value="-device" />
-    <qemu:arg value="virtio-net,netdev=ua-en0,mac={{GUEST_MAC}}" />
+    <qemu:arg value="virtio-net,netdev=ua-en0,mac={{GUEST_MAC}},addr=10.0" />
   </qemu:commandline>
   -->
 </domain>
