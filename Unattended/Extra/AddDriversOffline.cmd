@@ -57,7 +57,7 @@ CALL :log Mounting %~1[/Index:%2] at %MOUNT_DIR%
 DISM /Mount-Image /ImageFile:"%~1" /MountDir:"%MOUNT_DIR%" /Index:%2 /Optimize || EXIT /B
 
 CALL :log Installing drivers: %~3
-DISM /Image:"%MOUNT_DIR%" /Add-Driver /Driver:"%~3" /Recurse || EXIT /B
+DISM /Image:"%MOUNT_DIR%" /Add-Driver /Driver:"%~3" /Recurse /ForceUnsigned || EXIT /B
 
 CALL :log Unmounting %~1[/Index:%2] from %MOUNT_DIR%
 DISM /Unmount-Image /MountDir:"%MOUNT_DIR%" /Commit || EXIT /B

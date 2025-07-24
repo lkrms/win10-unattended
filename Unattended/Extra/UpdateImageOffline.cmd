@@ -35,7 +35,7 @@ IF NOT EXIST %1 GOTO :usage
 SET "SCRIPT_DIR=%~dp0"
 SET "IMAGE_FILE=%~f1"
 SET "IMAGE_DRIVE=%~d1"
-SET "MOUNT_DIR=%SystemDrive%\images\mount%~p1"
+SET "MOUNT_DIR=%SystemDrive%\images\mount\%IMAGE_DRIVE:~0,-1%%~p1"
 SET "MOUNT_DIR=%MOUNT_DIR:~0,-1%"
 SET "BACKUP_DIR=%~d1\images\backup%~p1"
 SET "BACKUP_FILE=%BACKUP_DIR%%~nx1"
