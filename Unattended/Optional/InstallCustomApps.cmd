@@ -5,11 +5,11 @@ NET SESSION >NUL 2>NUL || (
     EXIT /B 3
 )
 
-IF "%1"=="/unattended" GOTO :unattended
+IF [%~1]==[/unattended] GOTO :unattended
 
 SETLOCAL
 
-IF "%1"=="/start" GOTO :start
+IF [%~1]==[/start] GOTO :start
 IF NOT EXIST %SystemDrive%\Unattended\Logs (
     MD %SystemDrive%\Unattended\Logs || EXIT /B 3
     IF EXIST %SystemDrive%\Unattended.log (MOVE /Y %SystemDrive%\Unattended.log %SystemDrive%\Unattended\Logs || EXIT /B 3)
@@ -38,11 +38,12 @@ CALL :log ===== Starting %~f0
 GOTO :skipCustomApps
 
 CALL :osIs64Bit && CALL :choco espanso
-CALL :osIs64Bit && CALL :choco git --params="'/GitOnlyOnPath /NoShellIntegration /SChannel /NoOpenSSH /WindowsTerminalProfile /Symlinks'" && (
+CALL :enableDevelopmentMode && CALL :osIs64Bit && CALL :choco git --params="'/GitOnlyOnPath /NoShellIntegration /SChannel /NoOpenSSH /WindowsTerminalProfile /Symlinks'" && (
     SETX MSYS winsymlinks:nativestrict /M
     sc config ssh-agent start=auto
-    start-ssh-agent.cmd
+    CALL "%ProgramFiles%\Git\cmd\start-ssh-agent.cmd"
 )
+CALL :choco jq
 CALL :osIs64Bit && CALL :choco nextcloud-client
 CALL :osIs64Bit && CALL :choco powertoys
 CALL :choco shutup10
@@ -63,6 +64,10 @@ CALL :log ===== %~f0 finished with %ERRORS% errors
 IF %ERRORS% NEQ 0 EXIT /B 1
 EXIT /B 0
 
+
+:enableDevelopmentMode
+REG ADD HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock /v AllowDevelopmentWithoutDevLicense /t REG_DWORD /d 1 /f
+EXIT /B
 
 :osIs64Bit
 IF "%PROCESSOR_ARCHITECTURE%"=="AMD64" EXIT /B 0

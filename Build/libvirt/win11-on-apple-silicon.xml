@@ -31,21 +31,21 @@
       <target dev="vda" bus="virtio" />
       <boot order="1" />
     </disk>
+    <!--
+    Provide custom install media with:
+
+    - `viostor` and `vioscsi` drivers added to `boot.wim`
+    - all `virtio-win` drivers added to `install.wim`
+
+    This is a temporary workaround for the following bugs and limitations:
+
+    - Bugs in Windows Setup for Windows 11 24H2 on ARM64 (e.g. failure to apply boot-critical drivers provided via
+      `Autounattend.xml`; failure to propagate boot-critical drivers provided manually to the installed system)
+    - Limited availability of virtual ARM64 devices with `virtio-win` drivers supported by QEMU via libvirt
+    - Inadequate performance of VMs with generic storage devices
+    -->
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2" />
-      <!--
-      Provide custom install media with:
-
-      - `viostor` and `vioscsi` drivers added to `boot.wim`
-      - all `virtio-win` drivers added to `install.wim`
-
-      This is a temporary workaround for the following bugs and limitations:
-
-      - Bugs in Windows Setup for Windows 11 24H2 on ARM64 (e.g. failure to apply boot-critical drivers provided via
-        `Autounattend.xml`; failure to propagate boot-critical drivers provided manually to the installed system)
-      - Limited availability of virtual ARM64 devices with `virtio-win` drivers supported by QEMU via libvirt
-      - Inadequate performance of VMs with generic storage devices
-      -->
       <source file="/path/to/win11-arm64-disk-image-with-virtio-drivers.qcow2" />
       <target dev="vdb" bus="virtio" />
       <readonly />
@@ -95,14 +95,14 @@
       <model type="ramfb" />
     </video>
   </devices>
-  <!-- Option 1 (for libvirt user sessions if QEMU does not have the `com.apple.vm.networking` entitlement) -->
+  <!-- Option 1: qemu:///session with usermode networking (until QEMU has the `com.apple.vm.networking` entitlement) -->
   <qemu:commandline xmlns:qemu="http://libvirt.org/schemas/domain/qemu/1.0">
     <qemu:arg value="-netdev" />
     <qemu:arg value="user,id=ua-net0,hostfwd=tcp::3389-:3389,hostfwd=udp::3389-:3389" />
     <qemu:arg value="-device" />
     <qemu:arg value="virtio-net,netdev=ua-net0,mac={{GUEST_MAC}},addr=10.0" />
   </qemu:commandline>
-  <!-- Option 2 (for libvirt system sessions and QEMU builds with the `com.apple.vm.networking` entitlement) -->
+  <!-- Option 2: qemu:///system with bridged networking -->
   <!--
   <qemu:commandline xmlns:qemu="http://libvirt.org/schemas/domain/qemu/1.0">
     <qemu:arg value="-netdev" />

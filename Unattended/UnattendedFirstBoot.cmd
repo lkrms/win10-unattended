@@ -7,7 +7,7 @@ NET SESSION >NUL 2>NUL || (
     EXIT /B 3
 )
 
-IF "%1"=="/start" GOTO :start
+IF [%~1]==[/start] GOTO :start
 IF NOT EXIST %SystemDrive%\Unattended\Logs (
     MD %SystemDrive%\Unattended\Logs || EXIT /B 3
     IF EXIST %SystemDrive%\Unattended.log (MOVE /Y %SystemDrive%\Unattended.log %SystemDrive%\Unattended\Logs || EXIT /B 3)

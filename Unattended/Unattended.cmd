@@ -7,7 +7,7 @@ NET SESSION >NUL 2>NUL || (
     EXIT /B 3
 )
 
-IF "%1"=="/start" GOTO :start
+IF [%~1]==[/start] GOTO :start
 IF NOT EXIST %SystemDrive%\Unattended\Logs (
     MD %SystemDrive%\Unattended\Logs || EXIT /B 3
     IF EXIST %SystemDrive%\Unattended.log (MOVE /Y %SystemDrive%\Unattended.log %SystemDrive%\Unattended\Logs || EXIT /B 3)
@@ -97,7 +97,7 @@ IF %DISABLE_UCPD% NEQ 0 (
     CALL :log Disabling the "User Choice Protection" driver
     CALL :runOrReport REG ADD HKLM\SYSTEM\CurrentControlSet\Services\UCPD /v Start /t REG_DWORD /d 4 /f
     CALL :runOrReport SCHTASKS /Change /TN "\Microsoft\Windows\AppxDeploymentClient\UCPD velocity" /DISABLE
-    SET RETURN_CODE=1
+    CALL :serviceIsRunning UCPD && SET RETURN_CODE=1
 )
 
 IF %RETURN_CODE% EQU 0 (
@@ -179,6 +179,7 @@ choco feature enable -n=useRememberedArgumentsForUpgrades -y
 CALL :choco 7zip
 CALL :choco Firefox
 CALL :choco GoogleChrome --ignore-checksum && CALL :installInitialPreferences
+CALL :choco hashcheck
 CALL :choco notepadplusplus
 CALL :choco sumatrapdf
 CALL :choco vlc
@@ -317,12 +318,16 @@ COPY "%SCRIPT_DIR%Optional\initial_preferences" "%DIR%\initial_preferences" /Y
 EXIT /B
 
 :checkService
-sc query "%~1" | FIND "STATE" | FIND "RUNNING" >NUL && EXIT /B
+CALL :serviceIsRunning "%~1" && EXIT /B
 CALL :log Starting service %~1 ^(%~2^)
 sc start "%~1"
 :: Don't report an error if the service is already running
 IF %ERRORLEVEL% EQU 1056 EXIT /B 0
 IF %ERRORLEVEL% NEQ 0 CALL :error "sc start "%~1"" failed
+EXIT /B
+
+:serviceIsRunning
+sc query "%~1" | FIND "STATE" | FIND "RUNNING" >NUL
 EXIT /B
 
 :installMsi

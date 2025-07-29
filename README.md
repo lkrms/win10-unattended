@@ -1,16 +1,15 @@
 # win10-unattended
 
-> Automatic deployment of Windows 10 or 11 from standard install media. Intended
-> for personal, non-enterprise use.
+> Automatically deploy and tame Windows 10 or 11 from standard install media.
+> Intended for personal, non-enterprise use.
 
-The aim of this project is to make it relatively painless to provision "clean"
-Windows Home or Pro machines by using enterprise features like unattended
-installation and group policy to minimise the bloat, unnecessary notifications,
+This project aims to make it as painless as possible to provision "clean"
+Windows Home or Pro machines without the bloat, unnecessary notifications,
 unsolicited content, covert data collection, invasive advertising, coercive app
-provisioning and other horrors Microsoft enables by default.
+provisioning and other nefarious behaviour Microsoft enables by default.
 
-It provides a template you can download and customise as much or as little as
-you like (although I do recommend replacing my particulars with your own 😉).
+`win10-unattended` takes the form of a template you can download and customise
+as much or as little as you like after replacing my particulars with your own.
 Then, copy everything you need to a USB flash drive, connect it to your target
 system, and boot into Windows Setup from standard install media. If it works as
 intended, you will be asked for an install location for Windows, then no further
@@ -18,13 +17,17 @@ questions until provisioning is complete.
 
 > [!TIP]
 >
-> If you're Git-savvy, I suggest cloning the repository and creating a private
-> branch so you can easily rebase your changes onto `main` as needed.
+> If you're comfortable working with Git, I suggest cloning the repository and
+> creating a private branch so you can easily rebase your changes onto the
+> `main` branch as needed.
+>
+> The `test/virtio` and `test/virtio-arm64` branches take this approach.
 
 ## What it does
 
-Most of the actions taken by `win10-unattended` are optional, and if files are
-not provided for an action that requires them, the action is silently skipped.
+Most of the actions taken by `win10-unattended` are optional. Steps that require
+files are silently skipped if you remove or don't provide them, and others can
+be commented out in [Autounattend.xml] or one of the scripts it launches.
 
 1.  **Skips all Windows Setup and OOBE (out-of-box experience) prompts** except
     install location selection
@@ -46,6 +49,7 @@ not provided for an action that requires them, the action is silently skipped.
     - 7-Zip
     - Firefox
     - Google Chrome
+    - HashCheck shell extension
     - Notepad++
     - Sumatra PDF
     - VLC media player
@@ -66,8 +70,9 @@ not provided for an action that requires them, the action is silently skipped.
 
 > [!TIP]
 >
-> Architecture-specific answer files in [Build] can be used as drop-in
-> replacements for [Autounattend.xml] and [Audit.xml].
+> [Autounattend.xml] and [Audit.xml] contain `amd64`, `arm64` and `x86`
+> components. Architecture-specific equivalents can be found in the [Build]
+> directory.
 
 > [!NOTE]
 >
@@ -79,7 +84,7 @@ not provided for an action that requires them, the action is silently skipped.
 > If deployed, the local `admin` account will not appear in the user list during
 > sign-in, but it will be available for authentication in other contexts and
 > **has no password by default**. Please set a strong default password for this
-> account or remove it from your `Audit.xml` file.
+> account or exclude it from your [Audit.xml] file.
 
 1. Clone this repository to your system
 
@@ -316,9 +321,7 @@ There are two reasons for this:
 [teamsbootstrapper.exe]:
   https://go.microsoft.com/fwlink/?linkid=2243204&clcid=0x409
 [Tools]: Tools/
-[Unattended.cmd]: Unattended/Unattended.cmd
 [Unattended]: Unattended/
-[UnattendedFirstBoot.cmd]: Unattended/UnattendedFirstBoot.cmd
 [Updates]: Updates/
 [Use Unattend to run scripts]:
   https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/add-a-custom-script-to-windows-setup?view=windows-11#use-unattend-to-run-scripts
