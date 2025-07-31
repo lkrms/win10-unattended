@@ -18,16 +18,33 @@
   <features>
     <acpi />
     <apic />
-    <!-- Most Hyper-V Enlightenments are only supported on kvm -->
     <hyperv>
+      <!-- Enabled by default -->
+      <relaxed state="on" />
+      <vapic state="on" />
       <spinlocks state="on" retries="8191" />
+      <vpindex state="on" />
+      <runtime state="on" />
+      <synic state="on" />
+      <stimer state="on" />
+      <frequencies state="on" />
+      <tlbflush state="on" />
+      <ipi state="on" />
+      <!-- INTEL HOSTS ONLY -->
+      <evmcs state="on" />
+      <avic state="on" />
+      <!-- Recommended -->
+      <vendor_id state="on" value="KVM Hv" />
+      <reset state="on" />
+      <reenlightenment state="on" />
+      <emsr_bitmap state="on" />
+      <xmm_input state="on" />
     </hyperv>
+    <vmport state="off" />
   </features>
   <!-- On macOS, `mode="host-passthrough"` triggers blue screens of death in Windows guests -->
-  <cpu mode="custom" match="exact">
-    <!-- Derived from host.cpu.model in `virsh capabilities` output-->
-    <model>Skylake-Client</model>
-    <!-- Windows Home and Pro only use 1 or 2 CPUs (sockets), so allocate vCPUs via cores and threads -->
+  <cpu mode="host-model">
+    <!-- Windows Home and Pro only use 1 or 2 CPUs (sockets), so allocate vCPUs via cores and threads after checking host.cpu.topology in `virsh capabilities` output -->
     <topology sockets="1" cores="4" threads="1" />
   </cpu>
   <clock offset="variable" basis="localtime">
@@ -113,7 +130,6 @@
       <backend model="random">/dev/urandom</backend>
     </rng>
     <graphics type="vnc" port="-1" />
-    <!-- Replace `bochs` with `virtio` after installation for higher resolution and to improve performance -->
     <video>
       <model type="bochs" />
     </video>
