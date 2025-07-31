@@ -18,7 +18,7 @@
         <ProductKey>
           <!-- Home: YTMG3-N6DKC-DKB77-7M9GH-8HVX7 -->
           <!-- Pro: VK7JG-NPHTM-C97JM-9MPGT-3V66T -->
-          <Key>YTMG3-N6DKC-DKB77-7M9GH-8HVX7</Key>
+          <Key>VK7JG-NPHTM-C97JM-9MPGT-3V66T</Key>
         </ProductKey>
         <AcceptEula>true</AcceptEula>
         <FullName>Luke Arms</FullName>
@@ -31,7 +31,7 @@
               <!-- Windows 11: "Windows 11 Home", "Windows 11 Pro" -->
               <!-- Windows 10: "Windows 10 Home", "Windows 10 Pro" -->
               <Key>/IMAGE/DESCRIPTION</Key>
-              <Value>Windows 11 Home</Value>
+              <Value>Windows 11 Pro</Value>
             </MetaData>
           </InstallFrom>
           <Compact>true</Compact>
