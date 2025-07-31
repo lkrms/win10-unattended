@@ -1,5 +1,6 @@
-<domain type="kvm">
-  <name>win11</name>
+<domain type="hvf">
+  <!-- Use Windows 11 Pro to enable Remote Desktop, which outperforms virtio graphics in the absence of SPICE -->
+  <name>win11pro</name>
   <metadata>
     <libosinfo:libosinfo xmlns:libosinfo="http://libosinfo.org/xmlns/libvirt/domain/1.0">
       <libosinfo:os id="http://microsoft.com/win/11" />
@@ -17,31 +18,15 @@
   <features>
     <acpi />
     <apic />
+    <!-- Most Hyper-V Enlightenments are only supported on kvm -->
     <hyperv>
-      <!-- Enabled by default -->
-      <relaxed state="on" />
-      <vapic state="on" />
       <spinlocks state="on" retries="8191" />
-      <vpindex state="on" />
-      <runtime state="on" />
-      <synic state="on" />
-      <stimer state="on" />
-      <frequencies state="on" />
-      <tlbflush state="on" />
-      <ipi state="on" />
-      <!-- INTEL HOSTS ONLY -->
-      <evmcs state="on" />
-      <avic state="on" />
-      <!-- Recommended -->
-      <vendor_id state="on" value="KVM Hv" />
-      <reset state="on" />
-      <reenlightenment state="on" />
-      <emsr_bitmap state="on" />
-      <xmm_input state="on" />
     </hyperv>
-    <vmport state="off" />
   </features>
-  <cpu mode="host-passthrough">
+  <!-- On macOS, `mode="host-passthrough"` triggers blue screens of death in Windows guests -->
+  <cpu mode="custom" match="exact">
+    <!-- Derived from host.cpu.model in `virsh capabilities` output-->
+    <model>Skylake-Client</model>
     <!-- Windows Home and Pro only use 1 or 2 CPUs (sockets), so allocate vCPUs via cores and threads -->
     <topology sockets="1" cores="4" threads="1" />
   </cpu>
@@ -51,15 +36,17 @@
     <timer name="hpet" present="no" />
     <timer name="hypervclock" present="yes" />
   </clock>
+  <!-- Uncomment to allow changes during setup -->
+  <!--<on_reboot>destroy</on_reboot>-->
   <pm>
     <suspend-to-mem enabled="no" />
     <suspend-to-disk enabled="no" />
   </pm>
   <devices>
-    <emulator>/usr/bin/qemu-system-x86_64</emulator>
+    <emulator>/usr/local/bin/qemu-system-x86_64</emulator>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2" cache="none" discard="unmap" />
-      <source file="/path/to/win11.qcow2" />
+      <source file="/path/to/win11pro.qcow2" />
       <!-- Replace with `sata` during installation if detection fails -->
       <target dev="vda" bus="virtio" />
       <boot order="1" />
@@ -90,7 +77,7 @@
       - `viostor` and `vioscsi` drivers in the boot-critical `Drivers` directory
       - other `virtio-win` drivers in the `Drivers2` directory
       -->
-      <source file="/path/to/win11-1.qcow2" />
+      <source file="/path/to/win11pro-1.qcow2" />
       <target dev="sdb" bus="usb" removable="on" />
     </disk>
     <controller type="usb" model="qemu-xhci" />
@@ -110,14 +97,7 @@
     <controller type="pci" model="pcie-root-port" />
     <controller type="pci" model="pcie-root-port" />
     <controller type="pci" model="pcie-root-port" />
-    <interface type="network">
-      <source network="default" />
-      <model type="virtio" />
-    </interface>
     <console type="pty" />
-    <channel type="spicevmc">
-      <target type="virtio" name="com.redhat.spice.0" />
-    </channel>
     <channel type="unix">
       <source mode="bind" />
       <target type="virtio" name="org.qemu.guest_agent.0" />
@@ -126,20 +106,32 @@
     <input type="keyboard" bus="usb" />
     <input type="tablet" bus="virtio" />
     <input type="keyboard" bus="virtio" />
-    <graphics type="spice" port="-1" tlsPort="-1" autoport="yes">
-      <image compression="off" />
-    </graphics>
-    <sound model="ich9" />
-    <video>
-      <model type="qxl" />
-    </video>
-    <redirdev bus="usb" type="spicevmc" />
-    <redirdev bus="usb" type="spicevmc" />
     <tpm>
       <backend type="emulator" version="2.0" />
     </tpm>
     <rng model="virtio">
       <backend model="random">/dev/urandom</backend>
     </rng>
+    <graphics type="vnc" port="-1" />
+    <!-- Replace `bochs` with `virtio` after installation for higher resolution and to improve performance -->
+    <video>
+      <model type="bochs" />
+    </video>
   </devices>
+  <!-- Option 1: qemu:///session with usermode networking (until QEMU has the `com.apple.vm.networking` entitlement) -->
+  <qemu:commandline xmlns:qemu="http://libvirt.org/schemas/domain/qemu/1.0">
+    <qemu:arg value="-netdev" />
+    <qemu:arg value="user,id=ua-net0,hostfwd=tcp::3389-:3389,hostfwd=udp::3389-:3389" />
+    <qemu:arg value="-device" />
+    <qemu:arg value="virtio-net,netdev=ua-net0,mac={{GUEST_MAC}},addr=10.0" />
+  </qemu:commandline>
+  <!-- Option 2: qemu:///system with bridged networking -->
+  <!--
+  <qemu:commandline xmlns:qemu="http://libvirt.org/schemas/domain/qemu/1.0">
+    <qemu:arg value="-netdev" />
+    <qemu:arg value="vmnet-bridged,id=ua-en0,ifname=en0" />
+    <qemu:arg value="-device" />
+    <qemu:arg value="virtio-net,netdev=ua-en0,mac={{GUEST_MAC}},addr=10.0" />
+  </qemu:commandline>
+  -->
 </domain>
