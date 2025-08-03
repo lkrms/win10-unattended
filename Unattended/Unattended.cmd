@@ -31,17 +31,17 @@ SET DISABLE_UCPD=1
 FOR /F "tokens=2,* skip=2" %%G IN (
     'REG QUERY HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Setup\State /v ImageState'
 ) DO SET SETUP_STATE=%%H
-IF "%SETUP_STATE%"=="IMAGE_STATE_COMPLETE" SET SETUP_STATE=complete
-IF "%SETUP_STATE%"=="IMAGE_STATE_GENERALIZE_RESEAL_TO_AUDIT" SET SETUP_STATE=generalize
-IF "%SETUP_STATE%"=="IMAGE_STATE_GENERALIZE_RESEAL_TO_OOBE" SET SETUP_STATE=generalize
-IF "%SETUP_STATE%"=="IMAGE_STATE_SPECIALIZE_RESEAL_TO_AUDIT" SET SETUP_STATE=specialize
-IF "%SETUP_STATE%"=="IMAGE_STATE_SPECIALIZE_RESEAL_TO_OOBE" SET SETUP_STATE=specialize
-IF "%SETUP_STATE%"=="IMAGE_STATE_UNDEPLOYABLE" SET SETUP_STATE=audit
+IF [%SETUP_STATE%]==[IMAGE_STATE_COMPLETE] SET SETUP_STATE=complete
+IF [%SETUP_STATE%]==[IMAGE_STATE_GENERALIZE_RESEAL_TO_AUDIT] SET SETUP_STATE=generalize
+IF [%SETUP_STATE%]==[IMAGE_STATE_GENERALIZE_RESEAL_TO_OOBE] SET SETUP_STATE=generalize
+IF [%SETUP_STATE%]==[IMAGE_STATE_SPECIALIZE_RESEAL_TO_AUDIT] SET SETUP_STATE=specialize
+IF [%SETUP_STATE%]==[IMAGE_STATE_SPECIALIZE_RESEAL_TO_OOBE] SET SETUP_STATE=specialize
+IF [%SETUP_STATE%]==[IMAGE_STATE_UNDEPLOYABLE] SET SETUP_STATE=audit
 
-IF "%1"=="/1" GOTO :pass1
-IF "%1"=="/2" GOTO :pass2
-IF "%1"=="/3" GOTO :pass3
-IF "%1"=="/4" GOTO :pass4
+IF [%~1]==[/1] GOTO :pass1
+IF [%~1]==[/2] GOTO :pass2
+IF [%~1]==[/3] GOTO :pass3
+IF [%~1]==[/4] GOTO :pass4
 ECHO Usage: Unattended.cmd ^(/1^|/2^|/3^|/4^) [/debug]
 EXIT /B 3
 
@@ -52,7 +52,7 @@ CALL :log ===== Starting %~f0 pass 1 ^(state: %SETUP_STATE%^)
 
 SETLOCAL EnableDelayedExpansion
 
-IF "%2"=="/debug" (
+IF [%~2]==[/debug] (
     CALL :log Enabling remote access to admin shares
     REG ADD HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System /v LocalAccountTokenFilterPolicy /t REG_DWORD /d 1 /f
     SET RETURN_CODE=1
@@ -62,7 +62,7 @@ SET EXCLUDE=
 IF EXIST %SystemDrive%\Unattended\Optional\Unattended.reg.d (
     SET "EXCLUDE="%SCRIPT_DIR%Optional\Unattended.reg.d""
 )
-IF NOT "%SCRIPT_DIR%"=="%SystemDrive%\Unattended\" (
+IF NOT [%SCRIPT_DIR%]==[%SystemDrive%\Unattended\] (
     CALL :log Copying %SCRIPT_DIR:~0,-1% to %SystemDrive%\Unattended
     ROBOCOPY "%SCRIPT_DIR:~0,-1%" %SystemDrive%\Unattended /MIR /XD %SystemDrive%\Unattended\Logs %SystemDrive%\Unattended\Optional\Unattended.reg.d %EXCLUDE% /NJH /NJS /NP || (
         rem The first two bits of robocopy's exit code indicate success:
@@ -186,7 +186,7 @@ CALL :choco vlc
 
 CALL :optCmd InstallCustomApps.cmd "/unattended"
 
-IF "%2"=="/debug" (
+IF [%~2]==[/debug] (
     rem Don't install procmon if it's already installed, e.g. via sysinternals
     WHERE /Q Procmon || CALL :choco procmon
 
@@ -212,7 +212,7 @@ IF EXIST "%SCRIPT_DIR%..\Office365\teamsbootstrapper.exe" (
     )
 )
 
-IF NOT "%SETUP_STATE%"=="complete" DEL /F /Q "%PUBLIC%\Desktop\*.lnk" 2>NUL
+IF NOT [%SETUP_STATE%]==[complete] DEL /F /Q "%PUBLIC%\Desktop\*.lnk" 2>NUL
 
 CALL :optCmd ApplyRegistrySettings.cmd "/start"
 
@@ -249,7 +249,7 @@ IF EXIST "%SCRIPT_DIR%..\Office365\install.cmd" (
 CALL :optPs1 RemoveBloatware.ps1 "Removing bloatware"
 
 IF EXIST "%SCRIPT_DIR%..\Audit.xml" (
-    IF NOT "%SETUP_STATE%"=="complete" (
+    IF NOT [%SETUP_STATE%]==[complete] (
         CALL :log Installing answer file for generalize and OOBE passes
         IF NOT EXIST "%WINDIR%\Panther\Unattend" MD "%WINDIR%\Panther\Unattend"
         COPY "%SCRIPT_DIR%..\Audit.xml" "%WINDIR%\Panther\Unattend\Unattend.xml" /Y || EXIT /B 3

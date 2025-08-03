@@ -59,13 +59,13 @@ CALL :isWin10 && IF EXIST "%SCRIPT_DIR%StartLayout10.xml" (
     CALL :runOrReport COPY "%SCRIPT_DIR%StartLayout10.xml" "%SystemDrive%\Users\Default\AppData\Local\Microsoft\Windows\Shell\LayoutModification.xml" /Y
 )
 
-IF "%1"=="/boot" GOTO :skipDeploymentActions
+IF [%~1]==[/boot] GOTO :skipFirstRunActions
 
 IF EXIST "%SCRIPT_DIR%ConfigurePrinting.ps1" (
     CALL :runOrReport REG ADD HKLM\DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce /v !SetDefaultPrinter /t REG_EXPAND_SZ /d "powershell -NoProfile -Command \"^(New-Object -ComObject WScript.Network^).SetDefaultPrinter^('Brother HL-5450DN ^(black and white^)'^)\"" /f
 )
 
-:skipDeploymentActions
+:skipFirstRunActions
 
 REG UNLOAD HKLM\DEFAULT
 

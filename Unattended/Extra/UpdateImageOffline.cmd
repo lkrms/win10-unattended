@@ -11,25 +11,25 @@ SET BACKUP=1
 SET RESTORE=0
 SET PROCESS=1
 SET EXPORT=1
-IF [%1]==[/clean] (
+IF [%~1]==[/clean] (
     SET RESTORE=1
     SHIFT /1
 ) ELSE (
-    IF [%1]==[/nobackup] (
+    IF [%~1]==[/nobackup] (
         SET BACKUP=0
         SHIFT /1
     )
 )
-IF [%1]==[/noexport] (
+IF [%~1]==[/noexport] (
     SET EXPORT=0
     SHIFT /1
 ) ELSE (
-    IF [%1]==[/exportonly] (
+    IF [%~1]==[/exportonly] (
         SET PROCESS=0
         SHIFT /1
     )
 )
-IF [%1]==[] GOTO :usage
+IF [%~1]==[] GOTO :usage
 IF NOT EXIST %1 GOTO :usage
 
 SET "SCRIPT_DIR=%~dp0"
@@ -84,7 +84,7 @@ DISM /Export-Image /SourceImageFile:"%IMAGE_FILE%" /DestinationImageFile:"%EXPOR
 
 :skipExport
 SHIFT /1
-IF NOT [%1]==[] GOTO :loop
+IF NOT [%~1]==[] GOTO :loop
 
 IF %EXPORT% EQU 1 (
     MOVE /Y "%EXPORT_FILE%" "%IMAGE_FILE%" || EXIT /B

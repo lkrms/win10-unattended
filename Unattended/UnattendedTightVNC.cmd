@@ -23,8 +23,8 @@ EXIT /B %RETURN_CODE%
 SHIFT /1
 SET ERRORS=0
 
-IF "%~1"=="" GOTO :usage
-IF "%~2"=="" GOTO :usage
+IF [%~1]==[] GOTO :usage
+IF [%~2]==[] GOTO :usage
 
 CALL :log ===== Starting %~f0
 

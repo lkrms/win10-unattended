@@ -24,11 +24,14 @@ SHIFT /1
 SET "SCRIPT_DIR=%~dp0"
 SET RETURN_CODE=0
 
+sc stop wuauserv >NUL 2>NUL
+sc config wuauserv start=disabled
 CALL "%SCRIPT_DIR%Unattended.cmd" /start /1 %* || IF !ERRORLEVEL! GEQ 3 (EXIT /B) ELSE (RETURN_CODE=!ERRORLEVEL!)
 CALL "%SCRIPT_DIR%Unattended.cmd" /start /2 %* || IF !ERRORLEVEL! GEQ 3 (EXIT /B) ELSE (RETURN_CODE=!ERRORLEVEL!)
 CALL "%SCRIPT_DIR%Unattended.cmd" /start /3 %* || IF !ERRORLEVEL! GEQ 3 (EXIT /B) ELSE (RETURN_CODE=!ERRORLEVEL!)
 CALL "%SCRIPT_DIR%Unattended.cmd" /start /4 %* || RETURN_CODE=!ERRORLEVEL!
-CALL "%SCRIPT_DIR%UnattendedFirstBoot.cmd" /start %* || RETURN_CODE=!ERRORLEVEL!
+CALL "%SCRIPT_DIR%UnattendedFirstBoot.cmd" /start /deploy %* || RETURN_CODE=!ERRORLEVEL!
+sc config wuauserv start=demand
 
 EXIT /B %RETURN_CODE%
 

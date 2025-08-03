@@ -49,9 +49,13 @@ IF EXIST "%SCRIPT_DIR%UnattendedBoot.cmd" (
 CALL :log Deleting cached answer files
 DEL /F /Q "%WINDIR%\Panther\Unattend\Unattend.xml" "%WINDIR%\Panther\unattend.xml"
 
+IF [%~1]==[/deploy] GOTO :skipFirstRunActions
+
 CALL :optCmd ApplyRegistrySettings.cmd "/start /boot"
 
 CALL :optPs1 RemoveBloatware.ps1 "Removing bloatware"
+
+:skipFirstRunActions
 
 IF %ERRORS% EQU 0 EXIT /B 0
 EXIT /B 1

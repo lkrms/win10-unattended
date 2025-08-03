@@ -7,7 +7,7 @@ NET SESSION >NUL 2>NUL || (
     EXIT /B 3
 )
 
-IF [%1]==[] GOTO :usage
+IF [%~1]==[] GOTO :usage
 IF NOT EXIST %1 GOTO :usage
 
 SET "SCRIPT_DIR=%~dp0"
