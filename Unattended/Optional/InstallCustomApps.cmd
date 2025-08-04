@@ -41,7 +41,6 @@ CALL :osIs64Bit && CALL :choco espanso
 CALL :enableDevelopmentMode && CALL :osIs64Bit && CALL :choco git --params="'/GitOnlyOnPath /NoShellIntegration /SChannel /NoOpenSSH /WindowsTerminalProfile /Symlinks'" && (
     SETX MSYS winsymlinks:nativestrict /M
     sc config ssh-agent start=auto
-    CALL "%ProgramFiles%\Git\cmd\start-ssh-agent.cmd"
 )
 CALL :choco jq
 CALL :osIs64Bit && CALL :choco nextcloud-client
@@ -58,7 +57,7 @@ CALL :osIs64Bit && CALL :choco keepassxc --install-args="'LAUNCHAPPONEXIT=0 AUTO
 :: End custom apps
 
 
-IF "%1"=="/unattended" EXIT /B 0
+IF [%~1]==[/unattended] EXIT /B 0
 CALL :log %CHOCO_COUNT% packages deployed by Chocolatey ^(errors: %CHOCO_ERRORS%^)
 CALL :log ===== %~f0 finished with %ERRORS% errors
 IF %ERRORS% NEQ 0 EXIT /B 1
@@ -70,10 +69,10 @@ REG ADD HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock /v AllowDe
 EXIT /B
 
 :osIs64Bit
-IF "%PROCESSOR_ARCHITECTURE%"=="AMD64" EXIT /B 0
-IF "%PROCESSOR_ARCHITEW6432%"=="AMD64" EXIT /B 0
-IF "%PROCESSOR_ARCHITECTURE%"=="ARM64" EXIT /B 0
-IF "%PROCESSOR_ARCHITEW6432%"=="ARM64" EXIT /B 0
+IF [%PROCESSOR_ARCHITECTURE%]==[AMD64] EXIT /B 0
+IF [%PROCESSOR_ARCHITEW6432%]==[AMD64] EXIT /B 0
+IF [%PROCESSOR_ARCHITECTURE%]==[ARM64] EXIT /B 0
+IF [%PROCESSOR_ARCHITEW6432%]==[ARM64] EXIT /B 0
 EXIT /B 1
 
 :choco
