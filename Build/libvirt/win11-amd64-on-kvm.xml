@@ -31,6 +31,7 @@
       <ipi state="on" />
       <!-- INTEL HOSTS ONLY -->
       <evmcs state="on" />
+      <!-- May slow down guests on old hardware (without APICv/AVIC support) -->
       <avic state="on" />
       <!-- Recommended -->
       <vendor_id state="on" value="KVM Hv" />
@@ -40,6 +41,7 @@
       <xmm_input state="on" />
     </hyperv>
     <vmport state="off" />
+    <ps2 state="off" />
   </features>
   <cpu mode="host-passthrough">
     <!-- Windows Home and Pro only use 1 or 2 CPUs (sockets), so allocate vCPUs via cores and threads after checking host.cpu.topology in `virsh capabilities` output -->

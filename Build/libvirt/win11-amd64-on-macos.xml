@@ -18,8 +18,8 @@
   <features>
     <acpi />
     <apic />
+    <!-- Enable Hyper-V Enlightenments that are theoretically supported on hypervisors other than KVM -->
     <hyperv>
-      <!-- Enabled by default -->
       <relaxed state="on" />
       <vapic state="on" />
       <spinlocks state="on" retries="8191" />
@@ -30,17 +30,14 @@
       <frequencies state="on" />
       <tlbflush state="on" />
       <ipi state="on" />
-      <!-- INTEL HOSTS ONLY -->
-      <evmcs state="on" />
+      <!-- May slow down guests on old hardware (without APICv/AVIC support) -->
       <avic state="on" />
-      <!-- Recommended -->
       <vendor_id state="on" value="KVM Hv" />
       <reset state="on" />
-      <reenlightenment state="on" />
-      <emsr_bitmap state="on" />
       <xmm_input state="on" />
     </hyperv>
     <vmport state="off" />
+    <ps2 state="off" />
   </features>
   <!-- On macOS, `mode="host-passthrough"` triggers blue screens of death in Windows guests -->
   <cpu mode="host-model">
@@ -131,7 +128,8 @@
     </rng>
     <graphics type="vnc" port="-1" />
     <video>
-      <model type="bochs" />
+      <!-- Do NOT use `bochs`, the default, or QEMU will randomly crash with "failed to decode instruction" -->
+      <model type="ramfb" />
     </video>
   </devices>
   <!-- Option 1: qemu:///session with usermode networking (until QEMU has the `com.apple.vm.networking` entitlement) -->
@@ -145,9 +143,9 @@
   <!--
   <qemu:commandline xmlns:qemu="http://libvirt.org/schemas/domain/qemu/1.0">
     <qemu:arg value="-netdev" />
-    <qemu:arg value="vmnet-bridged,id=ua-en0,ifname=en0" />
+    <qemu:arg value="vmnet-bridged,id=ua-{{HOST_IFNAME}},ifname={{HOST_IFNAME}}" />
     <qemu:arg value="-device" />
-    <qemu:arg value="virtio-net,netdev=ua-en0,mac={{GUEST_MAC}},addr=10.0" />
+    <qemu:arg value="virtio-net,netdev=ua-{{HOST_IFNAME}},mac={{GUEST_MAC}},addr=10.0" />
   </qemu:commandline>
   -->
 </domain>

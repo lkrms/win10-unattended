@@ -15,7 +15,7 @@
     <acpi />
     <!-- Hyper-V Enlightenments are only supported on x86 -->
   </features>
-  <!-- On macOS, `mode="host-passthrough"` triggers blue screens of death in Windows guests -->
+  <!-- On macOS, `mode="host-passthrough"` triggers blue screens of death in Windows guests, and `mode="host-model"` is not supported on aarch64 -->
   <cpu mode="custom" match="exact">
     <model>cortex-a57</model>
     <!-- Windows Home and Pro only use 1 or 2 CPUs (sockets), so allocate vCPUs via cores and threads after checking host.cpu.topology in `virsh capabilities` output -->
