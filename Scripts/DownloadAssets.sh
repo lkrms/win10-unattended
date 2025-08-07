@@ -42,24 +42,25 @@ if [[ -d Office365 ]]; then
     download "$odt_url" "$odt_file"
     bsdtar -xf "$odt_file" -C Office365 EULA setup.exe ||
         die "error extracting Office Deployment Tool"
-
-    download "https://github.com/Fleex255/PolicyPlus/releases/latest/download/PolicyPlus.exe" Tools/PolicyPlus.exe
-    download "https://github.com/pbatard/rufus/releases/download/v${rufus}/rufus-${rufus}.exe" Tools/rufus.exe
-    download "https://github.com/pbatard/rufus/releases/download/v${rufus}/rufus-${rufus}_x86.exe" Tools/rufus_x86.exe
-    download "https://github.com/pbatard/rufus/releases/download/v${rufus}/rufus-${rufus}_arm64.exe" Tools/rufus_arm64.exe
-
-    lgpo_url=$(curl -fsSL "https://www.microsoft.com/en-au/download/details.aspx?id=55319" |
-        grep -Eo "\<https://download\.microsoft\.com/download/[0-9a-f/-]+/LGPO.zip\>" |
-        head -n1) || die "unable to get LGPO URL"
-    download "$lgpo_url" Cache/LGPO.zip
-    bsdtar -xf Cache/LGPO.zip -C Tools --strip-components 1 "*/LGPO.exe" ||
-        die "error extracting LGPO"
-
-    download "https://download.sysinternals.com/files/ProcessExplorer.zip" Cache/ProcessExplorer.zip
-    bsdtar -xf Cache/ProcessExplorer.zip -C Tools procexp.exe ||
-        die "error extracting Process Explorer"
-
-    download "https://download.sysinternals.com/files/ProcessMonitor.zip" Cache/ProcessMonitor.zip
-    bsdtar -xf Cache/ProcessMonitor.zip -C Tools Procmon.exe ||
-        die "error extracting Process Monitor"
 fi
+
+download "https://www.resplendence.com/download/LatencyMon.exe" Tools/LatencyMon.exe
+download "https://github.com/Fleex255/PolicyPlus/releases/latest/download/PolicyPlus.exe" Tools/PolicyPlus.exe
+download "https://github.com/pbatard/rufus/releases/download/v${rufus}/rufus-${rufus}.exe" Tools/rufus.exe
+download "https://github.com/pbatard/rufus/releases/download/v${rufus}/rufus-${rufus}_x86.exe" Tools/rufus_x86.exe
+download "https://github.com/pbatard/rufus/releases/download/v${rufus}/rufus-${rufus}_arm64.exe" Tools/rufus_arm64.exe
+
+lgpo_url=$(curl -fsSL "https://www.microsoft.com/en-au/download/details.aspx?id=55319" |
+    grep -Eo "\<https://download\.microsoft\.com/download/[0-9a-f/-]+/LGPO.zip\>" |
+    head -n1) || die "unable to get LGPO URL"
+download "$lgpo_url" Cache/LGPO.zip
+bsdtar -xf Cache/LGPO.zip -C Tools --strip-components 1 "*/LGPO.exe" ||
+    die "error extracting LGPO"
+
+download "https://download.sysinternals.com/files/ProcessExplorer.zip" Cache/ProcessExplorer.zip
+bsdtar -xf Cache/ProcessExplorer.zip -C Tools procexp.exe ||
+    die "error extracting Process Explorer"
+
+download "https://download.sysinternals.com/files/ProcessMonitor.zip" Cache/ProcessMonitor.zip
+bsdtar -xf Cache/ProcessMonitor.zip -C Tools Procmon.exe ||
+    die "error extracting Process Monitor"
