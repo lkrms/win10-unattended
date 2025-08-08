@@ -29,7 +29,7 @@ IF [%~1]==[/noexport] (
         SHIFT /1
     )
 )
-IF [%~1]==[] GOTO :usage
+IF [%1]==[] GOTO :usage
 IF NOT EXIST %1 GOTO :usage
 
 SET "SCRIPT_DIR=%~dp0"
@@ -84,7 +84,7 @@ DISM /Export-Image /SourceImageFile:"%IMAGE_FILE%" /DestinationImageFile:"%EXPOR
 
 :skipExport
 SHIFT /1
-IF NOT [%~1]==[] GOTO :loop
+IF NOT [%1]==[] GOTO :loop
 
 IF %EXPORT% EQU 1 (
     MOVE /Y "%EXPORT_FILE%" "%IMAGE_FILE%" || EXIT /B
