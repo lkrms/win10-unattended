@@ -38,11 +38,14 @@ CALL :log ===== Starting %~f0
 GOTO :skipCustomApps
 
 CALL :osIs64Bit && CALL :choco espanso
+CALL :osIs64Bit && CALL :choco flameshot
 CALL :enableDevelopmentMode && CALL :osIs64Bit && CALL :choco git --params="'/GitOnlyOnPath /NoShellIntegration /SChannel /NoOpenSSH /WindowsTerminalProfile /Symlinks'" && (
     SETX MSYS winsymlinks:nativestrict /M
     sc config ssh-agent start=auto
 )
+CALL :choco delta
 CALL :choco jq
+CALL :osIs64Bit && CALL :choco InkScape
 CALL :osIs64Bit && CALL :choco nextcloud-client
 CALL :osIs64Bit && CALL :choco powertoys
 CALL :choco shutup10
