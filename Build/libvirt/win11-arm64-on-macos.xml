@@ -19,7 +19,7 @@
   <cpu mode="custom" match="exact">
     <model>cortex-a57</model>
     <!-- Windows Home and Pro only use 1 or 2 CPUs (sockets), so allocate vCPUs via cores and threads after checking host.cpu.topology in `virsh capabilities` output -->
-    <topology sockets="1" cores="4" threads="1" />
+    <topology sockets="1" cores="2" threads="2" />
   </cpu>
   <clock offset="variable" basis="localtime" />
   <!-- Uncomment to allow changes during setup -->
