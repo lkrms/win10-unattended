@@ -24,8 +24,8 @@ SHIFT /1
 SET "SCRIPT_DIR=%~dp0"
 SET ERRORS=0
 SET RETURN_CODE=0
-SET CHOCO_COUNT=0
-SET CHOCO_ERRORS=0
+SET PKG_COUNT=0
+SET PKG_ERRORS=0
 SET DISABLE_UCPD=1
 
 FOR /F "tokens=2,* skip=2" %%G IN (
@@ -161,6 +161,14 @@ IF EXIST "%SCRIPT_DIR%..\Wi-Fi.xml" (
 :checkOnline
 CALL :awaitConnectivity || EXIT /B 3
 
+WHERE /Q winget || (
+    CALL :log Installing WinGet
+    powershell -NoProfile -ExecutionPolicy Bypass -File "%SystemDrive%\Unattended\InstallWinGet.ps1" || EXIT /B 3
+)
+
+CALL :log Configuring WinGet
+COPY "%SCRIPT_DIR%WinGetSettings.json" "%LOCALAPPDATA%\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\settings.json" /Y
+
 WHERE /Q choco && (
     CALL :log Updating Chocolatey
     CALL :runOrReport choco upgrade chocolatey -y --no-progress --fail-on-unfound || EXIT /B 3
@@ -176,25 +184,30 @@ SET "PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"
 choco feature enable -n=allowGlobalConfirmation -y
 choco feature enable -n=useRememberedArgumentsForUpgrades -y
 
-CALL :choco 7zip
-CALL :choco Firefox
-CALL :choco GoogleChrome --ignore-checksum && CALL :installInitialPreferences
-CALL :choco hashcheck
-CALL :choco notepadplusplus
-CALL :choco sumatrapdf
-CALL :choco vlc
+SET PKG_CRITICAL=1
+
+CALL :winget Google.Chrome && CALL :installInitialPreferences
+CALL :winget Notepad++.Notepad++
+CALL :winget SumatraPDF.SumatraPDF
+CALL :winget VideoLAN.VLC
+
+SET PKG_CRITICAL=
+
+CALL :winget 7zip.7zip
+CALL :winget Mozilla.Firefox
+CALL :winget gurnec.HashCheckShellExtension
 
 CALL :optCmd InstallCustomApps.cmd "/unattended"
 
 IF [%~2]==[/debug] (
     rem Don't install procmon if it's already installed, e.g. via sysinternals
-    WHERE /Q Procmon || CALL :choco procmon
+    WHERE /Q Procmon || CALL :winget Microsoft.Sysinternals.ProcessMonitor
 
     CALL :log Enabling Process Monitor log of next boot
     Procmon /AcceptEula /EnableBootLogging
 )
 
-CALL :log %CHOCO_COUNT% packages deployed by Chocolatey ^(errors: %CHOCO_ERRORS%^)
+CALL :log Packages deployed: %PKG_COUNT% ^(errors: %PKG_ERRORS%^)
 
 IF EXIST "%SCRIPT_DIR%..\MSI" (
     FOR /F "delims=" %%G IN ('WHERE /R "%SCRIPT_DIR%..\MSI" *.msi 2^>NUL') DO CALL :installMsi "%%G"
@@ -305,9 +318,28 @@ EXIT /B
 
 :choco
 CALL :log Deploying %1
-SET /A "CHOCO_COUNT+=1"
-CALL :runOrReport choco upgrade %* -y --no-progress --fail-on-unfound || SET /A "CHOCO_ERRORS+=1"
-EXIT /B
+SET /A "PKG_COUNT+=1"
+choco upgrade %* -y --no-progress --fail-on-unfound && EXIT /B
+IF NOT DEFINED PKG_CRITICAL (SET /A "PKG_ERRORS+=1" & EXIT /B 0)
+CALL :error "choco upgrade %* -y --no-progress --fail-on-unfound" failed
+SET /A "PKG_ERRORS+=1"
+EXIT /B %RESULT%
+
+:: See https://github.com/microsoft/winget-cli/blob/master/src/AppInstallerSharedLib/Public/AppInstallerErrors.h
+:winget
+CALL :log Deploying %1
+SET /A "PKG_COUNT+=1"
+winget install --id %* --scope machine --exact --silent --accept-source-agreements --disable-interactivity && EXIT /B
+:: UPDATE_NOT_APPLICABLE
+IF %ERRORLEVEL% EQU -1978335189 EXIT /B 0
+:: Ignore non-critical packages on unsupported hardware
+IF NOT DEFINED PKG_CRITICAL (
+    rem NO_APPLICABLE_INSTALLER
+    IF %ERRORLEVEL% EQU -1978335216 (SET /A "PKG_ERRORS+=1" & EXIT /B 0)
+)
+CALL :error "winget install --id %* --scope machine --exact --silent --accept-source-agreements --disable-interactivity" failed
+SET /A "PKG_ERRORS+=1"
+EXIT /B %RESULT%
 
 :: See https://support.google.com/chrome/a/answer/187948?hl=en
 :installInitialPreferences

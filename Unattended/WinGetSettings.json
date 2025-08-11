@@ -1,0 +1,6 @@
+{
+    "$schema": "https://aka.ms/winget-settings.schema.json",
+    "visual": {
+        "progressBar": "disabled"
+    }
+}

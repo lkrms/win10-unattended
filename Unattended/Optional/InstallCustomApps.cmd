@@ -24,8 +24,9 @@ EXIT /B %RETURN_CODE%
 :start
 SHIFT /1
 SET ERRORS=0
-SET CHOCO_COUNT=0
-SET CHOCO_ERRORS=0
+SET PKG_COUNT=0
+SET PKG_ERRORS=0
+SET PKG_CRITICAL=
 
 CALL :log ===== Starting %~f0
 
@@ -43,8 +44,8 @@ CALL :enableDevelopmentMode && CALL :osIs64Bit && CALL :choco git --params="'/Gi
     SETX MSYS winsymlinks:nativestrict /M
     sc config ssh-agent start=auto
 )
-CALL :choco delta
-CALL :choco jq
+CALL :osIs64Bit && CALL :winget dandavison.delta
+CALL :osIs64Bit && CALL :winget jqlang.jq
 CALL :osIs64Bit && CALL :choco InkScape
 CALL :osIs64Bit && CALL :choco nextcloud-client
 CALL :osIs64Bit && CALL :choco powertoys
@@ -61,7 +62,7 @@ CALL :osIs64Bit && CALL :choco keepassxc --install-args="'LAUNCHAPPONEXIT=0 AUTO
 
 
 IF [%~1]==[/unattended] EXIT /B 0
-CALL :log %CHOCO_COUNT% packages deployed by Chocolatey ^(errors: %CHOCO_ERRORS%^)
+CALL :log Packages deployed: %PKG_COUNT% ^(errors: %PKG_ERRORS%^)
 CALL :log ===== %~f0 finished with %ERRORS% errors
 IF %ERRORS% NEQ 0 EXIT /B 1
 EXIT /B 0
@@ -80,9 +81,27 @@ EXIT /B 1
 
 :choco
 CALL :log Deploying %1
-SET /A "CHOCO_COUNT+=1"
-CALL :runOrReport choco upgrade %* -y --no-progress --fail-on-unfound || SET /A "CHOCO_ERRORS+=1"
-EXIT /B
+SET /A "PKG_COUNT+=1"
+choco upgrade %* -y --no-progress --fail-on-unfound && EXIT /B
+IF NOT DEFINED PKG_CRITICAL (SET /A "PKG_ERRORS+=1" & EXIT /B 0)
+CALL :error "choco upgrade %* -y --no-progress --fail-on-unfound" failed
+SET /A "PKG_ERRORS+=1"
+EXIT /B %RESULT%
+
+:winget
+CALL :log Deploying %1
+SET /A "PKG_COUNT+=1"
+winget install --id %* --scope machine --exact --silent --accept-source-agreements --disable-interactivity && EXIT /B
+:: UPDATE_NOT_APPLICABLE
+IF %ERRORLEVEL% EQU -1978335189 EXIT /B 0
+:: Ignore non-critical packages on unsupported hardware
+IF NOT DEFINED PKG_CRITICAL (
+    rem NO_APPLICABLE_INSTALLER
+    IF %ERRORLEVEL% EQU -1978335216 (SET /A "PKG_ERRORS+=1" & EXIT /B 0)
+)
+CALL :error "winget install --id %* --scope machine --exact --silent --accept-source-agreements --disable-interactivity" failed
+SET /A "PKG_ERRORS+=1"
+EXIT /B %RESULT%
 
 :runOrReport
 %* || CALL :error "%*" failed
