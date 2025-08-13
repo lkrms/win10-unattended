@@ -83,8 +83,8 @@ IF NOT [%SCRIPT_DIR%]==[%SystemDrive%\Unattended\] (
             )
         )
 
-        FOR /F "delims=" %%G IN ('WHERE "%SCRIPT_DIR%..\Drivers2:*.msi" 2^>NUL') DO (
-            CALL :installMsi "%%G" || IF !ERRORLEVEL! EQU 3010 SET RETURN_CODE=1
+        FOR /F "delims=" %%G IN ('DIR "%SCRIPT_DIR%..\Drivers2" /B ^| FINDSTR /E ".msi .cmd"') DO (
+            CALL :installFile "%SCRIPT_DIR%..\Drivers2\%%G" || IF !ERRORLEVEL! EQU 3010 SET RETURN_CODE=1
         )
     )
 )
@@ -362,6 +362,15 @@ EXIT /B
 sc query "%~1" | FIND "STATE" | FIND "RUNNING" >NUL
 EXIT /B
 
+:installFile
+SET "FILE_EXT=%~x1"
+CALL :lower FILE_EXT
+IF [%FILE_EXT%]==[.msi] (CALL :installMsi "%~1" & EXIT /B)
+IF [%FILE_EXT%]==[.cmd] (CALL :installCmd "%~1" & EXIT /B)
+(CALL)
+CALL :error Cannot install "%~1"
+EXIT /B
+
 :installMsi
 SET "PKG_FILE=%~1"
 SET "LOG_FILE=%SystemDrive%\Unattended\Logs\%~n0WindowsInstaller-%~n1.log"
@@ -369,6 +378,13 @@ CALL :log Installing %PKG_FILE%
 START /WAIT /B msiexec /i "%PKG_FILE%" /qn /norestart /L+*vx "%LOG_FILE%" && EXIT /B
 IF %ERRORLEVEL% EQU 3010 EXIT /B
 CALL :error "msiexec /i "%PKG_FILE%"" failed, see %LOG_FILE%
+EXIT /B
+
+:installCmd
+CALL :log Running %~1
+CMD /C "%~1" && EXIT /B
+IF %ERRORLEVEL% EQU 3010 EXIT /B
+CALL :error "CMD /C "%~1"" failed
 EXIT /B
 
 :optCmd
@@ -405,3 +421,7 @@ SET RESULT=%ERRORLEVEL%
 CALL :log ERROR ^(%RESULT%^): %*
 SET /A "ERRORS+=1"
 EXIT /B %RESULT%
+
+:lower
+FOR %%G IN (a b c d e f g h i j k l m n o p q r s t u v w x y z) DO CALL SET "%~1=%%%~1:%%G=%%G%%"
+EXIT /B
