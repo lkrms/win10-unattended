@@ -28,6 +28,8 @@ SET PKG_COUNT=0
 SET PKG_ERRORS=0
 SET PKG_CRITICAL=
 
+SET "INNO_DEFAULT=/SP- /VERYSILENT /SUPPRESSMSGBOXES /NORESTART"
+
 CALL :log ===== Starting %~f0
 
 :unattended
@@ -38,22 +40,23 @@ CALL :log ===== Starting %~f0
 
 GOTO :skipCustomApps
 
-CALL :osIs64Bit && CALL :choco espanso
-CALL :osIs64Bit && CALL :choco flameshot
-CALL :enableDevelopmentMode && CALL :osIs64Bit && CALL :choco git --params="'/GitOnlyOnPath /NoShellIntegration /SChannel /NoOpenSSH /WindowsTerminalProfile /Symlinks'" && (
+CALL :enableDeveloperMode
+CALL :osIs64Bit && CALL :winget Espanso.Espanso
+CALL :osIs64Bit && CALL :winget Flameshot.Flameshot
+CALL :osIs64Bit && CALL :winget Git.Git --override "%INNO_DEFAULT% /COMPONENTS=ext,ext\shellhere,gitlfs,assoc,assoc_sh,windowsterminal,scalar /o:EditorOption=Notepad++ /o:DefaultBranchOption=main /o:PathOption=Cmd /o:SSHOption=ExternalOpenSSH /o:CURLOption=WinSSL /o:EnableSymlinks=Enabled /o:PerformanceTweaksFSCache=Enabled" && (
     SETX MSYS winsymlinks:nativestrict /M
     sc config ssh-agent start=auto
 )
 CALL :osIs64Bit && CALL :winget dandavison.delta
 CALL :osIs64Bit && CALL :winget jqlang.jq
-CALL :osIs64Bit && CALL :choco InkScape
-CALL :osIs64Bit && CALL :choco nextcloud-client
-CALL :osIs64Bit && CALL :choco powertoys
-CALL :choco shutup10
+CALL :osIs64Bit && CALL :winget Inkscape.Inkscape
+CALL :osIs64Bit && CALL :winget Nextcloud.NextcloudDesktop
+CALL :osIs64Bit && CALL :winget Microsoft.PowerToys
+CALL :winget OO-Software.ShutUp10
 CALL :choco SourceCodePro
 
 :: See https://keepassxc.org/docs/KeePassXC_UserGuide#_installer_options
-CALL :osIs64Bit && CALL :choco keepassxc --install-args="'LAUNCHAPPONEXIT=0 AUTOSTARTPROGRAM=0'"
+CALL :osIs64Bit && CALL :winget KeePassXCTeam.KeePassXC --custom "LAUNCHAPPONEXIT=0 AUTOSTARTPROGRAM=0"
 
 :skipCustomApps
 
@@ -68,8 +71,9 @@ IF %ERRORS% NEQ 0 EXIT /B 1
 EXIT /B 0
 
 
-:enableDevelopmentMode
-REG ADD HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock /v AllowDevelopmentWithoutDevLicense /t REG_DWORD /d 1 /f
+:enableDeveloperMode
+CALL :log Enabling Developer Mode
+CALL :runOrReport REG ADD HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock /v AllowDevelopmentWithoutDevLicense /t REG_DWORD /d 1 /f
 EXIT /B
 
 :osIs64Bit
