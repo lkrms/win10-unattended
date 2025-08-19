@@ -64,6 +64,7 @@
       <!-- Replace with `sata` during installation if detection fails -->
       <target dev="vda" bus="virtio" />
       <boot order="1" />
+      <alias name="ua-system-disk" />
     </disk>
     <!-- Option 1: provide custom install media -->
     <disk type="file" device="disk">
@@ -148,4 +149,12 @@
     <qemu:arg value="virtio-net,netdev=ua-{{HOST_IFNAME}},mac={{GUEST_MAC}},addr=10.0" />
   </qemu:commandline>
   -->
+  <qemu:override xmlns:qemu="http://libvirt.org/schemas/domain/qemu/1.0">
+    <qemu:device alias="ua-system-disk">
+      <qemu:frontend>
+        <!-- Improve Windows defrag/TRIM performance -->
+        <qemu:property name="discard_granularity" type="unsigned" value="33554432" />
+      </qemu:frontend>
+    </qemu:device>
+  </qemu:override>
 </domain>
