@@ -365,14 +365,14 @@ EXIT /B
 :installFile
 SET "FILE_EXT=%~x1"
 CALL :lower FILE_EXT
-IF [%FILE_EXT%]==[.msi] (CALL :installMsi "%~1" & EXIT /B)
-IF [%FILE_EXT%]==[.cmd] (CALL :installCmd "%~1" & EXIT /B)
+IF [%FILE_EXT%]==[.msi] (CALL :installMsi "%~f1" & EXIT /B)
+IF [%FILE_EXT%]==[.cmd] (CALL :installCmd "%~f1" & EXIT /B)
 (CALL)
-CALL :error Cannot install "%~1"
+CALL :error Cannot install "%~f1"
 EXIT /B
 
 :installMsi
-SET "PKG_FILE=%~1"
+SET "PKG_FILE=%~f1"
 SET "LOG_FILE=%SystemDrive%\Unattended\Logs\%~n0WindowsInstaller-%~n1.log"
 CALL :log Installing %PKG_FILE%
 START /WAIT /B msiexec /i "%PKG_FILE%" /qn /norestart /L+*vx "%LOG_FILE%" && EXIT /B
@@ -381,10 +381,10 @@ CALL :error "msiexec /i "%PKG_FILE%"" failed, see %LOG_FILE%
 EXIT /B
 
 :installCmd
-CALL :log Running %~1
-CMD /C "%~1" && EXIT /B
+CALL :log Running %~f1
+CMD /C "%~f1" && EXIT /B
 IF %ERRORLEVEL% EQU 3010 EXIT /B
-CALL :error "CMD /C "%~1"" failed
+CALL :error "CMD /C "%~f1"" failed
 EXIT /B
 
 :optCmd

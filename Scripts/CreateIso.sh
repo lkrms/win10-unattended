@@ -17,6 +17,7 @@ function usage() {
         "--[no-]office" "Include or exclude Office365 directory (if present)" \
         "--driver <path>..." "Add file or directory to Drivers" \
         "--driver2 <path>..." "Add file or directory to Drivers2" \
+        "--update <path>..." "Add file or directory to Updates" \
         "--reg <path>..." "Add file to Unattended.reg.d"
     exit 1
 }
@@ -63,6 +64,7 @@ wifi=
 office=
 driver=()
 driver2=()
+update=()
 reg=()
 
 reg_cmd=Unattended/Optional/ApplyRegistrySettings.cmd
@@ -100,6 +102,13 @@ while [[ ${1-} == -* ]]; do
             shift
             [[ -e $1 ]] || die "file not found: $1"
             driver2[${#driver2[@]}]=$1
+        done
+        ;;
+    --update)
+        while (($# > 1)) && [[ $2 != -* ]]; do
+            shift
+            [[ -e $1 ]] || die "file not found: $1"
+            update[${#update[@]}]=$1
         done
         ;;
     --reg)
@@ -151,13 +160,14 @@ delete=(
     )
 
     echo " -> Syncing additional files"
-    mkdir -p "$target"/{Drivers,Drivers2,"$reg_dir"}
     ((!${#driver[@]})) ||
-        rsync -rtvi "${driver[@]}" "$target/Drivers"
+        rsync -rtvi --mkpath "${driver[@]%/}" "$target/Drivers/"
     ((!${#driver2[@]})) ||
-        rsync -rtvi "${driver2[@]}" "$target/Drivers2"
+        rsync -rtvi --mkpath "${driver2[@]%/}" "$target/Drivers2/"
+    ((!${#update[@]})) ||
+        rsync -rtvi --mkpath "${update[@]%/}" "$target/Updates/"
     ((!${#reg[@]})) ||
-        rsync -rtvi "${reg[@]}" "$target/$reg_dir"
+        rsync -rtvi --mkpath "${reg[@]%/}" "$target/$reg_dir/"
     echo
 
     echo "==> ISO filesystem successfully created: $target"
@@ -174,7 +184,9 @@ delete=(
         echo " -> Creating ISO file"
         rm -f "$iso"
         mkdir -p "${iso%/*}"
-        mkisofs -o "$iso" -V Unattended -UDF .
+        name=${iso%.*}
+        name=${name##*/}
+        mkisofs -o "$iso" -V "$name" -UDF .
         echo
     )
 

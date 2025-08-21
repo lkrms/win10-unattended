@@ -57,10 +57,11 @@
     Provide `win10-unattended` media with `arm64`-only answer files (Windows Setup for Windows 11 24H2 on ARM64 does not
     ignore components for other architectures)
     -->
-    <disk type="file" device="disk">
-      <driver name="qemu" type="qcow2" cache="none" discard="unmap" />
-      <source file="/path/to/win11pro-1.qcow2" />
-      <target dev="sdb" bus="usb" removable="on" />
+    <disk type="file" device="cdrom">
+      <driver name="qemu" type="raw" />
+      <source file="/path/to/Unattended-win11pro.iso" />
+      <target dev="sdb" bus="usb" />
+      <readonly />
     </disk>
     <controller type="usb" model="qemu-xhci" />
     <controller type="scsi" model="virtio-scsi" />
@@ -108,9 +109,9 @@
   <!--
   <qemu:commandline xmlns:qemu="http://libvirt.org/schemas/domain/qemu/1.0">
     <qemu:arg value="-netdev" />
-    <qemu:arg value="vmnet-bridged,id=ua-en0,ifname=en0" />
+    <qemu:arg value="vmnet-bridged,id=ua-{{HOST_IFNAME}},ifname={{HOST_IFNAME}}" />
     <qemu:arg value="-device" />
-    <qemu:arg value="virtio-net,netdev=ua-en0,mac={{GUEST_MAC}},addr=10.0" />
+    <qemu:arg value="virtio-net,netdev=ua-{{HOST_IFNAME}},mac={{GUEST_MAC}},addr=10.0" />
   </qemu:commandline>
   -->
   <qemu:override xmlns:qemu="http://libvirt.org/schemas/domain/qemu/1.0">

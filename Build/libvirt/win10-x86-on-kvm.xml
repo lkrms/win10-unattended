@@ -10,7 +10,7 @@
   <os firmware="efi">
     <type arch="i686" machine="q35">hvm</type>
     <firmware>
-      <!-- Secure Boot is not supported on 32-bit guests -->
+      <!-- Secure Boot may not be supported for 32-bit guests -->
       <feature enabled="no" name="secure-boot" />
     </firmware>
   </os>
@@ -81,18 +81,20 @@
       <source file="/path/to/Win10_22H2_EnglishInternational_x32v1.iso" />
       <target dev="sda" bus="scsi" />
       <readonly />
+      <boot order="2" />
     </disk>
     -->
-    <disk type="file" device="disk">
-      <driver name="qemu" type="qcow2" cache="none" discard="unmap" />
-      <!--
-      Provide `win10-unattended` media with:
+    <!--
+    Provide `win10-unattended` media with:
 
-      - `viostor` and `vioscsi` drivers in the boot-critical `Drivers` directory
-      - other `virtio-win` drivers in the `Drivers2` directory
-      -->
-      <source file="/path/to/win10x86-1.qcow2" />
-      <target dev="sdb" bus="usb" removable="on" />
+    - `viostor` and `vioscsi` drivers in the boot-critical `Drivers` directory
+    - other `virtio-win` drivers in the `Drivers2` directory
+    -->
+    <disk type="file" device="cdrom">
+      <driver name="qemu" type="raw" />
+      <source file="/path/to/Unattended-win10x86.iso" />
+      <target dev="sdb" bus="usb" />
+      <readonly />
     </disk>
     <controller type="usb" model="qemu-xhci" />
     <controller type="scsi" model="virtio-scsi" />

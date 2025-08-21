@@ -1,8 +1,8 @@
 <domain type="kvm">
-  <name>win11</name>
+  <name>win10x64</name>
   <metadata>
     <libosinfo:libosinfo xmlns:libosinfo="http://libosinfo.org/xmlns/libvirt/domain/1.0">
-      <libosinfo:os id="http://microsoft.com/win/11" />
+      <libosinfo:os id="http://microsoft.com/win/10" />
     </libosinfo:libosinfo>
   </metadata>
   <memory>4194304</memory>
@@ -61,8 +61,7 @@
     <emulator>/usr/bin/qemu-system-x86_64</emulator>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2" cache="none" discard="unmap" />
-      <source file="/path/to/win11.qcow2" />
-      <!-- Replace with `sata` during installation if detection fails -->
+      <source file="/path/to/win10x64.qcow2" />
       <target dev="vda" bus="virtio" />
       <boot order="1" />
       <alias name="ua-system-disk" />
@@ -70,17 +69,16 @@
     <!-- Option 1: provide custom install media -->
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2" />
-      <source file="/path/to/win11-amd64-disk-image.qcow2" />
-      <!-- Replace with `usb` during installation if `viostor` detection fails -->
+      <source file="/path/to/win10-amd64-disk-image.qcow2" />
       <target dev="vdb" bus="virtio" />
       <readonly />
       <boot order="2" />
     </disk>
-    <!-- Option 2: provide a standard ISO file (use `sata` during installation if `vioscsi` detection fails) -->
+    <!-- Option 2: provide a standard ISO file -->
     <!--
     <disk type="file" device="cdrom">
       <driver name="qemu" type="raw" />
-      <source file="/path/to/Win11_24H2_EnglishInternational_x64.iso" />
+      <source file="/path/to/Win10_22H2_EnglishInternational_x64v1.iso" />
       <target dev="sda" bus="scsi" />
       <readonly />
       <boot order="2" />
@@ -94,7 +92,7 @@
     -->
     <disk type="file" device="cdrom">
       <driver name="qemu" type="raw" />
-      <source file="/path/to/Unattended-win11.iso" />
+      <source file="/path/to/Unattended-win10x64.iso" />
       <target dev="sdb" bus="usb" />
       <readonly />
     </disk>

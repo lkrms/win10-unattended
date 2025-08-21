@@ -32,8 +32,16 @@ IF NOT EXIST "%MOUNT_DIR%" (
 )
 
 CALL :log ===== Starting %~f0: %~1
+
+CALL :log Adding %SystemDrive%\images and image paths to Windows Defender exclusion list
+powershell -NoProfile -Command "function exclude { Set-MpPreference -ExclusionPath ((Get-MpPreference).ExclusionPath + $args | Sort-Object -Unique) }; exclude" "%SystemDrive%\images" "%BOOT_WIM%" "%INSTALL_WIM%"
+
 CALL :processWim "%BOOT_WIM%" "%SCRIPT_DIR%..\..\Drivers" || EXIT /B
 CALL :processWim "%INSTALL_WIM%" "%SCRIPT_DIR%..\..\Drivers2" || EXIT /B
+
+CALL :log Removing %SystemDrive%\images and image paths from Windows Defender exclusion list
+powershell -NoProfile -Command "function unexclude { $args | ForEach-Object { Remove-MpPreference -ExclusionPath $_ } }; unexclude" "%SystemDrive%\images" "%BOOT_WIM%" "%INSTALL_WIM%"
+
 CALL :log ===== %~f0 finished: %~1
 EXIT /B
 
@@ -46,7 +54,7 @@ FOR /F "tokens=2 delims=: " %%G IN (
 ) DO SET MAX_INDEX=%%G
 CALL :log Images found in %~1: %MAX_INDEX%
 FOR /L %%G IN (1, 1, %MAX_INDEX%) DO (
-    CALL :processImage "%~1" %%G "%~2" || EXIT /B
+    CALL :processImage "%~1" %%G "%~f2" || EXIT /B
 )
 CALL :log Finished with %MAX_INDEX% image^(s^): %~1
 EXIT /B

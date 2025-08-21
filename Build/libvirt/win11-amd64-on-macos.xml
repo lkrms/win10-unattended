@@ -82,18 +82,20 @@
       <source file="/path/to/Win11_24H2_EnglishInternational_x64.iso" />
       <target dev="sda" bus="scsi" />
       <readonly />
+      <boot order="2" />
     </disk>
     -->
-    <disk type="file" device="disk">
-      <driver name="qemu" type="qcow2" cache="none" discard="unmap" />
-      <!--
-      Provide `win10-unattended` media with:
+    <!--
+    Provide `win10-unattended` media with:
 
-      - `viostor` and `vioscsi` drivers in the boot-critical `Drivers` directory
-      - other `virtio-win` drivers in the `Drivers2` directory
-      -->
-      <source file="/path/to/win11pro-1.qcow2" />
-      <target dev="sdb" bus="usb" removable="on" />
+    - `viostor` and `vioscsi` drivers in the boot-critical `Drivers` directory
+    - other `virtio-win` drivers in the `Drivers2` directory
+    -->
+    <disk type="file" device="cdrom">
+      <driver name="qemu" type="raw" />
+      <source file="/path/to/Unattended-win11pro.iso" />
+      <target dev="sdb" bus="usb" />
+      <readonly />
     </disk>
     <controller type="usb" model="qemu-xhci" />
     <controller type="scsi" model="virtio-scsi" />

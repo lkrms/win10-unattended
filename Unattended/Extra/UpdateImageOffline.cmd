@@ -70,8 +70,12 @@ IF %EXPORT% EQU 1 (
     )
 )
 
-:loop
 CALL :log ===== Starting %~f0: %IMAGE_FILE%
+
+CALL :log Adding %SystemDrive%\images and %IMAGE_FILE% to Windows Defender exclusion list
+powershell -NoProfile -Command "function exclude { Set-MpPreference -ExclusionPath ((Get-MpPreference).ExclusionPath + $args | Sort-Object -Unique) }; exclude" "%SystemDrive%\images" "%IMAGE_FILE%"
+
+:loop
 IF %PROCESS% NEQ 1 GOTO :skipProcess
 CALL :processImage %1 || EXIT /B
 
@@ -90,6 +94,9 @@ IF %EXPORT% EQU 1 (
     MOVE /Y "%EXPORT_FILE%" "%IMAGE_FILE%" || EXIT /B
 )
 
+CALL :log Removing %SystemDrive%\images and %IMAGE_FILE% from Windows Defender exclusion list
+powershell -NoProfile -Command "function unexclude { $args | ForEach-Object { Remove-MpPreference -ExclusionPath $_ } }; unexclude" "%SystemDrive%\images" "%IMAGE_FILE%"
+
 CALL :log ===== %~f0 finished: %IMAGE_FILE%
 EXIT /B
 
@@ -102,7 +109,16 @@ FOR /F "usebackq delims=" %%G IN (
     `powershell -NoProfile -Command "Get-ChildItem -Path '%SCRIPT_DIR%..\..\Updates' -Include *.cab, *.msu -Recurse | Select-Object -ExpandProperty Directory | ForEach-Object FullName | Sort-Object -Unique"`
 ) DO (
     CALL :log Installing updates: %%G
-    DISM /Image:"%MOUNT_DIR%" /Add-Package /PackagePath:"%%G" /IgnoreCheck || EXIT /B
+    DISM /Image:"%MOUNT_DIR%" /Add-Package /PackagePath:"%%G" /IgnoreCheck || (
+        REM "Package may have failed due to pending updates to servicing
+        REM components in the image. Try the command again."
+        IF !ERRORLEVEL! EQU -2146498525 (
+            CALL :log Trying again after DISM error 0x800f0823: %%G
+            DISM /Image:"%MOUNT_DIR%" /Add-Package /PackagePath:"%%G" /IgnoreCheck || EXIT /B
+        ) ELSE (
+            EXIT /B
+        )
+    )
 )
 
 CALL :log Cleaning up %IMAGE_FILE%[%1] mounted at %MOUNT_DIR%
