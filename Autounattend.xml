@@ -18,7 +18,7 @@
         <ProductKey>
           <!-- Home: YTMG3-N6DKC-DKB77-7M9GH-8HVX7 -->
           <!-- Pro: VK7JG-NPHTM-C97JM-9MPGT-3V66T -->
-          <Key>YTMG3-N6DKC-DKB77-7M9GH-8HVX7</Key>
+          <Key>VK7JG-NPHTM-C97JM-9MPGT-3V66T</Key>
         </ProductKey>
         <AcceptEula>true</AcceptEula>
         <FullName>Luke Arms</FullName>
@@ -31,7 +31,7 @@
               <!-- Windows 11: "Windows 11 Home", "Windows 11 Pro" -->
               <!-- Windows 10: "Windows 10 Home", "Windows 10 Pro" -->
               <Key>/IMAGE/DESCRIPTION</Key>
-              <Value>Windows 11 Home</Value>
+              <Value>Windows 10 Pro</Value>
             </MetaData>
           </InstallFrom>
           <Compact>true</Compact>
@@ -170,7 +170,7 @@
         <ProductKey>
           <!-- Home: YTMG3-N6DKC-DKB77-7M9GH-8HVX7 -->
           <!-- Pro: VK7JG-NPHTM-C97JM-9MPGT-3V66T -->
-          <Key>VK7JG-NPHTM-C97JM-9MPGT-3V66T</Key>
+          <Key>YTMG3-N6DKC-DKB77-7M9GH-8HVX7</Key>
         </ProductKey>
         <AcceptEula>true</AcceptEula>
         <FullName>Luke Arms</FullName>
@@ -182,7 +182,7 @@
             <MetaData wcm:action="add">
               <!-- Windows 10: "Windows 10 Home", "Windows 10 Pro" -->
               <Key>/IMAGE/DESCRIPTION</Key>
-              <Value>Windows 10 Pro</Value>
+              <Value>Windows 10 Home</Value>
             </MetaData>
           </InstallFrom>
           <Compact>true</Compact>
@@ -246,7 +246,7 @@
       </RunSynchronous>
     </component>
     <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-      <ComputerName>win11</ComputerName>
+      <ComputerName>win10x64</ComputerName>
     </component>
     <!-- Architecture: "arm64" -->
     <component name="Microsoft-Windows-Deployment" processorArchitecture="arm64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
