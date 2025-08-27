@@ -26,9 +26,10 @@ SHIFT /1
 SET ERRORS=0
 SET PKG_COUNT=0
 SET PKG_ERRORS=0
-SET PKG_CRITICAL=
 
 SET "INNO_DEFAULT=/SP- /VERYSILENT /SUPPRESSMSGBOXES /NORESTART"
+
+SET PKG_CRITICAL=
 
 CALL :log ===== Starting %~f0
 
@@ -87,7 +88,7 @@ EXIT /B 1
 CALL :log Deploying %1
 SET /A "PKG_COUNT+=1"
 choco upgrade %* -y --no-progress --fail-on-unfound && EXIT /B
-IF NOT DEFINED PKG_CRITICAL (SET /A "PKG_ERRORS+=1" & EXIT /B 0)
+IF NOT DEFINED PKG_CRITICAL (CALL :log WARNING ^(%ERRORLEVEL%^): "choco upgrade %1" failed & SET /A "PKG_ERRORS+=1" & EXIT /B 0)
 CALL :error "choco upgrade %* -y --no-progress --fail-on-unfound" failed
 SET /A "PKG_ERRORS+=1"
 EXIT /B %RESULT%
@@ -101,7 +102,7 @@ IF %ERRORLEVEL% EQU -1978335189 EXIT /B 0
 :: Ignore non-critical packages on unsupported hardware
 IF NOT DEFINED PKG_CRITICAL (
     rem NO_APPLICABLE_INSTALLER
-    IF %ERRORLEVEL% EQU -1978335216 (SET /A "PKG_ERRORS+=1" & EXIT /B 0)
+    IF %ERRORLEVEL% EQU -1978335216 (CALL :log WARNING ^(%ERRORLEVEL%^): "winget install %1" failed & SET /A "PKG_ERRORS+=1" & EXIT /B 0)
 )
 CALL :error "winget install --id %* --scope machine --exact --silent --accept-source-agreements --disable-interactivity" failed
 SET /A "PKG_ERRORS+=1"
