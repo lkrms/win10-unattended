@@ -78,6 +78,13 @@
       </DriverPaths>
     </component>
   </settings>
+  <settings pass="offlineServicing">
+    <!-- Architecture: "amd64" -->
+    <component name="Security-Malware-Windows-Defender" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <!-- Replace with a unique GUID -->
+      <TrustedImageIdentifier>{00000000-0000-0000-0000-000000000000}</TrustedImageIdentifier>
+    </component>
+  </settings>
   <settings pass="specialize">
     <!-- Architecture: "amd64" -->
     <component name="Microsoft-Windows-Deployment" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
