@@ -127,6 +127,7 @@ while [[ ${1-} == -* ]]; do
 done
 
 target=$(mktemp -d)
+((EUID)) || chmod a+rx "$target" || true
 trap 'rm -Rf "$target"' EXIT
 
 sync=(Audit.xml Autounattend.xml Unattended)
