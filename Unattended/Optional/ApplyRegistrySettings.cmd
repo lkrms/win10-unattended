@@ -36,6 +36,7 @@ CALL :isPro && CALL :runOrReport netsh advfirewall firewall set rule group="Remo
 IF NOT EXIST "%SCRIPT_DIR%Unattended-HKLM-DEFAULT.reg" GOTO :skipImport
 CALL :runOrReport REG IMPORT "%SCRIPT_DIR%Unattended-HKLM-DEFAULT.reg"
 IF NOT EXIST "%SCRIPT_DIR%Unattended.reg.d" GOTO :skipImport
+FOR /F "delims=" %%G IN ('WHERE "%SCRIPT_DIR%Unattended.reg.d:*.cmd" 2^>NUL') DO CALL :runOrReport CALL "%%G"
 FOR /F "delims=" %%G IN ('WHERE "%SCRIPT_DIR%Unattended.reg.d:*.reg" 2^>NUL') DO CALL :runOrReport REG IMPORT "%%G"
 
 :skipImport

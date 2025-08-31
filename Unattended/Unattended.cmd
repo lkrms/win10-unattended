@@ -59,12 +59,15 @@ IF [%~2]==[/debug] (
 )
 
 SET EXCLUDE=
+IF EXIST %SystemDrive%\Unattended\Cache (
+    SET "EXCLUDE= "%SCRIPT_DIR%Cache""
+)
 IF EXIST %SystemDrive%\Unattended\Optional\Unattended.reg.d (
-    SET "EXCLUDE="%SCRIPT_DIR%Optional\Unattended.reg.d""
+    SET "EXCLUDE=%EXCLUDE% "%SCRIPT_DIR%Optional\Unattended.reg.d""
 )
 IF NOT [%SCRIPT_DIR%]==[%SystemDrive%\Unattended\] (
     CALL :log Copying %SCRIPT_DIR:~0,-1% to %SystemDrive%\Unattended
-    ROBOCOPY "%SCRIPT_DIR:~0,-1%" %SystemDrive%\Unattended /MIR /XD %SystemDrive%\Unattended\Logs %SystemDrive%\Unattended\Optional\Unattended.reg.d %EXCLUDE% /NJH /NJS /NP || (
+    ROBOCOPY "%SCRIPT_DIR:~0,-1%" %SystemDrive%\Unattended /MIR /XD %SystemDrive%\Unattended\Cache %SystemDrive%\Unattended\Logs %SystemDrive%\Unattended\Optional\Unattended.reg.d%EXCLUDE% /NJH /NJS /NP || (
         rem The first two bits of robocopy's exit code indicate success:
         rem - 1 = one or more files copied
         rem - 2 = excluded files detected

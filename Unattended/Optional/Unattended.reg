@@ -10,6 +10,16 @@ Windows Registry Editor Version 5.00
 ; Needed for access to guest shares
 "RequireSecuritySignature"=dword:00000000
 
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PolicyManager\default\Connectivity\DisableCrossDeviceResume]
+"value"=dword:00000001
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PolicyManager\current\device\Start]
+"HideRecommendedSection"=dword:00000001
+
+; Necessary because `HideRecommendedSection` only works on Windows Education
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PolicyManager\current\device\Education]
+"IsEducationEnvironment"=dword:00000001
+
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System]
 ; Sign users out whenever the system shuts down or restarts
 "DisableAutomaticRestartSignOn"=dword:00000001
@@ -36,6 +46,7 @@ Windows Registry Editor Version 5.00
 "ACSettingIndex"=dword:00000000
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer]
+"HideRecommendedSection"=dword:00000001
 ; Don't prompt for confirmation when first opening a PDF in SumatraPDF, for example
 "NoNewAppAlert"=dword:00000001
 
