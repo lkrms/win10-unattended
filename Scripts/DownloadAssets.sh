@@ -15,20 +15,31 @@ function die() {
 function download() {
     local args verb=Downloading
     [[ ! -s $2 ]] || {
-        args=(--time-cond "$2")
+        args=(--time-cond "$2" --dump-header "$temp")
         verb=Updating
     }
-    echo "==> $verb ${2##*/} from: $1"
-    curl -fLo "$2" --remote-time ${args+"${args[@]}"} "$1"
-    echo
+    echo " -> $verb ${2##*/} from: $1"
+    curl -f#Lo "$2" --remote-time ${args+"${args[@]}"} "$1" || return
+    [[ -n ${args+1} ]] &&
+        awk '$1 ~ /^HTTP\// { sub(/\r/, ""); s = $2 } END { exit s == 304 ? 0 : 1 }' "$temp" ||
+        replaced[${#replaced[@]}]=$2
 }
 
 [[ ${BASH_SOURCE[0]} -ef Scripts/DownloadAssets.sh ]] ||
     die "must run from root of package folder"
 
-mkdir -p Cache
+temp=$(mktemp)
+trap 'rm -f "$temp"' EXIT
 
-download "https://community.chocolatey.org/install.ps1" Unattended/install.ps1
+replaced=()
+
+mkdir -p Cache Unattended/Cache
+
+echo "==> Pre-downloading installers"
+
+download "https://community.chocolatey.org/install.ps1" Unattended/Cache/install.ps1
+download "https://github.com/microsoft/winget-cli/releases/latest/download/DesktopAppInstaller_Dependencies.zip" Unattended/Cache/DesktopAppInstaller_Dependencies.zip
+download "https://github.com/microsoft/winget-cli/releases/latest/download/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle" Unattended/Cache/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
 
 if [[ -d Office365 ]]; then
     download "https://go.microsoft.com/fwlink/?linkid=844652" Office365/OneDriveSetup.exe
@@ -43,6 +54,8 @@ if [[ -d Office365 ]]; then
     bsdtar -xf "$odt_file" -C Office365 EULA setup.exe ||
         die "error extracting Office Deployment Tool"
 fi
+
+echo "==> Downloading recommended tools"
 
 download "https://www.resplendence.com/download/LatencyMon.exe" Tools/LatencyMon.exe
 download "https://github.com/Fleex255/PolicyPlus/releases/latest/download/PolicyPlus.exe" Tools/PolicyPlus.exe
@@ -64,3 +77,10 @@ bsdtar -xf Cache/ProcessExplorer.zip -C Tools procexp.exe ||
 download "https://download.sysinternals.com/files/ProcessMonitor.zip" Cache/ProcessMonitor.zip
 bsdtar -xf Cache/ProcessMonitor.zip -C Tools Procmon.exe ||
     die "error extracting Process Monitor"
+
+[[ -z ${replaced+1} ]] || {
+    echo
+    echo "==> Downloaded:"
+    du -hc "${replaced[@]}" 2>/dev/null ||
+        printf ' -> %s\n' "${replaced[@]}"
+}

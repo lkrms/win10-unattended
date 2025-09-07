@@ -216,7 +216,12 @@ be commented out in [Autounattend.xml] or one of the scripts it launches.
     - [Wi-Fi.xml] - _optional for targets connected via Ethernet_
     - [Unattended] - _contents required except:_
       - [Optional] - _may be excluded if no files remain after personalisation_
-      - [install.ps1] - _may be downloaded to speed up Chocolatey installation_
+      - Cache - _optional_
+        - [DesktopAppInstaller_Dependencies.zip] and
+          [Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle] - _may be
+          downloaded to speed up WinGet installation_
+        - [install.ps1] - _may be downloaded to speed up Chocolatey
+          installation_
     - [Drivers] - _optional_
     - [Drivers2] - _optional_
     - [MSI] - _optional_
@@ -290,6 +295,8 @@ There are two reasons for this:
 [Compact OS]:
   https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/compact-os?view=windows-10
 [ConfigurePrinting.ps1]: Unattended/Optional/ConfigurePrinting.ps1
+[DesktopAppInstaller_Dependencies.zip]:
+  https://github.com/microsoft/winget-cli/releases/latest/download/DesktopAppInstaller_Dependencies.zip
 [download.cmd]: Office365/download.cmd
 [Drivers]: Drivers/
 [Drivers2]: Drivers2/
@@ -301,6 +308,8 @@ There are two reasons for this:
   Unattended/Optional/InstallOriginalProductKey.ps1
 [MapNetworkDrives.cmd]: Unattended/Optional/MapNetworkDrives.cmd
 [Microsoft Update Catalog]: https://catalog.update.microsoft.com/
+[Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle]:
+  https://github.com/microsoft/winget-cli/releases/latest/download/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
 [MSI]: MSI/
 [MSTeams-x64.msix]: https://go.microsoft.com/fwlink/?linkid=2196106
 [Office 365 Client Configuration Service]: https://config.office.com/

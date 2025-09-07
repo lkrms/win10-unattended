@@ -179,7 +179,6 @@ WHERE /Q choco && (
 )
 
 CALL :log Installing Chocolatey
-:: Install from %SystemDrive% for write access to install.ps1 if needed
 CALL :runOrReport CALL "%SystemDrive%\Unattended\InstallChocolatey.cmd" || EXIT /B 3
 SET "PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"
 
