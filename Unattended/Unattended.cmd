@@ -193,6 +193,7 @@ WHERE /Q winget || (
 
 CALL :log Configuring WinGet
 COPY "%SCRIPT_DIR%WinGetSettings.json" "%LOCALAPPDATA%\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\settings.json" /Y
+GOTO :noChoco
 
 WHERE /Q choco && (
     CALL :log Updating Chocolatey
@@ -208,6 +209,7 @@ SET "PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"
 choco feature enable -n=allowGlobalConfirmation -y
 choco feature enable -n=useRememberedArgumentsForUpgrades -y
 
+:noChoco
 SET "INNO_DEFAULT=/SP- /VERYSILENT /SUPPRESSMSGBOXES /NORESTART"
 SET MAX_ATTEMPTS=31
 
@@ -255,7 +257,7 @@ IF EXIST "%SCRIPT_DIR%..\Office365\teamsbootstrapper.exe" (
 CALL :optCmd ApplyRegistrySettings.cmd "/start"
 
 :: Exclude "admin" from user list during sign-in
-REG ADD "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\SpecialAccounts\UserList" /v admin /t REG_DWORD /d 0 /f
+::REG ADD "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\SpecialAccounts\UserList" /v admin /t REG_DWORD /d 0 /f
 
 IF EXIST "%SCRIPT_DIR%Optional\AppAssociations.xml" (
     CALL :log Importing default app associations
