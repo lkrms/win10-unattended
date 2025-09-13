@@ -2,6 +2,8 @@
 
 set -euo pipefail
 
+shopt -s globstar
+
 # die [<message>]
 function die() {
     local s=$?
@@ -13,6 +15,7 @@ function usage() {
     printf 'Usage: %s [options]\n\nOptions:\n' "${0##*/}"
     printf '  %s    %s\n' \
         "--iso <path>" "Set output path (default: Dist/Unattended.iso)" \
+        "--dir <path>" "Update a target instead of creating an ISO file" \
         "--[no-]wifi" "Include or exclude Wi-Fi.xml (if present)" \
         "--[no-]office" "Include or exclude Office365 directory (if present)" \
         "--driver <path>..." "Add file or directory to Drivers" \
@@ -60,6 +63,7 @@ function ask() {
     die "must run from root of package folder"
 
 iso=$PWD/Dist/Unattended.iso
+dir=
 wifi=
 office=
 driver=()
@@ -77,6 +81,13 @@ while [[ ${1-} == -* ]]; do
         iso=${1-}
         [[ -n $iso ]] || usage
         [[ $iso == /* ]] || iso=$PWD/$iso
+        dir=
+        ;;
+    --dir)
+        shift
+        dir=${1-}
+        [[ -d $dir ]] && dir=$(cd "$dir" && pwd -P) || usage
+        iso=
         ;;
     --wifi)
         wifi=1
@@ -132,8 +143,8 @@ trap 'rm -Rf "$target"' EXIT
 
 sync=(Audit.xml Autounattend.xml Unattended)
 
-for dir in Drivers Drivers2 MSI Tools Updates; do
-    [[ ! -d $dir ]] || sync[${#sync[@]}]=$dir
+for file in Drivers Drivers2 MSI Tools Updates; do
+    [[ ! -e $file ]] || sync[${#sync[@]}]=$file
 done
 
 [[ ! -f Wi-Fi.xml ]] ||
@@ -147,16 +158,17 @@ done
 delete=(
     {Drivers,Drivers2,MSI,Tools,Unattended/Extra,Updates}/README.md
     Unattended/Optional/Unattended.reg.d/.gitignore
+    Unattended/Optional/**/{{*.,}disabled.*,*.disabled}
 )
 
 {
-    echo "==> Creating ISO filesystem: $target"
+    echo "==> Creating filesystem: $target"
     rsync -rtvi "${sync[@]}" "$target/"
     echo
     (
         cd "$target"
         echo " -> Removing unnecessary files"
-        rm -fv "${delete[@]}"
+        rm -Rfv "${delete[@]}"
         echo
     )
 
@@ -171,9 +183,9 @@ delete=(
         rsync -rtvi --mkpath "${reg[@]%/}" "$target/$reg_dir/"
     echo
 
-    echo "==> ISO filesystem successfully created: $target"
+    echo "==> Filesystem successfully created: $target"
     echo
-    confirm "Create ISO file?" y || exit
+    confirm "${iso:+Create ISO file}${dir:+Update target}?" y || exit
 
     (
         cd "$target"
@@ -182,16 +194,26 @@ delete=(
         find . -type d -empty -print -delete
         echo
 
-        echo " -> Creating ISO file"
-        rm -f "$iso"
-        mkdir -p "${iso%/*}"
-        name=${iso%.*}
-        name=${name##*/}
-        mkisofs -o "$iso" -V "$name" -UDF .
+        if [[ -n $dir ]]; then
+            echo " -> Updating target"
+            # Allow manual maintenance of `Drivers`, `Drivers2` and `Wi-Fi.xml`
+            for file in MSI Office365 Tools Updates; do
+                [[ ! -e $file ]] || continue
+                rm -Rfv "${dir:?}/$file"
+            done
+            rsync -rtvi --delete ./* "$dir/"
+        else
+            echo " -> Creating ISO file"
+            rm -f "$iso"
+            mkdir -p "${iso%/*}"
+            name=${iso%.*}
+            name=${name##*/}
+            mkisofs -o "$iso" -V "$name" -UDF .
+        fi
         echo
     )
 
-    echo "==> ISO file successfully created: $iso"
+    echo "==> ${iso:+ISO file created}${dir:+Target updated} successfully: ${iso:-$dir}"
 
     exit
 }
