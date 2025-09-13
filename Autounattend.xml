@@ -15,28 +15,34 @@
     </component>
     <component name="Microsoft-Windows-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
       <UserData>
+        <!-- Home: YTMG3-N6DKC-DKB77-7M9GH-8HVX7 -->
+        <!-- Pro: VK7JG-NPHTM-C97JM-9MPGT-3V66T -->
+        <!--
         <ProductKey>
-          <!-- Home: YTMG3-N6DKC-DKB77-7M9GH-8HVX7 -->
-          <!-- Pro: VK7JG-NPHTM-C97JM-9MPGT-3V66T -->
           <Key>YTMG3-N6DKC-DKB77-7M9GH-8HVX7</Key>
         </ProductKey>
+        -->
         <AcceptEula>true</AcceptEula>
+        <!--
         <FullName>Luke Arms</FullName>
         <Organization>LINA Creative</Organization>
+        -->
       </UserData>
+      <!-- Windows 11: "Windows 11 Home", "Windows 11 Pro" -->
+      <!-- Windows 10: "Windows 10 Home", "Windows 10 Pro" -->
+      <!--
       <ImageInstall>
         <OSImage>
           <InstallFrom>
             <MetaData wcm:action="add">
-              <!-- Windows 11: "Windows 11 Home", "Windows 11 Pro" -->
-              <!-- Windows 10: "Windows 10 Home", "Windows 10 Pro" -->
               <Key>/IMAGE/DESCRIPTION</Key>
               <Value>Windows 11 Home</Value>
             </MetaData>
           </InstallFrom>
-          <!--<Compact>true</Compact>-->
+          <Compact>true</Compact>
         </OSImage>
       </ImageInstall>
+      -->
       <RunSynchronous>
         <RunSynchronousCommand wcm:action="add">
           <Order>1</Order>
@@ -91,28 +97,34 @@
     </component>
     <component name="Microsoft-Windows-Setup" processorArchitecture="arm64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
       <UserData>
+        <!-- Home: YTMG3-N6DKC-DKB77-7M9GH-8HVX7 -->
+        <!-- Pro: VK7JG-NPHTM-C97JM-9MPGT-3V66T -->
+        <!--
         <ProductKey>
-          <!-- Home: YTMG3-N6DKC-DKB77-7M9GH-8HVX7 -->
-          <!-- Pro: VK7JG-NPHTM-C97JM-9MPGT-3V66T -->
           <Key>YTMG3-N6DKC-DKB77-7M9GH-8HVX7</Key>
         </ProductKey>
+        -->
         <AcceptEula>true</AcceptEula>
+        <!--
         <FullName>Luke Arms</FullName>
         <Organization>LINA Creative</Organization>
+        -->
       </UserData>
+      <!-- Windows 11: "Windows 11 Home", "Windows 11 Pro" -->
+      <!-- Windows 10: "Windows 10 Home", "Windows 10 Pro" -->
+      <!--
       <ImageInstall>
         <OSImage>
           <InstallFrom>
             <MetaData wcm:action="add">
-              <!-- Windows 11: "Windows 11 Home", "Windows 11 Pro" -->
-              <!-- Windows 10: "Windows 10 Home", "Windows 10 Pro" -->
               <Key>/IMAGE/DESCRIPTION</Key>
               <Value>Windows 11 Home</Value>
             </MetaData>
           </InstallFrom>
-          <!--<Compact>true</Compact>-->
+          <Compact>true</Compact>
         </OSImage>
       </ImageInstall>
+      -->
       <RunSynchronous>
         <RunSynchronousCommand wcm:action="add">
           <Order>1</Order>
@@ -167,24 +179,30 @@
     </component>
     <component name="Microsoft-Windows-Setup" processorArchitecture="x86" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
       <UserData>
+        <!-- Home: YTMG3-N6DKC-DKB77-7M9GH-8HVX7 -->
+        <!-- Pro: VK7JG-NPHTM-C97JM-9MPGT-3V66T -->
+        <!--
         <ProductKey>
-          <!-- Home: YTMG3-N6DKC-DKB77-7M9GH-8HVX7 -->
-          <!-- Pro: VK7JG-NPHTM-C97JM-9MPGT-3V66T -->
           <Key>YTMG3-N6DKC-DKB77-7M9GH-8HVX7</Key>
         </ProductKey>
+        -->
         <AcceptEula>true</AcceptEula>
+        <!--
         <FullName>Luke Arms</FullName>
         <Organization>LINA Creative</Organization>
+        -->
       </UserData>
       <ImageInstall>
         <OSImage>
+          <!-- Windows 10: "Windows 10 Home", "Windows 10 Pro" -->
+          <!--
           <InstallFrom>
             <MetaData wcm:action="add">
-              <!-- Windows 10: "Windows 10 Home", "Windows 10 Pro" -->
               <Key>/IMAGE/DESCRIPTION</Key>
               <Value>Windows 10 Home</Value>
             </MetaData>
           </InstallFrom>
+          -->
           <Compact>true</Compact>
         </OSImage>
       </ImageInstall>
@@ -214,20 +232,23 @@
   </settings>
   <settings pass="offlineServicing">
     <!-- Architecture: "amd64" -->
+    <!--
     <component name="Security-Malware-Windows-Defender" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-      <!-- Replace with a unique GUID -->
       <TrustedImageIdentifier>{00000000-0000-0000-0000-000000000000}</TrustedImageIdentifier>
     </component>
+    -->
     <!-- Architecture: "arm64" -->
+    <!--
     <component name="Security-Malware-Windows-Defender" processorArchitecture="arm64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-      <!-- Replace with a unique GUID -->
       <TrustedImageIdentifier>{00000000-0000-0000-0000-000000000000}</TrustedImageIdentifier>
     </component>
+    -->
     <!-- Architecture: "x86" -->
+    <!--
     <component name="Security-Malware-Windows-Defender" processorArchitecture="x86" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-      <!-- Replace with a unique GUID -->
       <TrustedImageIdentifier>{00000000-0000-0000-0000-000000000000}</TrustedImageIdentifier>
     </component>
+    -->
   </settings>
   <settings pass="specialize">
     <!-- Architecture: "amd64" -->
