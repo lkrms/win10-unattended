@@ -28,21 +28,21 @@
         <Organization>LINA Creative</Organization>
         -->
       </UserData>
-      <!-- Windows 11: "Windows 11 Home", "Windows 11 Pro" -->
-      <!-- Windows 10: "Windows 10 Home", "Windows 10 Pro" -->
-      <!--
       <ImageInstall>
         <OSImage>
+          <!-- Windows 11: "Windows 11 Home", "Windows 11 Pro" -->
+          <!-- Windows 10: "Windows 10 Home", "Windows 10 Pro" -->
+          <!--
           <InstallFrom>
             <MetaData wcm:action="add">
               <Key>/IMAGE/DESCRIPTION</Key>
               <Value>Windows 11 Home</Value>
             </MetaData>
           </InstallFrom>
+          -->
           <Compact>true</Compact>
         </OSImage>
       </ImageInstall>
-      -->
       <RunSynchronous>
         <RunSynchronousCommand wcm:action="add">
           <Order>1</Order>
@@ -110,21 +110,21 @@
         <Organization>LINA Creative</Organization>
         -->
       </UserData>
-      <!-- Windows 11: "Windows 11 Home", "Windows 11 Pro" -->
-      <!-- Windows 10: "Windows 10 Home", "Windows 10 Pro" -->
-      <!--
       <ImageInstall>
         <OSImage>
+          <!-- Windows 11: "Windows 11 Home", "Windows 11 Pro" -->
+          <!-- Windows 10: "Windows 10 Home", "Windows 10 Pro" -->
+          <!--
           <InstallFrom>
             <MetaData wcm:action="add">
               <Key>/IMAGE/DESCRIPTION</Key>
               <Value>Windows 11 Home</Value>
             </MetaData>
           </InstallFrom>
+          -->
           <Compact>true</Compact>
         </OSImage>
       </ImageInstall>
-      -->
       <RunSynchronous>
         <RunSynchronousCommand wcm:action="add">
           <Order>1</Order>
