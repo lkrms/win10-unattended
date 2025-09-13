@@ -24,16 +24,17 @@
               <PlainText>false</PlainText>
             </Password>
           </LocalAccount>
+          <!--
           <LocalAccount wcm:action="add">
             <Name>lina</Name>
             <DisplayName />
             <Group>Administrators;Unattended Administrators</Group>
             <Password>
-              <!-- No password -->
               <Value>UABhAHMAcwB3AG8AcgBkAA==</Value>
               <PlainText>false</PlainText>
             </Password>
           </LocalAccount>
+          -->
           <!--
           <LocalAccount wcm:action="add">
             <Name>test-user</Name>
@@ -54,8 +55,10 @@
         <HideLocalAccountScreen>true</HideLocalAccountScreen>
         <HideOEMRegistrationScreen>true</HideOEMRegistrationScreen>
       </OOBE>
+      <!--
       <RegisteredOwner>Luke Arms</RegisteredOwner>
       <RegisteredOrganization>LINA Creative</RegisteredOrganization>
+      -->
       <TimeZone>AUS Eastern Standard Time</TimeZone>
       <FirstLogonCommands>
         <SynchronousCommand wcm:action="add">
@@ -88,16 +91,17 @@
               <PlainText>false</PlainText>
             </Password>
           </LocalAccount>
+          <!--
           <LocalAccount wcm:action="add">
             <Name>lina</Name>
             <DisplayName />
             <Group>Administrators;Unattended Administrators</Group>
             <Password>
-              <!-- No password -->
               <Value>UABhAHMAcwB3AG8AcgBkAA==</Value>
               <PlainText>false</PlainText>
             </Password>
           </LocalAccount>
+          -->
           <!--
           <LocalAccount wcm:action="add">
             <Name>test-user</Name>
@@ -118,8 +122,10 @@
         <HideLocalAccountScreen>true</HideLocalAccountScreen>
         <HideOEMRegistrationScreen>true</HideOEMRegistrationScreen>
       </OOBE>
+      <!--
       <RegisteredOwner>Luke Arms</RegisteredOwner>
       <RegisteredOrganization>LINA Creative</RegisteredOrganization>
+      -->
       <TimeZone>AUS Eastern Standard Time</TimeZone>
       <FirstLogonCommands>
         <SynchronousCommand wcm:action="add">
@@ -152,16 +158,17 @@
               <PlainText>false</PlainText>
             </Password>
           </LocalAccount>
+          <!--
           <LocalAccount wcm:action="add">
             <Name>lina</Name>
             <DisplayName />
             <Group>Administrators;Unattended Administrators</Group>
             <Password>
-              <!-- No password -->
               <Value>UABhAHMAcwB3AG8AcgBkAA==</Value>
               <PlainText>false</PlainText>
             </Password>
           </LocalAccount>
+          -->
           <!--
           <LocalAccount wcm:action="add">
             <Name>test-user</Name>
@@ -182,8 +189,10 @@
         <HideLocalAccountScreen>true</HideLocalAccountScreen>
         <HideOEMRegistrationScreen>true</HideOEMRegistrationScreen>
       </OOBE>
+      <!--
       <RegisteredOwner>Luke Arms</RegisteredOwner>
       <RegisteredOrganization>LINA Creative</RegisteredOrganization>
+      -->
       <TimeZone>AUS Eastern Standard Time</TimeZone>
       <FirstLogonCommands>
         <SynchronousCommand wcm:action="add">
