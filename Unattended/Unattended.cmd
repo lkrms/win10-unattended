@@ -92,7 +92,22 @@ IF NOT [%SCRIPT_DIR%]==[%SystemDrive%\Unattended\] (
     )
 )
 
-CALL :runOrReport ATTRIB +S +H "%SystemDrive%\Unattended"
+:: Hide and limit access to %SystemDrive%\Unattended
+::
+:: - S-1-5-18 = "NT AUTHORITY\SYSTEM"
+:: - S-1-5-32-544 = "BUILTIN\Administrators"
+:: - S-1-5-32-545 = "BUILTIN\Users" (one member by default: "NT AUTHORITY\Authenticated Users")
+ATTRIB -S +H "%SystemDrive%\Unattended"
+
+powershell -NoProfile -Command ^"if (!($group = (Get-LocalGroup ^| Where-Object Name -EQ 'Unattended Administrators'))) { ^
+    $group = New-LocalGroup -Name 'Unattended Administrators' -Description 'Members can administer win10-unattended' ^
+} ^
+if (!(Get-LocalGroupMember -Group $group ^| Where-Object SID -EQ 'S-1-5-32-544')) { ^
+    Add-LocalGroupMember -Group $group -Member 'S-1-5-32-544' ^
+}^"
+
+ICACLS "%SystemDrive%\Unattended\Logs" /grant:r *S-1-5-18:(OI)(CI)(F) /grant:r *S-1-5-32-544:(OI)(CI)(F) /grant:r "Unattended Administrators":(OI)(CI)(F) /grant:r *S-1-5-32-545:(RX) /inheritance:r /Q
+ICACLS "%SystemDrive%\Unattended" /grant:r *S-1-5-18:(OI)(CI)(F) /grant:r *S-1-5-32-544:(OI)(CI)(F) /grant:r "Unattended Administrators":(OI)(CI)(F) /grant:r *S-1-5-32-545:(OI)(CI)(RX) /inheritance:r /Q
 
 IF %DISABLE_UCPD% NEQ 0 (
     rem - See https://kolbi.cz/blog/2024/04/03/userchoice-protection-driver-ucpd-sys/
