@@ -99,11 +99,16 @@ IF NOT [%SCRIPT_DIR%]==[%SystemDrive%\Unattended\] (
 :: - S-1-5-32-545 = "BUILTIN\Users" (one member by default: "NT AUTHORITY\Authenticated Users")
 ATTRIB -S +H "%SystemDrive%\Unattended"
 
-powershell -NoProfile -Command ^"if (!($group = (Get-LocalGroup ^| Where-Object Name -EQ 'Unattended Administrators'))) { ^
-    $group = New-LocalGroup -Name 'Unattended Administrators' -Description 'Members can administer win10-unattended' ^
+powershell -NoProfile -Command ^"$name = 'Unattended Administrators'; ^
+$desc = 'Members can access unattended logs and settings'; ^
+$sid = 'S-1-5-32-544'; ^
+if ($null -eq ($group = Get-LocalGroup ^| Where-Object Name -EQ $name)) { ^
+    $group = New-LocalGroup -Name $name -Description $desc ^
+} else { ^
+    $group ^| Set-LocalGroup -Description $desc ^
 } ^
-if (!(Get-LocalGroupMember -Group $group ^| Where-Object SID -EQ 'S-1-5-32-544')) { ^
-    Add-LocalGroupMember -Group $group -Member 'S-1-5-32-544' ^
+if ($null -eq ($group ^| Get-LocalGroupMember ^| Where-Object SID -EQ $sid)) { ^
+    Add-LocalGroupMember -Group $group -Member $sid ^
 }^"
 
 ICACLS "%SystemDrive%\Unattended\Logs" /grant:r *S-1-5-18:(OI)(CI)(F) /grant:r *S-1-5-32-544:(OI)(CI)(F) /grant:r "Unattended Administrators":(OI)(CI)(F) /grant:r *S-1-5-32-545:(RX) /inheritance:r /Q
