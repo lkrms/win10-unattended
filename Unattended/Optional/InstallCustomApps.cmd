@@ -43,15 +43,15 @@ GOTO :skipCustomApps
 
 CALL :enableDeveloperMode
 CALL :osIs64Bit && CALL :winget Espanso.Espanso
-CALL :osIs64Bit && CALL :winget Flameshot.Flameshot
+CALL :osIs64Bit && CALL :winget Flameshot.Flameshot && DEL /F /Q "%PUBLIC%\Desktop\Flameshot.lnk" 2>NUL
 CALL :osIs64Bit && CALL :winget Git.Git --override "%INNO_DEFAULT% /COMPONENTS=ext,ext\shellhere,gitlfs,assoc,assoc_sh,windowsterminal,scalar /o:EditorOption=Notepad++ /o:DefaultBranchOption=main /o:PathOption=Cmd /o:SSHOption=ExternalOpenSSH /o:CURLOption=WinSSL /o:EnableSymlinks=Enabled /o:PerformanceTweaksFSCache=Enabled" && (
     SETX MSYS winsymlinks:nativestrict /M
     sc config ssh-agent start=auto
 )
 CALL :osIs64Bit && CALL :winget dandavison.delta
 CALL :osIs64Bit && CALL :winget jqlang.jq
-CALL :osIs64Bit && CALL :winget Inkscape.Inkscape
-CALL :osIs64Bit && CALL :winget Nextcloud.NextcloudDesktop
+CALL :osIs64Bit && CALL :winget Inkscape.Inkscape && DEL /F /Q "%PUBLIC%\Desktop\Inkscape.lnk" 2>NUL
+CALL :osIs64Bit && CALL :winget Nextcloud.NextcloudDesktop --custom "NO_DESKTOP_SHORTCUT=1"
 CALL :osIs64Bit && CALL :winget Microsoft.PowerToys
 CALL :winget OO-Software.ShutUp10
 CALL :choco SourceCodePro
@@ -96,15 +96,16 @@ EXIT /B %RESULT%
 :winget
 CALL :log Deploying %1
 SET /A "PKG_COUNT+=1"
-winget install --id %* --scope machine --exact --silent --accept-source-agreements --disable-interactivity && EXIT /B
+SET "LOG_FILE=%SystemDrive%\Unattended\Logs\%~n0WinGet-%~nx1.log"
+winget install --id %* --scope machine --exact --silent --log "%LOG_FILE%" --accept-source-agreements --disable-interactivity && EXIT /B
 :: UPDATE_NOT_APPLICABLE
 IF %ERRORLEVEL% EQU -1978335189 EXIT /B 0
 :: Ignore non-critical packages on unsupported hardware
 IF NOT DEFINED PKG_CRITICAL (
     rem NO_APPLICABLE_INSTALLER
-    IF %ERRORLEVEL% EQU -1978335216 (CALL :log WARNING ^(%ERRORLEVEL%^): "winget install %1" failed & SET /A "PKG_ERRORS+=1" & EXIT /B 0)
+    IF %ERRORLEVEL% EQU -1978335216 (CALL :log WARNING ^(%ERRORLEVEL%^): "winget install %1" failed, see %LOG_FILE% & SET /A "PKG_ERRORS+=1" & EXIT /B 0)
 )
-CALL :error "winget install --id %* --scope machine --exact --silent --accept-source-agreements --disable-interactivity" failed
+CALL :error "winget install --id %* --scope machine --exact --silent --accept-source-agreements --disable-interactivity" failed, see %LOG_FILE%
 SET /A "PKG_ERRORS+=1"
 EXIT /B %RESULT%
 

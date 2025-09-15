@@ -57,3 +57,11 @@ $packages | ForEach-Object {
     Add-AppxPackage $_
 }
 Remove-Directory DesktopAppInstaller_Dependencies
+
+if (!(Get-Module Microsoft.WinGet.Client -ListAvailable)) {
+    Write-Host "==> Installing PowerShell module for WinGet"
+    if (!(Get-PackageProvider -ListAvailable | Where-Object Name -EQ NuGet)) {
+        Install-PackageProvider -Name NuGet -Force | Out-Null
+    }
+    Install-Module Microsoft.WinGet.Client -Force | Out-Null
+}

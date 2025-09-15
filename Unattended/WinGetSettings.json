@@ -1,5 +1,11 @@
 {
     "$schema": "https://aka.ms/winget-settings.schema.json",
+    "network": {
+        "downloader": "wininet"
+    },
+    "telemetry": {
+        "disable": true
+    },
     "visual": {
         "progressBar": "disabled"
     }
