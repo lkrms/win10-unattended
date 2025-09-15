@@ -17,7 +17,7 @@
           <LocalAccount wcm:action="add">
             <Name>admin</Name>
             <DisplayName />
-            <Group>Administrators</Group>
+            <Group>Administrators;Unattended Administrators</Group>
             <Password>
               <!-- No password -->
               <Value>UABhAHMAcwB3AG8AcgBkAA==</Value>
@@ -27,7 +27,7 @@
           <LocalAccount wcm:action="add">
             <Name>lina</Name>
             <DisplayName />
-            <Group>Administrators</Group>
+            <Group>Administrators;Unattended Administrators</Group>
             <Password>
               <!-- No password -->
               <Value>UABhAHMAcwB3AG8AcgBkAA==</Value>

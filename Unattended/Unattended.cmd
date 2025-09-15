@@ -92,27 +92,24 @@ IF NOT [%SCRIPT_DIR%]==[%SystemDrive%\Unattended\] (
     )
 )
 
+:: Add or update the "Unattended Administrators" group if running after Setup
+SET "GROUP_NAME=Unattended Administrators"
+SET "GROUP_DESC=Members have full access to the system's unattended provisioning logs and settings"
+IF [%SETUP_STATE%]==[complete] (
+    NET LOCALGROUP "%GROUP_NAME%" /COMMENT:"%GROUP_DESC%" 2>NUL || (
+        NET LOCALGROUP "%GROUP_NAME%" /ADD /COMMENT:"%GROUP_DESC%" || EXIT /B 3
+    )
+)
+
 :: Hide and limit access to %SystemDrive%\Unattended
 ::
+:: - S-1-3-0 = "CREATOR OWNER"
 :: - S-1-5-18 = "NT AUTHORITY\SYSTEM"
-:: - S-1-5-32-544 = "BUILTIN\Administrators"
+:: - S-1-5-32-544 = "BUILTIN\Administrators" (UAC elevation may be required if present)
 :: - S-1-5-32-545 = "BUILTIN\Users" (one member by default: "NT AUTHORITY\Authenticated Users")
 ATTRIB -S +H "%SystemDrive%\Unattended"
-
-powershell -NoProfile -Command ^"$name = 'Unattended Administrators'; ^
-$desc = 'Members can access unattended logs and settings'; ^
-$sid = 'S-1-5-32-544'; ^
-if ($null -eq ($group = Get-LocalGroup ^| Where-Object Name -EQ $name)) { ^
-    $group = New-LocalGroup -Name $name -Description $desc ^
-} else { ^
-    $group ^| Set-LocalGroup -Description $desc ^
-} ^
-if ($null -eq ($group ^| Get-LocalGroupMember ^| Where-Object SID -EQ $sid)) { ^
-    Add-LocalGroupMember -Group $group -Member $sid ^
-}^"
-
-ICACLS "%SystemDrive%\Unattended\Logs" /grant:r *S-1-5-18:(OI)(CI)(F) /grant:r *S-1-5-32-544:(OI)(CI)(F) /grant:r "Unattended Administrators":(OI)(CI)(F) /grant:r *S-1-5-32-545:(RX) /inheritance:r /Q
-ICACLS "%SystemDrive%\Unattended" /grant:r *S-1-5-18:(OI)(CI)(F) /grant:r *S-1-5-32-544:(OI)(CI)(F) /grant:r "Unattended Administrators":(OI)(CI)(F) /grant:r *S-1-5-32-545:(OI)(CI)(RX) /inheritance:r /Q
+ICACLS "%SystemDrive%\Unattended\Logs" /grant:r *S-1-5-18:(OI)(CI)(F) /grant:r "%GROUP_NAME%":(OI)(CI)(F) /grant:r *S-1-3-0:(OI)(CI)(F) /grant:r *S-1-5-32-545:(RX) /inheritance:r /Q
+ICACLS "%SystemDrive%\Unattended" /grant:r *S-1-5-18:(OI)(CI)(F) /grant:r "%GROUP_NAME%":(OI)(CI)(F) /grant:r *S-1-3-0:(OI)(CI)(F) /grant:r *S-1-5-32-545:(OI)(CI)(RX) /inheritance:r /Q
 
 IF %DISABLE_UCPD% NEQ 0 (
     rem - See https://kolbi.cz/blog/2024/04/03/userchoice-protection-driver-ucpd-sys/

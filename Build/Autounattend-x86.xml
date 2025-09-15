@@ -76,6 +76,11 @@
           <Description>Disable voice-over during OOBE</Description>
           <Path>REG ADD HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\OOBE /v DisableVoice /t REG_DWORD /d 1 /f</Path>
         </RunSynchronousCommand>
+        <RunSynchronousCommand wcm:action="add">
+          <Order>2</Order>
+          <Description>Add local &quot;Unattended Administrators&quot; group</Description>
+          <Path>NET LOCALGROUP &quot;Unattended Administrators&quot; /ADD /COMMENT:&quot;Members have full access to the system&apos;s unattended provisioning logs and settings&quot;</Path>
+        </RunSynchronousCommand>
       </RunSynchronous>
     </component>
     <!--
