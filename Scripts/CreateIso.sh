@@ -163,7 +163,7 @@ delete=(
 
 {
     echo "==> Creating filesystem: $target"
-    rsync -rtvi "${sync[@]}" "$target/"
+    rsync -rLtvi "${sync[@]}" "$target/"
     echo
     (
         cd "$target"
@@ -174,13 +174,13 @@ delete=(
 
     echo " -> Syncing additional files"
     ((!${#driver[@]})) ||
-        rsync -rtvi --mkpath "${driver[@]%/}" "$target/Drivers/"
+        rsync -rLtvi --mkpath "${driver[@]%/}" "$target/Drivers/"
     ((!${#driver2[@]})) ||
-        rsync -rtvi --mkpath "${driver2[@]%/}" "$target/Drivers2/"
+        rsync -rLtvi --mkpath "${driver2[@]%/}" "$target/Drivers2/"
     ((!${#update[@]})) ||
-        rsync -rtvi --mkpath "${update[@]%/}" "$target/Updates/"
+        rsync -rLtvi --mkpath "${update[@]%/}" "$target/Updates/"
     ((!${#reg[@]})) ||
-        rsync -rtvi --mkpath "${reg[@]%/}" "$target/$reg_dir/"
+        rsync -rLtvi --mkpath "${reg[@]%/}" "$target/$reg_dir/"
     echo
 
     echo "==> Filesystem successfully created: $target"
@@ -201,7 +201,7 @@ delete=(
                 [[ ! -e $file ]] || continue
                 rm -Rfv "${dir:?}/$file"
             done
-            rsync -rtvi --delete ./* "$dir/"
+            rsync -rLtvi --delete ./* "$dir/"
         else
             echo " -> Creating ISO file"
             rm -f "$iso"
