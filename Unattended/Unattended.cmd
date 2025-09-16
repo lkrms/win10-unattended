@@ -280,6 +280,8 @@ IF EXIST "%SCRIPT_DIR%..\Office365\install.cmd" (
 
 CALL :optPs1 RemoveBloatware.ps1 "Removing bloatware"
 
+DEL /F /Q "%PUBLIC%\Desktop\Microsoft Edge.lnk" 2>NUL
+
 IF EXIST "%SCRIPT_DIR%..\Audit.xml" (
     IF NOT [%SETUP_STATE%]==[complete] (
         CALL :log Installing answer file for generalize and OOBE passes

@@ -55,6 +55,8 @@ CALL :optCmd ApplyRegistrySettings.cmd "/start /boot"
 
 CALL :optPs1 RemoveBloatware.ps1 "Removing bloatware"
 
+DEL /F /Q "%PUBLIC%\Desktop\Microsoft Edge.lnk" 2>NUL
+
 :skipFirstRunActions
 
 IF %ERRORS% EQU 0 EXIT /B 0
