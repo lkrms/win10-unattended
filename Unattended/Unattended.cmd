@@ -111,18 +111,12 @@ ATTRIB -S +H "%SystemDrive%\Unattended"
 ICACLS "%SystemDrive%\Unattended\Logs" /grant:r *S-1-5-18:(OI)(CI)(F) /grant:r "%GROUP_NAME%":(OI)(CI)(F) /grant:r *S-1-3-0:(OI)(CI)(F) /grant:r *S-1-5-32-545:(RX) /inheritance:r /Q
 ICACLS "%SystemDrive%\Unattended" /grant:r *S-1-5-18:(OI)(CI)(F) /grant:r "%GROUP_NAME%":(OI)(CI)(F) /grant:r *S-1-3-0:(OI)(CI)(F) /grant:r *S-1-5-32-545:(OI)(CI)(RX) /inheritance:r /Q
 
-IF %DISABLE_UCPD% NEQ 0 (
-    rem - See https://kolbi.cz/blog/2024/04/03/userchoice-protection-driver-ucpd-sys/
-    rem - Necessary if setting "TaskbarDa", for example
-    CALL :log Disabling the "User Choice Protection" driver
-    CALL :runOrReport REG ADD HKLM\SYSTEM\CurrentControlSet\Services\UCPD /v Start /t REG_DWORD /d 4 /f
-    CALL :runOrReport SCHTASKS /Change /TN "\Microsoft\Windows\AppxDeploymentClient\UCPD velocity" /DISABLE
-    CALL :serviceIsRunning UCPD && SET RETURN_CODE=1
-)
-
 IF %RETURN_CODE% EQU 0 (
     CALL :log ===== %~f0 pass 1 finished
 ) ELSE (
+    rem Use this reboot to stop the "User Choice Protection" driver and possibly
+    rem prevent a reboot during pass 2
+    CALL :disableUcpd
     CALL :log ===== %~f0 pass 1 finished; reboot required to finalise driver installation
 )
 EXIT /B %RETURN_CODE%
@@ -153,6 +147,15 @@ IF EXIST "%SCRIPT_DIR%..\Updates" (
     )
 )
 
+:: Reboot if needed to finish installing updates that may re-enable the "User
+:: Choice Protection" driver
+IF %RETURN_CODE% EQU 1 (
+    CALL :log ===== %~f0 pass 2 not finished; reboot required to finalise update servicing
+    EXIT /B 2
+)
+
+CALL :disableUcpd || SET RETURN_CODE=1
+
 IF %RETURN_CODE% EQU 0 (
     CALL :log ===== %~f0 pass 2 finished
 ) ELSE (
@@ -164,6 +167,8 @@ EXIT /B %RETURN_CODE%
 :pass3
 
 CALL :log ===== Starting %~f0 pass 3 ^(state: %SETUP_STATE%^)
+
+SETLOCAL EnableDelayedExpansion
 
 CALL :optPs1 InstallOriginalProductKey.ps1 "Installing original product key"
 
@@ -253,7 +258,9 @@ REG ADD "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\SpecialAccou
 
 IF EXIST "%SCRIPT_DIR%Optional\AppAssociations.xml" (
     CALL :log Importing default app associations
-    CALL :runOrReport DISM /Online /Import-DefaultAppAssociations:"%SCRIPT_DIR%Optional\AppAssociations.xml"
+    DISM /Online /Import-DefaultAppAssociations:"%SCRIPT_DIR%Optional\AppAssociations.xml" || (
+        CALL :log WARNING ^(!ERRORLEVEL!^): DISM /Online /Import-DefaultAppAssociations:"%SCRIPT_DIR%Optional\AppAssociations.xml" failed
+    )
 )
 
 IF %ERRORS% NEQ 0 GOTO :endPass3
@@ -362,6 +369,17 @@ IF NOT DEFINED PKG_CRITICAL (
 CALL :error "winget install --id %* --scope machine --exact --silent --accept-source-agreements --disable-interactivity" failed, see %LOG_FILE%
 SET /A "PKG_ERRORS+=1"
 EXIT /B %RESULT%
+
+:disableUcpd
+:: - See https://kolbi.cz/blog/2024/04/03/userchoice-protection-driver-ucpd-sys/
+:: - Necessary if setting "TaskbarDa", for example
+IF %DISABLE_UCPD% NEQ 0 (
+    CALL :log Disabling the "User Choice Protection" driver
+    CALL :runOrReport REG ADD HKLM\SYSTEM\CurrentControlSet\Services\UCPD /v Start /t REG_DWORD /d 4 /f
+    CALL :runOrReport SCHTASKS /Change /TN "\Microsoft\Windows\AppxDeploymentClient\UCPD velocity" /DISABLE
+    CALL :serviceIsRunning UCPD && EXIT /B 1
+)
+EXIT /B 0
 
 :: See https://support.google.com/chrome/a/answer/187948?hl=en
 :installInitialPreferences
