@@ -106,7 +106,7 @@ CALL :log Mounting %IMAGE_FILE%[%1] at %MOUNT_DIR%
 DISM /Mount-Image /ImageFile:"%IMAGE_FILE%" /MountDir:"%MOUNT_DIR%" %1 || EXIT /B
 
 FOR /F "usebackq delims=" %%G IN (
-    `powershell -NoProfile -Command "Get-ChildItem -Path '%SCRIPT_DIR%..\..\Updates' -Include *.cab, *.msu -Recurse | Select-Object -ExpandProperty Directory | ForEach-Object FullName | Sort-Object -Unique"`
+    `powershell -NoProfile -Command "Get-ChildItem -Path '%SCRIPT_DIR%..\..\Updates' -Include *.cab, *.msu -Recurse | Select-Object -ExpandProperty Directory | Sort-Object -Unique | ForEach-Object { Get-ChildItem -Path ($_.FullName + '\*') -Include *.cab, *.msu | Sort-Object | Select-Object -Last 1 -ExpandProperty FullName }"`
 ) DO (
     CALL :log Installing updates: %%G
     DISM /Image:"%MOUNT_DIR%" /Add-Package /PackagePath:"%%G" /IgnoreCheck || (
