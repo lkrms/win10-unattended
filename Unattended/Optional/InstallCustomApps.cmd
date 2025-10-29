@@ -49,7 +49,7 @@ CALL :osIs64Bit && CALL :winget Git.Git --override "%INNO_DEFAULT% /COMPONENTS=e
     sc config ssh-agent start=auto
 )
 CALL :osIs64Bit && CALL :winget dandavison.delta
-CALL :osIs64Bit && CALL :winget GnuPG.Gpg4win
+CALL :osIs64Bit && CALL :winget GnuPG.Gpg4win && DEL /F /Q "%PUBLIC%\Desktop\Kleopatra.lnk" 2>NUL
 CALL :osIs64Bit && CALL :winget jqlang.jq
 CALL :osIs64Bit && CALL :winget Inkscape.Inkscape && DEL /F /Q "%PUBLIC%\Desktop\Inkscape.lnk" 2>NUL
 CALL :osIs64Bit && CALL :winget Nextcloud.NextcloudDesktop --custom "NO_DESKTOP_SHORTCUT=1"
