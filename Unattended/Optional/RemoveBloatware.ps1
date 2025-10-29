@@ -2,6 +2,7 @@ $ErrorActionPreference = "Stop"
 
 # See https://learn.microsoft.com/en-us/windows/application-management/remove-provisioned-apps-during-update
 $packageNames = @(
+    "aimgr"
     "Clipchamp.Clipchamp"
     "Microsoft.549981C3F5F10" # Cortana
     "Microsoft.BingNews"
@@ -35,7 +36,8 @@ $packageNames = @(
     "Microsoft.YourPhone"
     "Microsoft.ZuneMusic"
     "Microsoft.ZuneVideo"
-    #"MSTeams" # Removed until installed for all users
+    "MicrosoftCorporationII.MicrosoftFamily"
+    #"MSTeams" # Uncomment if not using Teams (no machine-wide installer exists)
 )
 
 try {

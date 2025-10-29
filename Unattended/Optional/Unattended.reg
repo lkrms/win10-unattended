@@ -6,6 +6,10 @@ Windows Registry Editor Version 5.00
 ; See https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2008-R2-and-2008/gg252535(v=ws.10)
 [HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Network\NewNetworkWindowOff]
 
+; Disable "Connected User Experiences and Telemetry" service
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\DiagTrack]
+"Start"=dword:00000004
+
 [HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters]
 ; Needed for access to guest shares
 "RequireSecuritySignature"=dword:00000000
@@ -20,6 +24,9 @@ Windows Registry Editor Version 5.00
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PolicyManager\current\device\Education]
 "IsEducationEnvironment"=dword:00000001
 
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection]
+"AllowTelemetry"=dword:00000000
+
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System]
 ; Sign users out whenever the system shuts down or restarts
 "DisableAutomaticRestartSignOn"=dword:00000001
@@ -33,6 +40,9 @@ Windows Registry Editor Version 5.00
 ; Lock session when screen is turned off, or after 15 minutes (0x384 seconds) of inactivity
 "InactivityTimeoutSecs"=dword:00000384
 
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting]
+"Disabled"=dword:00000001
+
 ; Unattended sleep timeout (plugged in) = never
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Power\PowerSettings\7BC4A2F9-D8FC-4469-B07B-33EB785AACA0]
 "ACSettingIndex"=dword:00000000
@@ -44,6 +54,10 @@ Windows Registry Editor Version 5.00
 ; System hibernate timeout (plugged in) = never
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Power\PowerSettings\9D7815A6-7EE4-497E-8888-515A05F02364]
 "ACSettingIndex"=dword:00000000
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat]
+; Disable Application Impact Telemetry
+"AITEnable"=dword:00000000
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer]
 "HideRecommendedSection"=dword:00000001
@@ -77,9 +91,13 @@ Windows Registry Editor Version 5.00
 "ShowRecommendationsEnabled"=dword:00000000
 "StandaloneHubsSidebarEnabled"=dword:00000000
 "StartupBoostEnabled"=dword:00000000
+"UserFeedbackAllowed"=dword:00000000
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\EdgeUpdate]
 "CreateDesktopShortcutDefault"=dword:00000000
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MRT]
+"DontReportInfectionInformation"=dword:00000001
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent]
 ; Disable account-related notifications
@@ -90,15 +108,20 @@ Windows Registry Editor Version 5.00
 "DisableWindowsConsumerFeatures"=dword:00000001
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection]
-"AllowTelemetry"=-
+"AllowTelemetry"=dword:00000000
 "DoNotShowFeedbackNotifications"=dword:00000001
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\OOBE]
 "DisablePrivacyExperience"=dword:00000001
 
-; As above, see https://techcommunity.microsoft.com/blog/windows-itpro-blog/configuring-weather-and-more-on-the-lock-screen-in-windows/4101024
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System]
+; As above, see https://techcommunity.microsoft.com/blog/windows-itpro-blog/configuring-weather-and-more-on-the-lock-screen-in-windows/4101024
 "DisableLockScreenAppNotifications"=dword:00000001
+; Don't upload Activity History, see https://learn.microsoft.com/en-us/windows/privacy/manage-connections-from-windows-operating-system-components-to-microsoft-services
+"UploadUserActivities"=dword:00000000
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsCopilot]
+"TurnOffWindowsCopilot"=dword:00000001
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Feeds]
 ; Disable news and interests on Windows 10 taskbar
@@ -124,6 +147,12 @@ Windows Registry Editor Version 5.00
 "ScheduledInstallFourthWeek"=-
 ; Enable Microsoft Update
 "AllowMUUpdateService"=dword:00000001
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Spynet]
+; Do not join the Microsoft Active Protection Service (MAPS)
+"SpyNetReporting"=dword:00000000
+; 2 = Never send
+"SubmitSamplesConsent"=dword:00000002
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\SystemRestore]
 "DisableSR"=dword:00000001

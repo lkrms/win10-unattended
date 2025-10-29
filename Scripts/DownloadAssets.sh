@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-rufus=4.9
+rufus=4.11
 
 # die [<message>]
 function die() {
