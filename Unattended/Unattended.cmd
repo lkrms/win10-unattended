@@ -221,6 +221,7 @@ CALL :winget VideoLAN.VLC && DEL /F /Q "%PUBLIC%\Desktop\VLC media player.lnk" 2
 SET PKG_CRITICAL=
 
 CALL :winget 7zip.7zip
+CALL :winget voidtools.Everything --installer-type NULLSOFT --custom "-install-options \"-app-data -install-service -install-efu-association -install-run-on-system-startup -install-all-users-start-menu-shortcuts -uninstall-all-users-desktop-shortcut\""
 CALL :winget Mozilla.Firefox --custom /DesktopShortcut=false
 CALL :winget gurnec.HashCheckShellExtension
 
