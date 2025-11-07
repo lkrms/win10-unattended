@@ -50,13 +50,19 @@ Get-Asset `
 
 Remove-Directory DesktopAppInstaller_Dependencies
 Expand-Archive DesktopAppInstaller_Dependencies.zip
-$packages = Get-ChildItem "DesktopAppInstaller_Dependencies\$arch\*" -Include *.appx
-$packages += Get-Item Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
-$packages | ForEach-Object {
+Get-ChildItem "DesktopAppInstaller_Dependencies\$arch\*" -Include *.appx | ForEach-Object {
     Write-Host "==> Installing $($_.BaseName)"
-    Add-AppxPackage $_
+    try {
+        Add-AppxPackage $_
+    } catch {
+        Write-Host "Error installing package:"
+        Write-Host $_
+    }
 }
 Remove-Directory DesktopAppInstaller_Dependencies
+
+Write-Host "==> Installing Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
+Add-AppxPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
 
 if (!(Get-Module Microsoft.WinGet.Client -ListAvailable)) {
     Write-Host "==> Installing PowerShell module for WinGet"

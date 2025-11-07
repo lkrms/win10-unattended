@@ -235,6 +235,11 @@ IF [%~2]==[/debug] (
     Procmon /AcceptEula /EnableBootLogging
 )
 
+:: Allow other users to run portable packages
+IF EXIST "%ProgramFiles%\WinGet\Packages" (
+    CALL :runOrReport ICACLS "%ProgramFiles%\WinGet\Packages\*" /reset /T /C /Q
+)
+
 CALL :log Packages deployed: %PKG_COUNT% ^(errors: %PKG_ERRORS%^)
 
 IF EXIST "%SCRIPT_DIR%..\MSI" (
