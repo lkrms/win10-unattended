@@ -49,7 +49,7 @@ if [[ -d Office365 ]]; then
     odt_url=$(curl -fsSL "https://www.microsoft.com/en-au/download/details.aspx?id=49117" |
         grep -Eo "\<https://download\.microsoft\.com/download/[0-9a-f/-]+/officedeploymenttool_[0-9-]+\.exe\>" |
         head -n1) || die "unable to get Office Deployment Tool URL"
-    odt_file=Cache/${odt_url##*/}
+    odt_file=Cache/officedeploymenttool.exe
     download "$odt_url" "$odt_file"
     bsdtar -xf "$odt_file" -C Office365 EULA setup.exe ||
         die "error extracting Office Deployment Tool"
