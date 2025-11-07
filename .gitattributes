@@ -6,3 +6,6 @@
 *.reg text eol=crlf
 *.txt text eol=crlf
 *.xml text eol=crlf
+
+# SCHTASKS fails if task XML is not UTF-16 with BOM
+/Unattended/Optional/WindowSwitcher.xml text eol=crlf working-tree-encoding=UTF-16

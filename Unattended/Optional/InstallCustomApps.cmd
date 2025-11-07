@@ -23,7 +23,6 @@ EXIT /B %RETURN_CODE%
 
 :start
 SHIFT /1
-SET "SCRIPT_DIR=%~dp0"
 SET ERRORS=0
 SET PKG_COUNT=0
 SET PKG_ERRORS=0
@@ -36,6 +35,7 @@ SET PKG_CRITICAL=
 CALL :log ===== Starting %~f0
 
 :unattended
+SET "OPTIONAL_DIR=%~dp0"
 
 
 :: Start custom apps
@@ -56,8 +56,8 @@ CALL :osIs64Bit && CALL :winget lucasg.Dependencies
 CALL :osIs64Bit && CALL :winget Inkscape.Inkscape && DEL /F /Q "%PUBLIC%\Desktop\Inkscape.lnk" 2>NUL
 CALL :osIs64Bit && CALL :winget Nextcloud.NextcloudDesktop --custom "NO_DESKTOP_SHORTCUT=1"
 CALL :osIs64Bit && CALL :winget Microsoft.PowerToys
-CALL :winget sigoden.WindowSwitcher && IF EXIST "%SCRIPT_DIR%WindowSwitcher.xml" (
-    SCHTASKS /Create /F /TN "WindowSwitcher" /XML "%SCRIPT_DIR%WindowSwitcher.xml"
+CALL :winget sigoden.WindowSwitcher && IF EXIST "%OPTIONAL_DIR%WindowSwitcher.xml" (
+    SCHTASKS /Create /F /TN "WindowSwitcher" /XML "%OPTIONAL_DIR%WindowSwitcher.xml"
 )
 CALL :winget OO-Software.ShutUp10
 CALL :choco SourceCodePro
