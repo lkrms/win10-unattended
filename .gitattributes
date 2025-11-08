@@ -9,3 +9,4 @@
 
 # SCHTASKS fails if task XML is not UTF-16 with BOM
 /Unattended/Optional/WindowSwitcher.xml text eol=crlf working-tree-encoding=UTF-16
+/Unattended/UnattendedBoot.xml text eol=crlf working-tree-encoding=UTF-16

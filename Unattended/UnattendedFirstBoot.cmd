@@ -40,10 +40,10 @@ CALL :runOrReport powershell -NoProfile -Command ^"Get-CimInstance ^
 -Query 'select * from Win32_UserAccount where LocalAccount = true and Disabled = false and PasswordExpires = true' ^| ^
 Set-CimInstance -Property @{PasswordExpires=$false}^"
 
-IF EXIST "%SCRIPT_DIR%UnattendedBoot.cmd" (
+IF EXIST "%SCRIPT_DIR%UnattendedBoot.cmd" IF EXIST "%SCRIPT_DIR%UnattendedBoot.xml" (
     CALL :log Scheduling system startup task
-    COPY "%SCRIPT_DIR%UnattendedBoot.cmd" "%SystemRoot%" /Y
-    SCHTASKS /Create /F /TN "Remove bloatware and reapply registry settings" /TR "%%SystemRoot%%\UnattendedBoot.cmd" /SC ONSTART /RU SYSTEM
+    CALL :runOrReport COPY "%SCRIPT_DIR%UnattendedBoot.cmd" "%SystemRoot%" /Y
+    CALL :runOrReport SCHTASKS /Create /F /TN "Remove bloatware and reapply registry settings" /XML "%SCRIPT_DIR%UnattendedBoot.xml"
 )
 
 CALL :log Deleting cached answer files
