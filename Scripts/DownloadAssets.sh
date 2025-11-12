@@ -81,6 +81,6 @@ bsdtar -xf Cache/ProcessMonitor.zip -C Tools Procmon.exe ||
 [[ -z ${replaced+1} ]] || {
     echo
     echo "==> Downloaded:"
-    du -hc "${replaced[@]}" 2>/dev/null ||
+    du -hcD "${replaced[@]}" 2>/dev/null ||
         printf ' -> %s\n' "${replaced[@]}"
 }
