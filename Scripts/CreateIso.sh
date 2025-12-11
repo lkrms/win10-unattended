@@ -197,7 +197,10 @@ delete=(
         if [[ -n $dir ]]; then
             echo " -> Updating target"
             # Allow manual maintenance of `Drivers`, `Drivers2` and `Wi-Fi.xml`
-            for file in MSI Office365 Tools Updates; do
+            clean=(MSI Office365 Tools Updates)
+            [[ ! -e Drivers ]] && [[ ! -e Drivers2 ]] ||
+                clean+=(Drivers Drivers2)
+            for file in "${clean[@]}"; do
                 [[ ! -e $file ]] || continue
                 rm -Rfv "${dir:?}/$file"
             done
