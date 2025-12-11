@@ -368,7 +368,12 @@ SET "LOG_FILE=%SystemDrive%\Unattended\Logs\%~n0WinGet-%~nx1.log"
 SET ATTEMPT=1
 :wingetRetry
 SET RETRY=0
-winget install --id %* --scope machine --exact --silent --log "%LOG_FILE%" --accept-source-agreements --disable-interactivity && EXIT /B
+IF EXIST %SystemDrive%\Unattended\Cache\Manifests\%1 (
+    winget settings --enable LocalManifestFiles >NUL
+    winget install --manifest %SystemDrive%\Unattended\Cache\Manifests\%* --scope machine --silent --log "%LOG_FILE%" --accept-source-agreements --disable-interactivity && EXIT /B
+) ELSE (
+    winget install --id %* --exact --scope machine --silent --log "%LOG_FILE%" --accept-source-agreements --disable-interactivity && EXIT /B
+)
 :: DOWNLOAD_FAILED
 IF %ERRORLEVEL% EQU -1978335224 SET RETRY=%ERRORLEVEL%
 :: INSTALLER_HASH_MISMATCH
