@@ -365,6 +365,11 @@ EXIT /B %RESULT%
 :winget
 CALL :log Deploying %1
 SET /A "PKG_COUNT+=1"
+:: --no-upgrade doesn't always prevent winget performing an upgrade
+CALL :wingetIsInstalled %1 && (
+    CALL :log Package already installed: %1
+    EXIT /B 0
+)
 SET "LOG_FILE=%SystemDrive%\Unattended\Logs\%~n0WinGet-%~nx1.log"
 SET ATTEMPT=1
 :wingetRetry
@@ -405,6 +410,10 @@ IF NOT DEFINED PKG_CRITICAL (
 CALL :error "winget install %1" failed, see %LOG_FILE%
 SET /A "PKG_ERRORS+=1"
 EXIT /B %RESULT%
+
+:wingetIsInstalled
+winget list --id %1 --exact --scope machine --accept-source-agreements --disable-interactivity >NUL || EXIT /B 1
+EXIT /B 0
 
 :disableUcpd
 :: - See https://kolbi.cz/blog/2024/04/03/userchoice-protection-driver-ucpd-sys/
