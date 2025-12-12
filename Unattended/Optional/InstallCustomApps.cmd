@@ -98,9 +98,9 @@ EXIT /B 0
 :choco
 CALL :log Deploying %1
 SET /A "PKG_COUNT+=1"
-choco upgrade %* -y --no-progress --fail-on-unfound && EXIT /B
-IF NOT DEFINED PKG_CRITICAL (CALL :log WARNING ^(%ERRORLEVEL%^): "choco upgrade %1" failed & SET /A "PKG_ERRORS+=1" & EXIT /B 0)
-CALL :error "choco upgrade %* -y --no-progress --fail-on-unfound" failed
+choco install %* -y --no-progress && EXIT /B
+IF NOT DEFINED PKG_CRITICAL (CALL :log WARNING ^(%ERRORLEVEL%^): "choco install %1" failed & SET /A "PKG_ERRORS+=1" & EXIT /B 0)
+CALL :error "choco install %1" failed
 SET /A "PKG_ERRORS+=1"
 EXIT /B %RESULT%
 
@@ -111,7 +111,12 @@ SET "LOG_FILE=%SystemDrive%\Unattended\Logs\%~n0WinGet-%~nx1.log"
 SET ATTEMPT=1
 :wingetRetry
 SET RETRY=0
-winget install --id %* --scope machine --exact --silent --log "%LOG_FILE%" --accept-source-agreements --disable-interactivity && EXIT /B
+IF EXIST %SystemDrive%\Unattended\Cache\Manifests\%1 (
+    winget settings --enable LocalManifestFiles >NUL
+    winget install --manifest %SystemDrive%\Unattended\Cache\Manifests\%* --scope machine --silent --log "%LOG_FILE%" --accept-source-agreements --disable-interactivity --no-upgrade && EXIT /B
+) ELSE (
+    winget install --id %* --exact --scope machine --silent --log "%LOG_FILE%" --accept-source-agreements --disable-interactivity --no-upgrade && EXIT /B
+)
 :: DOWNLOAD_FAILED
 IF %ERRORLEVEL% EQU -1978335224 SET RETRY=%ERRORLEVEL%
 :: INSTALLER_HASH_MISMATCH
@@ -129,15 +134,17 @@ ping -n 121 127.0.0.1 >NUL
 SET /A "ATTEMPT+=1"
 GOTO :wingetRetry
 :wingetNoRetry
+:: PACKAGE_ALREADY_INSTALLED
+IF %ERRORLEVEL% EQU -1978335135 EXIT /B 0
 :: UPDATE_NOT_APPLICABLE
-IF %ERRORLEVEL% EQU -1978335189 EXIT /B 0
+::IF %ERRORLEVEL% EQU -1978335189 EXIT /B 0
 :: Ignore non-critical packages on unsupported hardware
 IF NOT DEFINED PKG_CRITICAL (
     rem NO_APPLICABLE_INSTALLER
     IF %ERRORLEVEL% EQU -1978335216 (CALL :log WARNING ^(%ERRORLEVEL%^): "winget install %1" failed, see %LOG_FILE% & SET /A "PKG_ERRORS+=1" & EXIT /B 0)
 )
 :wingetError
-CALL :error "winget install --id %* --scope machine --exact --silent --accept-source-agreements --disable-interactivity" failed, see %LOG_FILE%
+CALL :error "winget install %1" failed, see %LOG_FILE%
 SET /A "PKG_ERRORS+=1"
 EXIT /B %RESULT%
 
