@@ -213,10 +213,10 @@ SET MAX_ATTEMPTS=31
 
 SET PKG_CRITICAL=1
 
-CALL :winget Google.Chrome && CALL :installInitialPreferences && DEL /F /Q "%PUBLIC%\Desktop\Google Chrome.lnk" 2>NUL
+CALL :winget Google.Chrome && CALL :installInitialPreferences && CALL :deleteDesktopIcon "Google Chrome.lnk"
 CALL :winget Notepad++.Notepad++
-CALL :winget SumatraPDF.SumatraPDF && DEL /F /Q "%PUBLIC%\Desktop\SumatraPDF.lnk" 2>NUL
-CALL :winget VideoLAN.VLC && DEL /F /Q "%PUBLIC%\Desktop\VLC media player.lnk" 2>NUL
+CALL :winget SumatraPDF.SumatraPDF && CALL :deleteDesktopIcon SumatraPDF.lnk
+CALL :winget VideoLAN.VLC && CALL :deleteDesktopIcon "VLC media player.lnk"
 
 SET PKG_CRITICAL=
 
@@ -350,6 +350,11 @@ EXIT /B
 :online
 ping -4 -n 1 -w 1000 1.1.1.1 | FINDSTR /R /C:"TTL=[0-9][0-9]*$" >NUL
 EXIT /B
+
+:deleteDesktopIcon
+DEL /F /Q "%PUBLIC%\Desktop\%~1" 2>NUL
+DEL /F /Q "%USERPROFILE%\Desktop\%~1" 2>NUL
+EXIT /B 0
 
 :choco
 CALL :log Deploying %1

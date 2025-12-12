@@ -44,16 +44,16 @@ SET "OPTIONAL_DIR=%~dp0"
 GOTO :skipCustomApps
 
 CALL :enableDeveloperMode
-CALL :osIs64Bit && CALL :winget Flameshot.Flameshot && DEL /F /Q "%PUBLIC%\Desktop\Flameshot.lnk" 2>NUL
+CALL :osIs64Bit && CALL :winget Flameshot.Flameshot && CALL :deleteDesktopIcon Flameshot.lnk
 CALL :osIs64Bit && CALL :winget Git.Git --override "%INNO_DEFAULT% /COMPONENTS=ext,ext\shellhere,gitlfs,assoc,assoc_sh,windowsterminal,scalar /o:EditorOption=Notepad++ /o:DefaultBranchOption=main /o:PathOption=Cmd /o:SSHOption=ExternalOpenSSH /o:CURLOption=WinSSL /o:EnableSymlinks=Enabled /o:PerformanceTweaksFSCache=Enabled" && (
     SETX MSYS winsymlinks:nativestrict /M
     sc config ssh-agent start=auto
 )
 CALL :osIs64Bit && CALL :winget dandavison.delta
-CALL :osIs64Bit && CALL :winget GnuPG.Gpg4win && DEL /F /Q "%PUBLIC%\Desktop\Kleopatra.lnk" 2>NUL
+CALL :osIs64Bit && CALL :winget GnuPG.Gpg4win && CALL :deleteDesktopIcon Kleopatra.lnk
 CALL :osIs64Bit && CALL :winget jqlang.jq
 CALL :osIs64Bit && CALL :winget lucasg.Dependencies
-CALL :osIs64Bit && CALL :winget Inkscape.Inkscape && DEL /F /Q "%PUBLIC%\Desktop\Inkscape.lnk" 2>NUL
+CALL :osIs64Bit && CALL :winget Inkscape.Inkscape && CALL :deleteDesktopIcon Inkscape.lnk
 CALL :osIs64Bit && CALL :winget Nextcloud.NextcloudDesktop --custom "NO_DESKTOP_SHORTCUT=1"
 CALL :osIs64Bit && CALL :winget Microsoft.PowerToys
 CALL :winget sigoden.WindowSwitcher && IF EXIST "%OPTIONAL_DIR%WindowSwitcher.xml" (
@@ -89,6 +89,11 @@ IF [%PROCESSOR_ARCHITEW6432%]==[AMD64] EXIT /B 0
 IF [%PROCESSOR_ARCHITECTURE%]==[ARM64] EXIT /B 0
 IF [%PROCESSOR_ARCHITEW6432%]==[ARM64] EXIT /B 0
 EXIT /B 1
+
+:deleteDesktopIcon
+DEL /F /Q "%PUBLIC%\Desktop\%~1" 2>NUL
+DEL /F /Q "%USERPROFILE%\Desktop\%~1" 2>NUL
+EXIT /B 0
 
 :choco
 CALL :log Deploying %1
