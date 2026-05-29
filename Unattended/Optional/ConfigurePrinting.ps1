@@ -25,12 +25,37 @@ function ConfigureLprPrinter ($PrinterName, $DriverName, $HostAddress, $Duplexin
         Write-Host "Error configuring ${PrinterName}:"
         Write-Host $_
     }
-
 }
 
-ConfigureLprPrinter -PrinterName "Brother HL-5450DN (black and white)" `
-    -DriverName "Brother HL-5450DN series" `
-    -HostAddress "10.10.10.10" `
+function RemoveLprPrinter ($PrinterName, $HostAddress) {
+    try {
+        Write-Host "Removing $PrinterName if present"
+        Write-Host "Removing printer"
+        try {
+            Remove-Printer -Name $PrinterName
+        } catch {
+            Write-Host "Error removing printer:"
+            Write-Host $_
+        }
+        Write-Host "Removing port"
+        try {
+            Remove-PrinterPort -Name $HostAddress
+        } catch {
+            Write-Host "Error removing port:"
+            Write-Host $_
+        }
+    } catch {
+        Write-Host "Error removing ${PrinterName}:"
+        Write-Host $_
+    }
+}
+
+RemoveLprPrinter -PrinterName "Brother HL-5450DN (black and white)" `
+    -HostAddress "10.10.10.10"
+
+ConfigureLprPrinter -PrinterName "Brother HL-L2375DW (black and white)" `
+    -DriverName "Brother HL-L2375DW series" `
+    -HostAddress "10.10.10.17" `
     -DuplexingMode TwoSidedLongEdge
 
 ConfigureLprPrinter -PrinterName "Brother HL-L3230CDW (colour)" `
@@ -39,5 +64,5 @@ ConfigureLprPrinter -PrinterName "Brother HL-L3230CDW (colour)" `
     -DuplexingMode OneSided
 
 try {
-    (New-Object -ComObject WScript.Network).SetDefaultPrinter("Brother HL-5450DN (black and white)")
+    (New-Object -ComObject WScript.Network).SetDefaultPrinter("Brother HL-L2375DW (black and white)")
 } catch {}
