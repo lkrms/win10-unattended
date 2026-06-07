@@ -122,9 +122,15 @@ FOR /F "usebackq delims=" %%G IN (
 )
 
 CALL :log Cleaning up %IMAGE_FILE%[%1] mounted at %MOUNT_DIR%
-:: Add /ResetBase to remove "all superseded versions of every component in the
-:: component store", along with the ability to remove updates installed so far
+:: Uncomment the second command to remove "all superseded versions of every
+:: component in the component store", along with the ability to remove updates
+:: installed so far
+:: - Add /ResetBase after /StartComponentCleanup succeeds without it, as per
+::   https://www.edtittel.com/blog/wed-dism-resetbase-bites-back.html
+:: - In online scenarios, this may also be of interest:
+::   https://www.edtittel.com/blog/remove-package-kills-spurious-reclaimables.html
 DISM /Image:"%MOUNT_DIR%" /Cleanup-Image /StartComponentCleanup || EXIT /B
+:: DISM /Image:"%MOUNT_DIR%" /Cleanup-Image /StartComponentCleanup /ResetBase || EXIT /B
 
 CALL :log Unmounting %IMAGE_FILE%[%1] from %MOUNT_DIR%
 DISM /Unmount-Image /MountDir:"%MOUNT_DIR%" /Commit || EXIT /B

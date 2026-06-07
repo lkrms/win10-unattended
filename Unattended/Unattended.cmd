@@ -254,6 +254,11 @@ IF EXIST "%SCRIPT_DIR%..\Office365\teamsbootstrapper.exe" (
     )
 )
 
+IF EXIST "%SCRIPT_DIR%DiskCleanupHandler.reg" (
+    CALL :log Registering disk cleanup handler
+    CALL :runOrReport REG IMPORT "%SCRIPT_DIR%DiskCleanupHandler.reg"
+)
+
 CALL :optCmd ApplyRegistrySettings.cmd "/start"
 
 :: Exclude "admin" from user list during sign-in

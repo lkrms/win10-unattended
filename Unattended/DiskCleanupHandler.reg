@@ -1,0 +1,22 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VolumeCaches\Unattended Cache]
+; Use DataDrivenCleaner
+@="{c0e13e61-0cc6-11d1-bbb6-0060978b2ae6}"
+; Remove cache entries by default
+"Autorun"=dword:00000001
+"Description"="Files downloaded for Unattended system provisioning"
+"Display"="Unattended Cache"
+"FileList"="*.*"
+"Folder"=hex(2):25,00,53,00,79,00,73,00,74,00,65,00,6d,00,44,00,72,00,69,00,76,\
+  00,65,00,25,00,5c,00,55,00,6e,00,61,00,74,00,74,00,65,00,6e,00,64,00,65,00,\
+  64,00,5c,00,43,00,61,00,63,00,68,00,65,00,00,00
+; DDEVCF_DOSUBDIRS (0x00000001). Search and remove recursively.
+; DDEVCF_REMOVEREADONLY (0x00000004). Remove files that meet the search criteria even if they are read-only.
+; DDEVCF_REMOVESYSTEM (0x00000008). Remove files that meet the search criteria even if they are system files.
+; DDEVCF_REMOVEHIDDEN (0x00000010). Remove files that meet the search criteria even if they are hidden files.
+; DDEVCF_REMOVEDIRS (0x00000040). Match the FileList value against directories and remove matches and all of their subdirectories.
+"Flags"=dword:0000005d
+; Before Update Cleanup, like other temporary files
+"Priority"=dword:00000064
+
